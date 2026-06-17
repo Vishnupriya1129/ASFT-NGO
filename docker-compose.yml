@@ -1,0 +1,72 @@
+version: '3.9'
+
+services:
+  # ── PostgreSQL ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: seedandserve_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB:       seedandserve
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout:  5s
+      retries:  5
+
+  # ── Meilisearch ─────────────────────────────────────────────
+  meilisearch:
+    image: getmeili/meilisearch:v1.7
+    container_name: seedandserve_search
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY:      your_meilisearch_key
+      MEILI_NO_ANALYTICS:    'true'
+    volumes:
+      - meilisearch_data:/meili_data
+    ports:
+      - '7700:7700'
+
+  # ── Next.js Web App ─────────────────────────────────────────
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        DATABASE_URL:               postgresql://postgres:postgres@postgres:5432/seedandserve
+        NEXTAUTH_SECRET:            your_nextauth_secret
+        NEXTAUTH_URL:               http://localhost:3000
+        NEXT_PUBLIC_RAZORPAY_KEY_ID: rzp_test_YOUR_KEY
+        MEILISEARCH_HOST:           http://meilisearch:7700
+    container_name: seedandserve_web
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      meilisearch:
+        condition: service_started
+    environment:
+      DATABASE_URL:                 postgresql://postgres:postgres@postgres:5432/seedandserve
+      NEXTAUTH_SECRET:              your_nextauth_secret
+      NEXTAUTH_URL:                 http://localhost:3000
+      RAZORPAY_KEY_ID:              rzp_test_YOUR_KEY
+      RAZORPAY_KEY_SECRET:          YOUR_SECRET
+      RAZORPAY_WEBHOOK_SECRET:      YOUR_WEBHOOK_SECRET
+      NEXT_PUBLIC_RAZORPAY_KEY_ID:  rzp_test_YOUR_KEY
+      MEILISEARCH_HOST:             http://meilisearch:7700
+      MEILISEARCH_API_KEY:          your_meilisearch_key
+      ADMIN_EMAIL:                  admin@seedandserve.org
+      ADMIN_PASSWORD:               ChangeMe@2025!
+
+volumes:
+  postgres_data:
+  meilisearch_data:

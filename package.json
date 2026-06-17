@@ -1,0 +1,40 @@
+{
+  "name": "seed-and-serve",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --filter=@seed-and-serve/web",
+    "build": "turbo run build --filter=@seed-and-serve/web",
+    "lint": "turbo run lint --filter=@seed-and-serve/web",
+    "typecheck": "turbo run typecheck --filter=@seed-and-serve/web",
+    "test": "turbo run test --filter=@seed-and-serve/web",
+    "test:e2e": "turbo run test:e2e --filter=@seed-and-serve/web",
+    "db:push": "cd apps/web && npx prisma db push",
+    "db:migrate": "cd apps/web && npx prisma migrate deploy",
+    "db:seed": "cd apps/web && npx ts-node prisma/seed.ts",
+    "db:studio": "cd apps/web && npx prisma studio"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^19.0.0",
+    "commitlint": "^19.0.0",
+    "eslint": "^8.57.0",
+    "husky": "^9.0.0",
+    "prettier": "^3.2.0",
+    "turbo": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "npm@10.0.0",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.107.0",
+    "lucide-react": "^1.18.0",
+    "react-hot-toast": "^2.6.0",
+    "react-icons": "^5.6.0"
+  }
+}
