@@ -4,11 +4,31 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { PlayCircle, Heart } from 'lucide-react'; // Removed unused ChevronDown
+import { PlayCircle, Heart } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export function HeroSection() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [stats, setStats] = useState<any[]>([]);
+
+  useEffect(() => {
+    setMounted(true);
+    loadStats();
+  }, []);
+
+  async function loadStats() {
+    const { data, error } = await supabase
+      .from('stats')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error) {
+      console.error('Stats Error:', error);
+      return;
+    }
+
+    setStats(data || []);
+  }
 
   return (
     <section
@@ -22,7 +42,7 @@ export function HeroSection() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center py-20 lg:py-32">
-          {/* Text Content (unchanged) */}
+          {/* Text Content */}
           {mounted && (
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -82,25 +102,23 @@ export function HeroSection() {
                 </Link>
               </motion.div>
 
-              {/* Trust Stats - Redesigned */}
+              {/* Dynamic Stats from Supabase */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
                 className="grid grid-cols-3 gap-6 pt-6 border-t border-stone/20"
               >
-                <div className="space-y-2">
-                  <div className="font-serif text-3xl font-bold text-soil-dark">50K+</div>
-                  <div className="text-stone text-sm font-medium">Meals/Month</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="font-serif text-3xl font-bold text-soil-dark">500+</div>
-                  <div className="text-stone text-sm font-medium">Children Educated</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="font-serif text-3xl font-bold text-soil-dark">25+</div>
-                  <div className="text-stone text-sm font-medium">Partner Homes</div>
-                </div>
+                {stats.map((stat) => (
+                  <div key={stat.id} className="space-y-2">
+                    <div className="font-serif text-3xl font-bold text-soil-dark">
+                      {stat.value}
+                    </div>
+                    <div className="text-stone text-sm font-medium">
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
               </motion.div>
             </motion.div>
           )}
@@ -113,7 +131,7 @@ export function HeroSection() {
               transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
               className="relative"
             >
-              {/* Main Image (background) */}
+              {/* Main Image */}
               <div className="relative w-full h-[450px] sm:h-[500px] lg:h-[550px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
                 <Image
                   src="https://images.yourstory.com/cs/wordpress/2018/03/19884450_1686832194672581_7847578843808818976_n.jpg?fm=png&auto=format&blur=500"
@@ -125,7 +143,7 @@ export function HeroSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-soil-dark/30 to-transparent pointer-events-none" />
               </div>
 
-              {/* Small Overlapping Image - Bottom Right Corner, Slight Rotation */}
+              {/* Small Overlapping Image */}
               <motion.div
                 initial={{ opacity: 0, y: 30, rotate: -5 }}
                 animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -143,7 +161,6 @@ export function HeroSection() {
                 </div>
               </motion.div>
 
-              {/* Decorative accent blur behind images */}
               <div className="absolute -top-10 -left-10 w-40 h-40 bg-sun-warm/20 rounded-full blur-2xl -z-10" />
             </motion.div>
           )}

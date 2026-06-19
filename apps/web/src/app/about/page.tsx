@@ -1,5 +1,5 @@
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
+import { Navbar } from '@/app/components/layout/Navbar';
+import { Footer } from '@/app/components/layout/Footer';
 import Image from 'next/image';
 
 export default function AboutPage() {

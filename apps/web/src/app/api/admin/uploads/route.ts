@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
       const timestamp = Date.now();
       const filename = `${folder}/${timestamp}-${file.name.replace(/\s+/g, '-')}`;
 
-      const { data, error } = await supabaseAdmin.storage
+      const { error } = await supabaseAdmin.storage
         .from(process.env.SUPABASE_STORAGE_BUCKET || 'content-images')
         .upload(filename, buffer, {
           contentType: file.type,

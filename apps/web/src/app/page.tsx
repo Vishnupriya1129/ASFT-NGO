@@ -1,15 +1,15 @@
-import { Navbar }               from '@/components/layout/Navbar';
-import { Footer }               from '@/components/layout/Footer';
-import { HeroSection }          from '@/components/home/HeroSection';
-import { AnnouncementsSection } from '@/components/home/AnnouncementsSection';
-import { StatsSection }         from '@/components/home/StatsSection';
-import { MissionVisionSection } from '@/components/home/MissionVisionSection';
-import { ProgramsSection }      from '@/components/home/ProgramsSection';
-import { GallerySection }       from '@/components/home/GallerySection';
-import { EducationSection }     from '@/components/home/EducationSection';
-import { DonationSection }      from '@/components/home/DonationSection';
-import { ExploreSection }       from '@/components/home/ExploreSection';
-import { RecruitmentPopup }     from '@/components/home/RecruitmentPopup';
+import { Navbar }               from '@/app/components/layout/Navbar';
+import { Footer }               from '@/app/components/layout/Footer';
+import { HeroSection }          from '@/app/components/home/HeroSection';
+import { AnnouncementsSection } from '@/app/components/home/AnnouncementsSection';
+import { StatsSection }         from '@/app/components/home/StatsSection';
+import { MissionVisionSection } from '@/app/components/home/MissionVisionSection';
+import { ProgramsSection }      from '@/app/components/home/ProgramsSection';
+import { GallerySection }       from '@/app/components/home/GallerySection';
+import { EducationSection }     from '@/app/components/home/EducationSection';
+import { DonationSection }      from '@/app/components/home/DonationSection';
+import { ExploreSection }       from '@/app/components/home/ExploreSection';
+import { RecruitmentPopup }     from '@/app/components/home/RecruitmentPopup';
 
 export default function HomePage() {
   return (

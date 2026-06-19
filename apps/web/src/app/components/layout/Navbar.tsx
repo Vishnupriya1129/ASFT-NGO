@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
-import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -22,8 +20,9 @@ const navItems = [
 export function Navbar() {
   const [scrolled, setScrolled]   = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
-  const { data: session }         = useSession();
 
+
+  // Scroll listener
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -34,6 +33,7 @@ export function Navbar() {
     <nav
       role="navigation"
       aria-label="Main navigation"
+      suppressHydrationWarning
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-white shadow-lg py-3'
@@ -41,69 +41,59 @@ export function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-        {/* Logo - Modern & Compact */}
+        {/* Logo */}
         <Link
-  href="/"
-  className="flex items-center gap-3 group shrink-0"
-  aria-label="Aram Seivom Family Trust Home"
->
-  <Image
-    src="/aram.png"
-    alt="Aram Seivom Family Trust"
-    width={60}
-    height={60}
-    priority
-    className="object-contain"
-  />
+          href="/"
+          className="flex items-center gap-3 group shrink-0"
+          aria-label="Aram Seivom Family Trust Home"
+        >
+          <Image
+            src="/aram.png"
+            alt="Aram Seivom Family Trust"
+            width={60}
+            height={60}
+            priority
+            className="object-contain"
+          />
+          <div className="hidden sm:block">
+            <div className="font-bold text-base text-gray-900 leading-tight">
+              Aram Seivom Family Trust
+            </div>
+            <div className="text-xs text-primary-600 font-medium">
+              Youth Skill Development Organisation
+            </div>
+          </div>
+        </Link>
 
-  <div className="hidden sm:block">
-    <div className="font-bold text-base text-gray-900 leading-tight">
-      Aram Seivom Family Trust
-    </div>
-
-    <div className="text-xs text-primary-600 font-medium">
-      Youth Skill Development Organisation
-    </div>
-  </div>
-</Link>
-
-        {/* Desktop Nav - Centered */}
+        {/* Desktop Nav */}
         <ul className="hidden lg:flex items-center gap-1" role="list">
           {navItems.map((item) => (
             <li key={item.href}>
-              <Link 
-                href={item.href} 
+              <Link
+                href={item.href}
                 className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors duration-300 rounded-md hover:bg-gray-50"
               >
                 {item.label}
               </Link>
             </li>
           ))}
-          {session?.user?.role === 'ADMIN' || session?.user?.role === 'EDITOR' ? (
-            <li>
-              <Link href="/admin" className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors duration-300 rounded-md hover:bg-gray-50">
-                Dashboard
-              </Link>
-            </li>
-          ) : null}
+          {/* Hardcoded Dashboard link (temporary) */}
+          <li>
+            <Link
+              href="/admin"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors duration-300 rounded-md hover:bg-gray-50"
+            >
+              Dashboard
+            </Link>
+          </li>
         </ul>
 
-        {/* CTA Section */}
+        {/* CTA Section – only the Donate button */}
         <div className="hidden lg:flex items-center gap-3">
-          {session ? (
-            <div className="flex items-center gap-3 border-r border-gray-200 pr-3">
-              <span className="text-sm text-gray-600 font-medium">
-                {session.user?.name}
-              </span>
-              <button
-                onClick={() => signOut()}
-                className="text-sm text-gray-600 hover:text-primary-600 font-medium transition-colors"
-              >
-                Sign out
-              </button>
-            </div>
-          ) : null}
-          <Link href="/#donate" className="btn-primary-sm text-sm py-2.5 px-6 font-semibold">
+          <Link
+            href="/#donate"
+            className="btn-primary-sm text-sm py-2.5 px-6 font-semibold"
+          >
             Donate
           </Link>
         </div>
@@ -115,7 +105,7 @@ export function Navbar() {
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          {menuOpen ? '✕' : '☰'}
         </button>
       </div>
 

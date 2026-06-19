@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Sprout, QrCode, Building2, Copy, Check, Utensils, GraduationCap } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { supabase } from '@/lib/supabase';
 
 const donationAmounts = [
   { amount: 500,  label: 'Feeds 5 children for a week',         impact: '35 nutritious meals',        icon: Utensils },
@@ -19,9 +20,10 @@ export function DonationSection() {
   const [donorEmail, setDonorEmail] = useState('');
   const [copied, setCopied]         = useState<string | null>(null);
   const [qrScriptReady, setQrScriptReady] = useState(false);
+  const [settings, setSettings]     = useState<any>(null); // donation_settings from Supabase
   const qrRef = useRef<HTMLDivElement>(null);
 
-  // Load QRCode library once on mount
+  // 1. Load QR library once
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -43,16 +45,36 @@ export function DonationSection() {
     };
   }, []);
 
-  // Generate QR code whenever the QR tab is active and the library is ready
+  // 2. Fetch donation settings from Supabase
   useEffect(() => {
-    if (!qrScriptReady || activeTab !== 'qr' || !qrRef.current) return;
+    async function loadSettings() {
+      const { data, error } = await supabase
+        .from('donation_settings')
+        .select('*')
+        .limit(1)
+        .single();
 
-    // Clear any previous QR code (in case it was rendered before)
+      if (error) {
+        console.error('Donation settings error:', error);
+        return;
+      }
+
+      console.log('Donation Settings:', data);
+      setSettings(data);
+    }
+    loadSettings();
+  }, []);
+
+  // 3. Generate QR code whenever settings, tab, or library is ready
+  useEffect(() => {
+    if (!qrScriptReady || activeTab !== 'qr' || !qrRef.current || !settings) return;
+
     qrRef.current.innerHTML = '';
 
-    // Static amount – QR code does NOT change with user selection
     const staticAmount = 500;
-    const upiUrl = `upi://pay?pa=vishnupriyam348@okicici&pn=Arram%20Seivom%20Family%20Trust&am=${staticAmount}&cu=INR`;
+    const upiUrl = `upi://pay?pa=${settings.upi_id}&pn=${encodeURIComponent(
+      settings.account_name
+    )}&am=${staticAmount}&cu=INR`;
 
     try {
       new (window as any).QRCode(qrRef.current, {
@@ -66,8 +88,9 @@ export function DonationSection() {
     } catch (error) {
       console.error('QR generation failed', error);
     }
-  }, [qrScriptReady, activeTab]); // Re-run when tab changes or script loads
+  }, [qrScriptReady, activeTab, settings]);
 
+  // Helper: copy to clipboard
   const handleCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopied(key);
@@ -84,13 +107,15 @@ export function DonationSection() {
     );
   };
 
-  const bankDetails = [
-    { label: 'Account Name',   value: 'Arram Seivom Family Trust', copyKey: null },
-    { label: 'Account Number', value: '123456789012',             copyKey: 'accno' },
-    { label: 'IFSC Code',      value: 'SBIN0001234',              copyKey: 'ifsc' },
-    { label: 'Bank Name',      value: 'State Bank of India',      copyKey: null },
-    { label: 'Branch',         value: 'Bangalore Main',           copyKey: null },
-  ];
+  // 4. Build bank details from settings (empty array while loading)
+  const bankDetails = settings
+    ? [
+        { label: 'Account Name', value: settings.account_name, copyKey: null },
+        { label: 'Account Number', value: settings.account_number, copyKey: 'accno' },
+        { label: 'IFSC Code', value: settings.ifsc_code, copyKey: 'ifsc' },
+        { label: 'Bank Name', value: settings.bank_name, copyKey: null },
+      ]
+    : [];
 
   return (
     <section
@@ -214,11 +239,11 @@ export function DonationSection() {
                     Scan with PhonePe, GPay, Paytm, or any UPI app
                   </p>
                   <button
-                    onClick={() => handleCopy('vishnupriyam348@okicici', 'upi')}
+                    onClick={() => handleCopy(settings?.upi_id || '', 'upi')}
                     className="inline-flex items-center gap-3 bg-white/15 hover:bg-white/25 text-white font-mono text-lg font-bold px-6 py-3 rounded-2xl border border-dashed border-white/30 transition-all"
                     aria-label="Copy UPI ID"
                   >
-                    vishnupriyam348@okicici
+                    {settings?.upi_id || 'Loading...'}
                     {copied === 'upi' ? <Check size={18} className="text-sun-warm" /> : <Copy size={18} />}
                   </button>
                   <p className="text-white/50 text-xs mt-3">
@@ -233,32 +258,38 @@ export function DonationSection() {
                     <Building2 size={20} className="text-forest-mid" />
                     Bank Account Details
                   </h3>
-                  {bankDetails.map(({ label, value, copyKey }) => (
-                    <div key={label} className="flex justify-between items-center py-3.5 border-b border-earth-cream last:border-0">
-                      <span className="text-stone text-sm font-medium">{label}</span>
-                      <span className="text-charcoal font-mono font-semibold flex items-center gap-2">
-                        {value}
-                        {copyKey && (
-                          <button
-                            onClick={() => handleCopy(value, copyKey)}
-                            className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
-                              copied === copyKey
-                                ? 'bg-forest-mid text-white'
-                                : 'bg-leaf-pale text-forest-dark hover:bg-forest-mid hover:text-white'
-                            }`}
-                            aria-label={`Copy ${label}`}
-                          >
-                            {copied === copyKey ? <Check size={13} /> : <Copy size={13} />}
-                          </button>
-                        )}
-                      </span>
-                    </div>
-                  ))}
+                  {bankDetails.length > 0 ? (
+                    bankDetails.map(({ label, value, copyKey }) => (
+                      <div key={label} className="flex justify-between items-center py-3.5 border-b border-earth-cream last:border-0">
+                        <span className="text-stone text-sm font-medium">{label}</span>
+                        <span className="text-charcoal font-mono font-semibold flex items-center gap-2">
+                          {value}
+                          {copyKey && (
+                            <button
+                              onClick={() => handleCopy(value, copyKey)}
+                              className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
+                                copied === copyKey
+                                  ? 'bg-forest-mid text-white'
+                                  : 'bg-leaf-pale text-forest-dark hover:bg-forest-mid hover:text-white'
+                              }`}
+                              aria-label={`Copy ${label}`}
+                            >
+                              {copied === copyKey ? <Check size={13} /> : <Copy size={13} />}
+                            </button>
+                          )}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-stone text-center">Loading bank details...</p>
+                  )}
                 </div>
                 <div className="bg-white/10 rounded-2xl p-5 text-white/80 text-sm">
                   After transferring, email{' '}
-                  <strong className="text-sun-warm">donations@seedandserve.org</strong> with
-                  your name and transaction ID for your receipt.
+                  <strong className="text-sun-warm">
+                    {settings?.email || 'donations@seedandserve.org'}
+                  </strong>{' '}
+                  with your name and transaction ID for your receipt.
                 </div>
               </div>
             )}
