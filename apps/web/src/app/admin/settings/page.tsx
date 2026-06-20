@@ -9,6 +9,11 @@ export default function SettingsPage() {
   const [stats, setStats] = useState<any[]>([]);
 
   async function loadStats() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     const { data, error } = await supabase
       .from('stats')
       .select('*')
@@ -23,6 +28,11 @@ export default function SettingsPage() {
   }
 
   async function addStat() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     const { error } = await supabase
       .from('stats')
       .insert([
@@ -45,6 +55,11 @@ export default function SettingsPage() {
   }
 
   async function deleteStat(id: number) {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     await supabase
       .from('stats')
       .delete()
@@ -59,9 +74,7 @@ export default function SettingsPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">
-        Hero Statistics CMS
-      </h1>
+      <h1 className="text-3xl font-bold mb-6">Hero Statistics CMS</h1>
 
       <div className="space-y-4 max-w-lg">
         <input
@@ -93,13 +106,8 @@ export default function SettingsPage() {
             className="border p-4 rounded flex justify-between items-center"
           >
             <div>
-              <div className="font-bold text-xl">
-                {item.value}
-              </div>
-
-              <div className="text-gray-600">
-                {item.label}
-              </div>
+              <div className="font-bold text-xl">{item.value}</div>
+              <div className="text-gray-600">{item.label}</div>
             </div>
 
             <button

@@ -14,6 +14,11 @@ export default function EventsPage() {
   }, []);
 
   async function loadEvents() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     const { data, error } = await supabase
       .from('events')
       .select('*')

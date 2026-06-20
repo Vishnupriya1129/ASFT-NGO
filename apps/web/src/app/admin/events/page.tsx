@@ -16,6 +16,11 @@ export default function EventsAdminPage() {
   }, []);
 
   async function loadEvents() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     const { data, error } = await supabase
       .from('events')
       .select('*')
@@ -30,6 +35,11 @@ export default function EventsAdminPage() {
   }
 
   async function addEvent() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     const { error } = await supabase
       .from('events')
       .insert([
@@ -57,6 +67,11 @@ export default function EventsAdminPage() {
   }
 
   async function deleteEvent(id: number) {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     await supabase
       .from('events')
       .delete()
@@ -67,9 +82,7 @@ export default function EventsAdminPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">
-        Events CMS
-      </h1>
+      <h1 className="text-3xl font-bold mb-6">Events CMS</h1>
 
       <div className="space-y-4 max-w-xl">
         <input
@@ -117,20 +130,11 @@ export default function EventsAdminPage() {
 
       <div className="mt-10 space-y-4">
         {events.map((event) => (
-          <div
-            key={event.id}
-            className="border p-4 rounded"
-          >
+          <div key={event.id} className="border p-4 rounded">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="font-bold text-lg">
-                  {event.title}
-                </h2>
-
-                <p className="text-gray-600">
-                  {event.location}
-                </p>
-
+                <h2 className="font-bold text-lg">{event.title}</h2>
+                <p className="text-gray-600">{event.location}</p>
                 <p className="text-sm text-gray-500">
                   {new Date(event.event_date).toLocaleDateString()}
                 </p>
@@ -144,9 +148,7 @@ export default function EventsAdminPage() {
               </button>
             </div>
 
-            <p className="mt-3">
-              {event.description}
-            </p>
+            <p className="mt-3">{event.description}</p>
           </div>
         ))}
       </div>

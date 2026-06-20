@@ -11,6 +11,11 @@ export default function GalleryAdminPage() {
   const [gallery, setGallery] = useState<any[]>([]);
 
   async function loadGallery() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     const { data } = await supabase
       .from('gallery')
       .select('*')
@@ -20,19 +25,24 @@ export default function GalleryAdminPage() {
   }
 
   async function addImage() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     await supabase.from('gallery').insert([
       {
         title,
         image_url: imageUrl,
         caption,
-        span, // now uses the controlled span state
+        span,
       },
     ]);
 
     setTitle('');
     setImageUrl('');
     setCaption('');
-    setSpan('normal'); // reset to default
+    setSpan('normal');
 
     loadGallery();
   }
@@ -67,7 +77,6 @@ export default function GalleryAdminPage() {
           className="border p-3 w-full"
         />
 
-        {/* NEW: span selector */}
         <select
           value={span}
           onChange={(e) =>
@@ -98,7 +107,6 @@ export default function GalleryAdminPage() {
             />
             <h3>{item.title}</h3>
             <p>{item.caption}</p>
-            {/* Optional: display span */}
             <span className="text-xs text-gray-500 uppercase">
               Layout: {item.span}
             </span>

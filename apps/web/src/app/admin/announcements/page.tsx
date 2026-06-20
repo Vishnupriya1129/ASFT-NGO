@@ -9,6 +9,11 @@ export default function AnnouncementsAdminPage() {
   const [announcements, setAnnouncements] = useState<any[]>([]);
 
   async function loadAnnouncements() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     const { data } = await supabase
       .from('announcements')
       .select('*')
@@ -17,25 +22,30 @@ export default function AnnouncementsAdminPage() {
     setAnnouncements(data || []);
   }
 
-async function addAnnouncement() {
-  console.log("FUNCTION STARTED");
+  async function addAnnouncement() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
 
-  const result = await supabase
-    .from('announcements')
-    .insert([
-      {
-        title,
-        content,
-      },
-    ]);
+    console.log('FUNCTION STARTED');
 
-  console.log("RESULT:", result);
+    const result = await supabase
+      .from('announcements')
+      .insert([
+        {
+          title,
+          content,
+        },
+      ]);
 
-  setTitle('');
-  setContent('');
+    console.log('RESULT:', result);
 
-  loadAnnouncements();
-}
+    setTitle('');
+    setContent('');
+
+    await loadAnnouncements();
+  }
 
   useEffect(() => {
     loadAnnouncements();
@@ -64,12 +74,12 @@ async function addAnnouncement() {
 
         <button
           onClick={() => {
-          console.log("BUTTON CLICKED");
-          addAnnouncement();
-      }}
-         className="bg-blue-600 text-white px-5 py-2 rounded"
+            console.log('BUTTON CLICKED');
+            addAnnouncement();
+          }}
+          className="bg-blue-600 text-white px-5 py-2 rounded"
         >
-         Add Announcement
+          Add Announcement
         </button>
       </div>
 

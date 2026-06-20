@@ -20,7 +20,7 @@ export function DonationSection() {
   const [donorEmail, setDonorEmail] = useState('');
   const [copied, setCopied]         = useState<string | null>(null);
   const [qrScriptReady, setQrScriptReady] = useState(false);
-  const [settings, setSettings]     = useState<any>(null); // donation_settings from Supabase
+  const [settings, setSettings]     = useState<any>(null);
   const qrRef = useRef<HTMLDivElement>(null);
 
   // 1. Load QR library once
@@ -45,9 +45,14 @@ export function DonationSection() {
     };
   }, []);
 
-  // 2. Fetch donation settings from Supabase
+  // 2. Fetch donation settings from Supabase (with null guard)
   useEffect(() => {
     async function loadSettings() {
+      if (!supabase) {
+        console.error('Supabase is not configured');
+        return;
+      }
+
       const { data, error } = await supabase
         .from('donation_settings')
         .select('*')
@@ -59,9 +64,9 @@ export function DonationSection() {
         return;
       }
 
-      console.log('Donation Settings:', data);
       setSettings(data);
     }
+
     loadSettings();
   }, []);
 
@@ -107,7 +112,7 @@ export function DonationSection() {
     );
   };
 
-  // 4. Build bank details from settings (empty array while loading)
+  // 4. Build bank details from settings
   const bankDetails = settings
     ? [
         { label: 'Account Name', value: settings.account_name, copyKey: null },

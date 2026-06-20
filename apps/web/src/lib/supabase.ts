@@ -4,20 +4,24 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
+export const supabase =
+  supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey)
+    : null;
 
-// Client-side Supabase instance (anon key)
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-// Server-side Supabase instance (service role key)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-});
+export const supabaseAdmin =
+  supabaseUrl && (supabaseServiceKey || supabaseAnonKey)
+    ? createClient(
+        supabaseUrl,
+        (supabaseServiceKey || supabaseAnonKey)!,   // TypeScript now trusts this
+        {
+          auth: {
+            autoRefreshToken: false,
+            persistSession: false,
+          },
+        }
+      )
+    : null;
 
 // Types for CMS content
 export interface CMSPage {

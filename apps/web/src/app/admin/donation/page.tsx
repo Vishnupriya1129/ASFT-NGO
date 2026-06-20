@@ -34,6 +34,11 @@ export default function DonationSettingsPage() {
   }, []);
 
   async function loadSettings() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
     const { data, error } = await supabase
       .from('donation_settings')
       .select('*')
@@ -51,17 +56,19 @@ export default function DonationSettingsPage() {
   }
 
   async function saveSettings() {
-    setSaving(true);
-    console.log('SAVING...', settings);
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
 
-    // 1. Find existing record
+    setSaving(true);
+
     const { data: existing, error: existingError } = await supabase
       .from('donation_settings')
       .select('id');
 
     if (existingError) {
-      console.error('Select error:', existingError);
-      alert('Error checking settings. Check console.');
+      console.error(existingError);
       setSaving(false);
       return;
     }
@@ -69,30 +76,24 @@ export default function DonationSettingsPage() {
     let error = null;
 
     if (existing && existing.length > 0) {
-      // Update
       const { error: updateError } = await supabase
         .from('donation_settings')
         .update(settings)
         .eq('id', existing[0].id);
 
       error = updateError;
-      if (error) console.error('Update error:', error);
-      else console.log('Updated successfully');
     } else {
-      // Insert
       const { error: insertError } = await supabase
         .from('donation_settings')
         .insert([settings]);
 
       error = insertError;
-      if (error) console.error('Insert error:', error);
-      else console.log('Inserted successfully');
     }
 
     if (error) {
-      alert('Failed to save. Check console for details.');
+      console.error(error);
     } else {
-      alert('Settings saved to Supabase!');
+      console.log('Donation settings saved');
     }
 
     setSaving(false);

@@ -22,17 +22,21 @@ export function AnnouncementsSection() {
     loadAnnouncements();
   }, []);
 
-  async function loadAnnouncements() {
-    const { data } = await supabase
-      .from('announcements')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (data) {
-      setAnnouncements(data);
-    }
+ async function loadAnnouncements() {
+  if (!supabase) {
+    console.error('Supabase is not configured');
+    return;
   }
 
+  const { data } = await supabase
+    .from('announcements')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (data) {
+    setAnnouncements(data);
+  }
+}
   return (
     <section
       className="py-16 bg-gradient-to-b from-soil-dark to-soil-mid relative overflow-hidden"

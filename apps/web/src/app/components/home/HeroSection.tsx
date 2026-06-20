@@ -17,6 +17,12 @@ export function HeroSection() {
   }, []);
 
   async function loadStats() {
+    // Guard against missing Supabase client
+    if (!supabase) {
+      console.warn('Supabase client not available');
+      return;
+    }
+
     const { data, error } = await supabase
       .from('stats')
       .select('*')
@@ -36,7 +42,7 @@ export function HeroSection() {
       className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-primary-50 via-white to-slate-50 pt-20"
       aria-label="Hero section"
     >
-      {/* Gradient background blobs */}
+      {/* Gradient blobs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary-200/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent-200/20 rounded-full blur-3xl pointer-events-none" />
 
@@ -123,7 +129,7 @@ export function HeroSection() {
             </motion.div>
           )}
 
-          {/* Overlapping Images - Modern Magazine Style */}
+          {/* Overlapping Images */}
           {mounted && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}

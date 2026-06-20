@@ -14,19 +14,23 @@ export function GallerySection() {
   }, []);
 
   async function loadGallery() {
-    const { data, error } = await supabase
-      .from('gallery')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Gallery fetch error:', error);
-      return;
-    }
-
-    console.log('Gallery:', data);
-    setGalleryItems(data || []);
+  if (!supabase) {
+    console.error('Supabase is not configured');
+    return;
   }
+
+  const { data, error } = await supabase
+    .from('gallery')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Gallery fetch error:', error);
+    return;
+  }
+
+  setGalleryItems(data || []);
+}
 
   return (
     <section
