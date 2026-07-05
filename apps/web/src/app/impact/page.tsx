@@ -35,11 +35,11 @@ export default function ImpactPage() {
 
             <div className="rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 relative h-[480px] w-full bg-gradient-to-br from-sun-warm/30 to-sun-gold/30">
               <Image
-                src="https://media.istockphoto.com/id/508497052/photo/unity-of-indian-children-asia.jpg?s=612x612&w=0&k=20&c=kG5rMa8k0HngLbT5CcgJaXA_wu2ufHoVwSLrj--YVQs="
+                src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/renovation/IMG-20240705-WA0208.jpg"
                 alt="Group of volunteers celebrating community service"
                 width={800}
                 height={600}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 to-transparent" />
             </div>

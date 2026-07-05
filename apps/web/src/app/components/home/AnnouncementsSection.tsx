@@ -47,7 +47,7 @@ export function AnnouncementsSection() {
         className="absolute inset-0 opacity-50 pointer-events-none"
         style={{
           backgroundImage:
-            "url('https://media.istockphoto.com/id/1290692045/photo/the-concept-of-unity-cooperation-teamwork-and-charity.webp?b=1&s=170667a&w=0&k=20&c=ED6Bvhds6oE8epOJKYXhF2ABxjD56-qamRnGWL9S1tU=')",
+            "url('https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2026/just-ride/IMG_3066.JPG')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

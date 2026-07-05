@@ -10,11 +10,41 @@ import { supabase } from '@/lib/supabase';
 export function HeroSection() {
   const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState<any[]>([]);
+  const [hero, setHero] = useState({
+    heading: '',
+    subheading: '',
+    hero_image: '',
+    secondary_image: '',
+    primary_button: '',
+    primary_button_link: '',
+    secondary_button: '',
+    secondary_button_link: '',
+  });
 
   useEffect(() => {
     setMounted(true);
+    loadHero();
     loadStats();
   }, []);
+
+  async function loadHero() {
+    if (!supabase) return;
+
+    const { data, error } = await supabase
+      .from('hero_content')
+      .select('*')
+      .eq('id', 1)
+      .single();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    if (data) {
+      setHero(data);
+    }
+  }
 
   async function loadStats() {
     // Guard against missing Supabase client
@@ -75,9 +105,7 @@ export function HeroSection() {
                 className="space-y-4"
               >
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
-                  <span className="text-slate-900 block">Arram Seivom</span>
-                  <span className="text-slate-900 block">Family Trust</span>
-                  <span className="block text-gradient-primary">Hope for Every Community</span>
+                  {hero.heading}
                 </h1>
               </motion.div>
 
@@ -88,7 +116,7 @@ export function HeroSection() {
                 transition={{ delay: 0.4, duration: 0.8 }}
                 className="text-slate-600 text-lg sm:text-xl leading-relaxed max-w-2xl font-light"
               >
-                From city streets to village schools, we deliver food, education, and civic leadership with Indian heart and local dignity.
+                {hero.subheading}
               </motion.p>
 
               {/* CTA Buttons */}
@@ -98,13 +126,13 @@ export function HeroSection() {
                 transition={{ delay: 0.5, duration: 0.8 }}
                 className="flex flex-col sm:flex-row gap-4 pt-6"
               >
-                <Link href="/#donate" className="btn-primary inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold shadow-lg hover:shadow-xl transition-all">
+                <Link href={hero.primary_button_link} className="btn-primary inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold shadow-lg hover:shadow-xl transition-all">
                   <Heart size={20} strokeWidth={1.5} />
-                  <span>Plant a Seed</span>
+                  <span>{hero.primary_button}</span>
                 </Link>
-                <Link href="/programs" className="btn-secondary inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold">
+                <Link href={hero.secondary_button_link} className="btn-secondary inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold">
                   <PlayCircle size={20} strokeWidth={1.5} />
-                  <span>See Our Work</span>
+                  <span>{hero.secondary_button}</span>
                 </Link>
               </motion.div>
 
@@ -140,7 +168,7 @@ export function HeroSection() {
               {/* Main Image */}
               <div className="relative w-full h-[450px] sm:h-[500px] lg:h-[550px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
                 <Image
-                  src="https://images.yourstory.com/cs/wordpress/2018/03/19884450_1686832194672581_7847578843808818976_n.jpg?fm=png&auto=format&blur=500"
+                  src={hero.hero_image}
                   alt="Indian children supported by community volunteers"
                   fill
                   className="object-cover"
@@ -158,7 +186,7 @@ export function HeroSection() {
               >
                 <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-2xl overflow-hidden shadow-xl border-4 border-white rotate-3 transition-transform hover:rotate-0 duration-300">
                   <Image
-                    src="https://thumbs.dreamstime.com/b/rural-education-india-educating-students-children-isolated-villages-48430299.jpg"
+                    src={hero.secondary_image}
                     alt="Rural Indian classroom with students learning together"
                     fill
                     className="object-cover"

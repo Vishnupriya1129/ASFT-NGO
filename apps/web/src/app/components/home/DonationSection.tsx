@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Heart, Sprout, QrCode, Building2, Copy, Check, Utensils, GraduationCap } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -19,33 +20,9 @@ export function DonationSection() {
   const [donorName, setDonorName]   = useState('');
   const [donorEmail, setDonorEmail] = useState('');
   const [copied, setCopied]         = useState<string | null>(null);
-  const [qrScriptReady, setQrScriptReady] = useState(false);
   const [settings, setSettings]     = useState<any>(null);
-  const qrRef = useRef<HTMLDivElement>(null);
 
-  // 1. Load QR library once
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    if ((window as any).QRCode) {
-      setQrScriptReady(true);
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
-    script.async = true;
-    script.onload = () => setQrScriptReady(true);
-    document.head.appendChild(script);
-
-    return () => {
-      try {
-        document.head.removeChild(script);
-      } catch {}
-    };
-  }, []);
-
-  // 2. Fetch donation settings from Supabase (with null guard)
+  // Fetch donation settings from Supabase
   useEffect(() => {
     async function loadSettings() {
       if (!supabase) {
@@ -54,8 +31,7 @@ export function DonationSection() {
       }
 
       const { data, error } = await supabase
-        .from('donation_settings')
-        .select('*')
+        .from('donation_settings') .select('*')
         .limit(1)
         .single();
 
@@ -69,31 +45,6 @@ export function DonationSection() {
 
     loadSettings();
   }, []);
-
-  // 3. Generate QR code whenever settings, tab, or library is ready
-  useEffect(() => {
-    if (!qrScriptReady || activeTab !== 'qr' || !qrRef.current || !settings) return;
-
-    qrRef.current.innerHTML = '';
-
-    const staticAmount = 500;
-    const upiUrl = `upi://pay?pa=${settings.upi_id}&pn=${encodeURIComponent(
-      settings.account_name
-    )}&am=${staticAmount}&cu=INR`;
-
-    try {
-      new (window as any).QRCode(qrRef.current, {
-        text: upiUrl,
-        width: 200,
-        height: 200,
-        colorDark: '#1B5E20',
-        colorLight: '#ffffff',
-        correctLevel: 1,
-      });
-    } catch (error) {
-      console.error('QR generation failed', error);
-    }
-  }, [qrScriptReady, activeTab, settings]);
 
   // Helper: copy to clipboard
   const handleCopy = (text: string, key: string) => {
@@ -112,7 +63,7 @@ export function DonationSection() {
     );
   };
 
-  // 4. Build bank details from settings
+  // Build bank details from settings
   const bankDetails = settings
     ? [
         { label: 'Account Name', value: settings.account_name, copyKey: null },
@@ -130,7 +81,6 @@ export function DonationSection() {
     >
       {/* Background glow */}
       <div className="absolute top-[-30%] right-[-20%] w-[700px] h-[700px] bg-white/5 rounded-full blur-3xl pointer-events-none" />
-
       <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
         <span className="inline-flex items-center gap-2 bg-white/10 text-sun-warm px-5 py-2 rounded-full text-sm font-semibold uppercase tracking-widest mb-6">
           <Heart size={14} /> Support Our Mission
@@ -158,7 +108,6 @@ export function DonationSection() {
               <div className={`absolute top-0 left-0 right-0 h-1 rounded-t-3xl bg-gradient-to-r from-sun-gold to-sun-warm transition-opacity ${
                 selectedAmt === amount && !customAmt ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'
               }`} />
-
               <div className="font-serif text-4xl font-bold text-sun-warm mb-2">
                 ₹{amount.toLocaleString()}
               </div>
@@ -198,7 +147,6 @@ export function DonationSection() {
             aria-label="Donor email"
           />
         </div>
-
         <button onClick={handleDonationSupport} className="btn-gold mb-16 inline-flex items-center gap-2 bg-gradient-to-r from-sun-gold to-sun-warm text-soil-dark font-bold py-4 px-8 rounded-full shadow-lg transition-all hover:scale-105">
           <Sprout size={22} />
           Donate via UPI / Bank Transfer
@@ -235,8 +183,15 @@ export function DonationSection() {
           >
             {activeTab === 'qr' ? (
               <div className="flex flex-col lg:flex-row items-center gap-10">
-                <div className="bg-white p-8 rounded-2xl shadow-2xl flex-shrink-0">
-                  <div ref={qrRef} className="flex justify-center" />
+                <div className="bg-white p-4 rounded-2xl shadow-2xl flex-shrink-0">
+                  <Image
+                    src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/WhatsApp%20Image%202026-03-25%20at%2022.14.28%20(1).jpg"
+                    alt="UPI QR Code"
+                    width={220}
+                    height={220}
+                    className="rounded-lg"
+                    priority
+                  />
                 </div>
                 <div className="text-center lg:text-left">
                   <h3 className="font-serif text-2xl text-white mb-3">Pay via UPI</h3>

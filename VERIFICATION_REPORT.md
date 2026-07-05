@@ -134,22 +134,22 @@ All images use Unsplash with proper parameters:
   - Status: Active & Valid
 
 **Programs Section Images:**
-- ✅ `https://images.unsplash.com/photo-1511378410727-adf20cb369a9?w=800&h=600&fit=crop`
+- ✅ `https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2023/happiness-day/IMG_8344.JPG`
   - Program: Orphanage Nutrition
   - Status: Active & Valid
   
-- ✅ `https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&h=600&fit=crop`
+- ✅ `https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/medical-camp/IMG-20240518-WA0003.jpg`
   - Program: Elderly Care Homes
   - Status: Active & Valid
   
-- ✅ `https://images.unsplash.com/photo-1559027615-cd2628902d4a?w=800&h=600&fit=crop`
+- ✅ `https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/food-program/IMG_2496.JPG`
   - Program: Street Outreach
   - Status: Active & Valid
 
 **Education Section Images:**
-- ✅ `https://images.unsplash.com/photo-1427504494785-cdbb7ceb0f04?w=700&h=350&fit=crop`
-- ✅ `https://images.unsplash.com/photo-1509995307325-d86e58d7ce86?w=300&h=180&fit=crop`
-- ✅ `https://images.unsplash.com/photo-1497633762026-c827405898f7?w=300&h=180&fit=crop`
+- ✅ `https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/child-safety-program/_MG_2426.JPG`
+- ✅ `https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/child-safety-program/_MG_2497.JPG`
+- ✅ `https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/child-safety-program/IMG_2327.JPG`
 
 **Gallery Section Images:**
 - ✅ All 5+ images properly referenced with Unsplash

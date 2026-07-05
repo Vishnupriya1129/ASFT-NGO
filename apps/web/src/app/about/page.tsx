@@ -39,7 +39,7 @@ export default function AboutPage() {
           <div className="max-w-6xl mx-auto px-6 grid gap-16 lg:grid-cols-[0.95fr_1.05fr] items-center">
             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl bg-gradient-to-br from-forest-light/30 to-sun-gold/30">
               <Image
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&h=700&fit=crop"
+                src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2026/just-ride/20260104_165523.jpg"
                 alt="Vision and Mission of Aram Saeivom Family Trust"
                 width={900}
                 height={700}

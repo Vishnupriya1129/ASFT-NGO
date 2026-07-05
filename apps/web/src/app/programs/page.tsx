@@ -39,7 +39,7 @@ export default function ProgramsPage() {
 
             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl bg-gradient-to-br from-sun-warm/30 to-sun-gold/30">
               <Image
-                src="https://www.thehindu.com/news/cities/Coimbatore/xic2s6/article31167869.ece/ALTERNATES/LANDSCAPE_615/CB26-MSPP"
+                src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/food-program/IMG_8860.JPG"
                 alt="Volunteers serving food to families"
                 width={900}
                 height={700}

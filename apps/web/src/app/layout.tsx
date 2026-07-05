@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: process.env.NEXT_PUBLIC_APP_URL,
     siteName: 'Arram Seivom Family Trust',
-    images: [{ url: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=630&fit=crop', width: 1200, height: 630, alt: 'Arram Seivom Family Trust' }],
+    images: [{ url: 'https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2026/just-ride/20260104_165523.jpg', width: 1200, height: 630, alt: 'Arram Seivom Family Trust' }],
   },
   twitter: { card: 'summary_large_image', creator: '@seedandserve' },
 };

@@ -1,6 +1,6 @@
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
-import { GallerySection } from '@/app/components/home/GallerySection';
+import GalleryArchive from '@/app/components/gallery/GalleryArchive';
 import Image from 'next/image';
 
 export default function GalleryPage() {
@@ -21,7 +21,8 @@ export default function GalleryPage() {
           </div>
         </section>
 
-        <GallerySection />
+        {/* Gallery Archive */}
+        <GalleryArchive />
 
         <section className="py-20">
           <div className="max-w-6xl mx-auto px-6 grid gap-8 lg:grid-cols-2 items-center">
@@ -34,7 +35,7 @@ export default function GalleryPage() {
             </div>
             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 bg-gradient-to-br from-sun-warm/30 to-sun-gold/30">
               <Image
-                src="children in class.png"
+                src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2026/mental-health-training/FullSizeRender.jpeg"
                 alt="School children in a classroom"
                 width={900}
                 height={650}

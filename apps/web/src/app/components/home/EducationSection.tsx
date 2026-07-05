@@ -33,7 +33,7 @@ export function EducationSection() {
           {/* Main image */}
           <div className="col-span-2 relative rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-forest-light/30 to-sun-gold/30">
             <Image
-              src="https://www.sriharsha.in/wp-content/uploads/2022/09/IMG_8242-1800x1200.jpg"
+              src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/child-safety-program/IMG_2327.JPG"
               alt="Rural Indian classroom where children sit on the floor learning"
               width={700}
               height={350}
@@ -50,7 +50,7 @@ export function EducationSection() {
           {/* Small images */}
           <div className="relative rounded-xl overflow-hidden shadow-lg mt-4 bg-gradient-to-br from-sun-warm/30 to-sun-gold/30">
             <Image
-              src="https://volunteersindia.org/images/teaching-volunteer.jpg"
+              src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/child-safety-program/_MG_2426.JPG"
               alt="Volunteer teaching children in a community classroom"
               width={300}
               height={180}
@@ -60,7 +60,7 @@ export function EducationSection() {
           </div>
           <div className="relative rounded-xl overflow-hidden shadow-lg mt-4 bg-gradient-to-br from-forest-light/30 to-leaf-pale/30">
             <Image
-              src="https://as1.ftcdn.net/v2/jpg/01/85/50/42/1000_F_185504238_yhaEvCsfCArD2vUliLxGerlNZLrl5FSt.jpg"
+              src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/child-safety-program/_MG_2497.JPG"
               alt="Children learning letters on a blackboard"
               width={300}
               height={180}

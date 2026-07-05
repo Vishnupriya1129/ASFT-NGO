@@ -13,7 +13,7 @@ export default function EducationPage() {
           <div className="max-w-6xl mx-auto px-6 grid gap-16 lg:grid-cols-[0.95fr_1.05fr] items-center">
             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl bg-gradient-to-br from-forest-light/30 to-leaf-pale/30">
               <Image
-                src="https://www.smilefoundationindia.org/blog/wp-content/uploads/2024/07/448405374_911445267673283_7708986045448760025_n.jpg"
+                src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2024/child-safety-program/IMG_2327.JPG"
                 alt="Children learning together in a classroom"
                 width={900}
                 height={700}
