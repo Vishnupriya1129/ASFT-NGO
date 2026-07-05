@@ -22,21 +22,22 @@ export function AnnouncementsSection() {
     loadAnnouncements();
   }, []);
 
- async function loadAnnouncements() {
-  if (!supabase) {
-    console.error('Supabase is not configured');
-    return;
+  async function loadAnnouncements() {
+    if (!supabase) {
+      console.error('Supabase is not configured');
+      return;
+    }
+
+    const { data } = await supabase
+      .from('announcements')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (data) {
+      setAnnouncements(data);
+    }
   }
 
-  const { data } = await supabase
-    .from('announcements')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (data) {
-    setAnnouncements(data);
-  }
-}
   return (
     <section
       className="py-16 bg-gradient-to-b from-soil-dark to-soil-mid relative overflow-hidden"
@@ -67,7 +68,18 @@ export function AnnouncementsSection() {
 
       {/* Infinite scrolling track */}
       <div className="overflow-hidden max-w-7xl mx-auto relative z-10">
-        <div className="announcements-track">
+        <div
+          style={{
+            display: 'flex',
+            animation: 'scroll 25s linear infinite',
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLDivElement).style.animationPlayState = 'paused';
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLDivElement).style.animationPlayState = 'running';
+          }}
+        >
           {/* Duplicate the list to create seamless loop */}
           {[...announcements, ...announcements].map((item, i) => (
             <div
@@ -86,12 +98,7 @@ export function AnnouncementsSection() {
         </div>
       </div>
 
-      {/* CSS for infinite scroll animation (injected via style tag) */}
-      <style jsx>{`
-        .announcements-track {
-          display: flex;
-          animation: scroll 25s linear infinite;
-        }
+      <style>{`
         @keyframes scroll {
           0% {
             transform: translateX(0);
@@ -99,10 +106,6 @@ export function AnnouncementsSection() {
           100% {
             transform: translateX(-50%);
           }
-        }
-        /* Pause on hover for better UX */
-        .announcements-track:hover {
-          animation-play-state: paused;
         }
       `}</style>
     </section>

@@ -1,3 +1,4 @@
+// app/campaigns/page.tsx
 import { Metadata } from 'next';
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
@@ -23,6 +24,8 @@ export const metadata: Metadata = {
   description: 'Support our ongoing campaigns — from feeding children to funding education.',
 };
 
+// Add this to handle static generation with search params
+export const dynamic = 'force-static';
 export const revalidate = 60;
 
 // Fallback demo campaigns
@@ -148,10 +151,13 @@ export default async function CampaignsPage({
 }: {
   searchParams: { q?: string; tag?: string; page?: string };
 }) {
-  const page = parseInt(searchParams.page ?? '1');
+  // Safely access searchParams
+  const page = parseInt(searchParams?.page ?? '1');
   const limit = 9;
+  const query = searchParams?.q || '';
+  const tag = searchParams?.tag || '';
 
-  const { campaigns, total, uniqueTags } = await getCampaignsData(searchParams);
+  const { campaigns, total, uniqueTags } = await getCampaignsData({ q: query, tag, page: page.toString() });
 
   return (
     <>
@@ -175,7 +181,7 @@ export default async function CampaignsPage({
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone" size={18} />
               <input
                 name="q"
-                defaultValue={searchParams.q}
+                defaultValue={query}
                 placeholder="Search campaigns..."
                 className="form-input pl-11"
               />
@@ -184,24 +190,24 @@ export default async function CampaignsPage({
               <a
                 href="/campaigns"
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
-                  !searchParams.tag
+                  !tag
                     ? 'bg-forest-mid text-white'
                     : 'bg-earth-cream text-soil-mid hover:bg-leaf-pale'
                 }`}
               >
                 All
               </a>
-              {uniqueTags.map((tag: string) => (
+              {uniqueTags.map((tagItem: string) => (
                 <a
-                  key={tag}
-                  href={`/campaigns?tag=${tag}`}
+                  key={tagItem}
+                  href={`/campaigns?tag=${tagItem}`}
                   className={`px-5 py-2 rounded-full text-sm font-semibold capitalize transition-all ${
-                    searchParams.tag === tag
+                    tag === tagItem
                       ? 'bg-forest-mid text-white'
                       : 'bg-earth-cream text-soil-mid hover:bg-leaf-pale'
                   }`}
                 >
-                  {tag}
+                  {tagItem}
                 </a>
               ))}
             </div>
@@ -229,7 +235,7 @@ export default async function CampaignsPage({
               {Array.from({ length: Math.ceil(total / limit) }).map((_, i) => (
                 <a
                   key={i}
-                  href={`/campaigns?page=${i + 1}${searchParams.tag ? `&tag=${searchParams.tag}` : ''}`}
+                  href={`/campaigns?page=${i + 1}${tag ? `&tag=${tag}` : ''}`}
                   className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${
                     page === i + 1
                       ? 'bg-forest-mid text-white'

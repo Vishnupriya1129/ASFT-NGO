@@ -1,7 +1,5 @@
 'use client';
 
-import * as Sentry from '@sentry/nextjs';
-
 export default function GlobalError({
   error,
   reset,
@@ -9,17 +7,16 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  Sentry.captureException(error);
-
   return (
     <html>
-      <body>
-        <div style={{ padding: '20px', fontFamily: 'system-ui' }}>
-          <h1>Something went wrong</h1>
-          <p>{error.message}</p>
-          {error.digest && <p>Error ID: {error.digest}</p>}
-          <button onClick={() => reset()}>Try again</button>
-        </div>
+      <body style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+        <h1>Something went wrong</h1>
+
+        <p>{error.message}</p>
+
+        <button onClick={() => reset()}>
+          Try Again
+        </button>
       </body>
     </html>
   );

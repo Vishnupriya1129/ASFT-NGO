@@ -1,8 +1,6 @@
+// next.config.js
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
-  reactStrictMode: true,
-
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -10,14 +8,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'vixzstrzqhwswhibzfdq.supabase.co',
       },
+      // other hosts...
     ],
   },
+  // Remove staticOptimizationPages - it's not a valid Next.js config option
+}
 
-  compress: true,
-
-  poweredByHeader: false,
-
-  productionBrowserSourceMaps: false,
-};
-
-module.exports = nextConfig;
+module.exports = nextConfig
+module.exports = {
+  // ... other config
+  swcMinify: false, // Temporarily disable SWC
+}
