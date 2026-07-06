@@ -1,35 +1,44 @@
-name: CI - Seed & Serve
+name: Build Application
 
 on:
   push:
-    branches:
-      - main
-      - develop
-
+    branches: [main, develop]
   pull_request:
-    branches:
-      - main
-
-env:
-  NODE_VERSION: "20"
+    branches: [main]
 
 jobs:
   build:
-    name: Build Application
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
+          node-version: '18'
+          cache: 'npm'
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Install dependencies (root)
+        run: npm install --legacy-peer-deps
 
-      - name: Build Application
-        run: npm run build
+      - name: Install dependencies (web)
+        run: |
+          cd apps/web
+          npm install --legacy-peer-deps
+
+      - name: Generate Prisma Client
+        run: |
+          cd apps/web
+          npx prisma generate
+
+      - name: Build
+        run: |
+          cd apps/web
+          npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
