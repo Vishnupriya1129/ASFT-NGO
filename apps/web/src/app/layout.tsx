@@ -4,7 +4,7 @@ import { Providers } from '@/app/components/providers';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://seed-and-serve-4djp3dt4c-vishnus-projects-76247019.vercel.app'),
   title: {
     template: '%s | Arram Seivom Family Trust — Where Sky Meets Earth, Hope Blooms',
     default: 'Arram Seivom Family Trust — Where Sky Meets Earth, Hope Blooms',

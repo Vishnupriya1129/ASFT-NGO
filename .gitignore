@@ -30,3 +30,5 @@ Thumbs.db
 
 *.log
 *.png
+# Added by ggshield
+.cache_ggshield

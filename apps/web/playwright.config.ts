@@ -22,7 +22,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'pnpm dev',
-    url:     'http://localhost:3000',
+    url:     'https://seed-and-serve-4djp3dt4c-vishnus-projects-76247019.vercel.app',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },

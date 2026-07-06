@@ -25,7 +25,7 @@ jest.mock('@/lib/rate-limit', () => ({
 describe('POST /api/orders', () => {
   it('creates a Razorpay order for valid input', async () => {
     const { POST } = await import('@/app/api/orders/route');
-    const request = new Request('http://localhost:3000/api/orders', {
+    const request = new Request('https://seed-and-serve-4djp3dt4c-vishnus-projects-76247019.vercel.app/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-forwarded-for': '127.0.0.1' },
       body: JSON.stringify({ amount: 500, currency: 'INR', donorName: 'Test', donorEmail: 'test@test.com' }),

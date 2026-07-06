@@ -91,7 +91,7 @@ console.log(`
   Then:
   $ cd apps\\web
   $ npm run dev
-  $ Open http://localhost:3000
+  $ Open https://seed-and-serve-4djp3dt4c-vishnus-projects-76247019.vercel.app
 `);
 
 section('📖 DOCUMENTATION');
