@@ -5,7 +5,6 @@ import { AnnouncementsSection } from '@/app/components/home/AnnouncementsSection
 import { StatsSection }         from '@/app/components/home/StatsSection';
 import { MissionVisionSection } from '@/app/components/home/MissionVisionSection';
 import { ProgramsSection }      from '@/app/components/home/ProgramsSection';
-import { GallerySection }       from '@/app/components/home/GallerySection';
 import { EducationSection }     from '@/app/components/home/EducationSection';
 import { DonationSection }      from '@/app/components/home/DonationSection';
 import { ExploreSection }       from '@/app/components/home/ExploreSection';
@@ -22,7 +21,6 @@ export default function HomePage() {
         <MissionVisionSection />
         <ExploreSection />
         <ProgramsSection />
-        <GallerySection />
         <EducationSection />
         <DonationSection />
       </main>
