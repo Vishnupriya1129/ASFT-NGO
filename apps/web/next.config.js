@@ -1,21 +1,21 @@
-// next.config.js
+// apps/web/next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    unoptimized: true,
+    // Add this if you want to test without optimization
+    // unoptimized: true,
+    
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'vixzstrzqhwswhibzfdq.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**',
       },
-      // other hosts...
+      // Add any other hosts if needed
     ],
   },
-  // Remove staticOptimizationPages - it's not a valid Next.js config option
-}
-
-module.exports = nextConfig
-module.exports = {
   // ... other config
-  swcMinify: false, // Temporarily disable SWC
-}
+};
+
+module.exports = nextConfig;

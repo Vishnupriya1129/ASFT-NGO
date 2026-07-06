@@ -1,36 +1,33 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "globalEnv": [
-    "DATABASE_URL",
-    "NEXTAUTH_URL",
-    "NEXTAUTH_SECRET",
-    "NEXT_PUBLIC_APP_URL"
-  ],
-  "tasks": {
+  "extends": "//",
+  "pipeline": {
     "build": {
-      "outputs": [".next/**", "dist/**"],
-      "cache": true,
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "dist/**", "!dist/**/*.map"],
+      "cache": true
     },
     "dev": {
       "cache": false,
-      "persistent": true,
-      "outputs": []
-    },
-    "lint": {
-      "outputs": [],
-      "cache": true,
-      "dependsOn": ["^lint"]
-    },
-    "typecheck": {
-      "outputs": [],
-      "cache": true,
-      "dependsOn": ["^typecheck"]
+      "persistent": true
     },
     "test": {
+      "dependsOn": ["build"],
       "outputs": ["coverage/**"],
-      "cache": true,
-      "dependsOn": ["^build"]
+      "cache": true
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "lint": {
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "prisma:generate": {
+      "cache": false
     }
   }
 }
