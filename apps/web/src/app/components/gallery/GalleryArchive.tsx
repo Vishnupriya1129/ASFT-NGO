@@ -1,11 +1,18 @@
-// apps/web/src/components/gallery/GalleryArchive.tsx
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
-import { X, ChevronLeft, ChevronRight, FolderOpen } from 'lucide-react';
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Folder,
+  FolderOpen,
+  ChevronDown,
+  ChevronRight as ChevronRightIcon,
+} from 'lucide-react';
 
 type GalleryItem = {
   id: number;
@@ -21,6 +28,8 @@ export default function GalleryArchive() {
   const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryItem | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [openYears, setOpenYears] = useState<Record<number, boolean>>({});
+  const [openEvents, setOpenEvents] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     loadGallery();
@@ -62,8 +71,16 @@ export default function GalleryArchive() {
 
   const allPhotos = useMemo(() => photos, [photos]);
 
+  const toggleYear = (year: number) => {
+    setOpenYears((prev) => ({ ...prev, [year]: !prev[year] }));
+  };
+
+  const toggleEvent = (key: string) => {
+    setOpenEvents((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
   const handlePhotoClick = (photo: GalleryItem) => {
-    const index = allPhotos.findIndex(p => p.id === photo.id);
+    const index = allPhotos.findIndex((p) => p.id === photo.id);
     setSelectedPhoto(photo);
     setSelectedIndex(index);
     document.body.style.overflow = 'hidden';
@@ -75,7 +92,7 @@ export default function GalleryArchive() {
   };
 
   const navigatePhoto = (direction: 'prev' | 'next') => {
-    const currentIndex = allPhotos.findIndex(p => p.id === selectedPhoto?.id);
+    const currentIndex = allPhotos.findIndex((p) => p.id === selectedPhoto?.id);
     let newIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
     if (newIndex < 0) newIndex = allPhotos.length - 1;
     if (newIndex >= allPhotos.length) newIndex = 0;
@@ -112,85 +129,114 @@ export default function GalleryArchive() {
               (acc, items) => acc + items.length,
               0
             );
+            const isYearOpen = openYears[Number(year)] ?? false;
 
             return (
-              <div key={year} className="mb-20">
-                {/* Year Header - Folder Style */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="flex items-center gap-4 mb-8"
+              <div key={year} className="mb-6 border-b border-white/5 pb-6">
+                {/* Year Folder Header */}
+                <button
+                  onClick={() => toggleYear(Number(year))}
+                  className="flex items-center gap-3 w-full text-left hover:bg-white/5 rounded-lg p-3 transition-colors group"
                 >
-                  <FolderOpen className="w-8 h-8 text-sun-warm" />
-                  <h2 className="text-4xl font-serif text-white">
-                    {year}
-                  </h2>
-                  <span className="text-white/30 text-sm font-mono">
+                  {isYearOpen ? (
+                    <FolderOpen className="w-6 h-6 text-sun-warm" />
+                  ) : (
+                    <Folder className="w-6 h-6 text-sun-warm/70 group-hover:text-sun-warm" />
+                  )}
+                  <span className="text-2xl font-serif text-white">{year}</span>
+                  <span className="text-white/40 text-sm font-mono">
                     ({totalPhotos} photos)
                   </span>
-                </motion.div>
+                  <span className="ml-auto">
+                    {isYearOpen ? (
+                      <ChevronDown className="w-5 h-5 text-white/40" />
+                    ) : (
+                      <ChevronRightIcon className="w-5 h-5 text-white/40" />
+                    )}
+                  </span>
+                </button>
 
-                {/* Events - Like Subfolders */}
-                {Object.entries(events).map(([event, items]) => (
-                  <div key={event} className="mb-12 ml-8">
-                    {/* Event Header */}
-                    <motion.h3
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      className="text-2xl font-semibold text-white/80 mb-4 flex items-center gap-3"
-                    >
-                      <span className="w-1 h-6 bg-sun-warm/50 rounded-full" />
-                      {event}
-                      <span className="text-white/30 text-sm font-mono">
-                        ({items.length} {items.length === 1 ? 'photo' : 'photos'})
-                      </span>
-                    </motion.h3>
+                {/* Year Content */}
+                {isYearOpen && (
+                  <div className="ml-8 mt-4 space-y-6">
+                    {Object.entries(events).map(([event, items]) => {
+                      const eventKey = `${year}-${event}`;
+                      const isEventOpen = openEvents[eventKey] ?? false;
 
-                    {/* Photo Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                      {items.map((photo, index) => (
-                        <motion.div
-                          key={photo.id}
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.3, delay: index * 0.05 }}
-                          className="group relative rounded-lg overflow-hidden bg-white/5 border border-white/10 hover:border-sun-warm/50 transition-all duration-300 cursor-pointer aspect-square"
-                          onClick={() => handlePhotoClick(photo)}
-                        >
-                          <Image
-                            src={photo.image_url}
-                            alt={photo.title || photo.caption || 'Gallery image'}
-                            fill
-                            className="object-cover group-hover:scale-110 transition-transform duration-500"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                          <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
-                            <p className="text-white text-xs font-medium line-clamp-2">
-                              {photo.caption || photo.title}
-                            </p>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
+                      return (
+                        <div key={event} className="border-l-2 border-white/10 pl-4">
+                          {/* Event Subfolder Header */}
+                          <button
+                            onClick={() => toggleEvent(eventKey)}
+                            className="flex items-center gap-2 w-full text-left hover:bg-white/5 rounded-lg px-3 py-2 transition-colors group"
+                          >
+                            {isEventOpen ? (
+                              <FolderOpen className="w-5 h-5 text-sun-warm/80" />
+                            ) : (
+                              <Folder className="w-5 h-5 text-sun-warm/60 group-hover:text-sun-warm" />
+                            )}
+                            <span className="text-lg font-semibold text-white/80">
+                              {event}
+                            </span>
+                            <span className="text-white/30 text-sm font-mono">
+                              ({items.length} {items.length === 1 ? 'photo' : 'photos'})
+                            </span>
+                            <span className="ml-auto">
+                              {isEventOpen ? (
+                                <ChevronDown className="w-4 h-4 text-white/30" />
+                              ) : (
+                                <ChevronRightIcon className="w-4 h-4 text-white/30" />
+                              )}
+                            </span>
+                          </button>
+
+                          {/* Event Content (Image Grid) */}
+                          {isEventOpen && (
+                            <div className="mt-3 ml-6">
+                              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                                {items.map((photo, index) => (
+                                  <motion.div
+                                    key={photo.id}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                                    className="group relative rounded-lg overflow-hidden bg-white/5 border border-white/10 hover:border-sun-warm/50 transition-all duration-300 cursor-pointer aspect-square"
+                                    onClick={() => handlePhotoClick(photo)}
+                                  >
+                                    <Image
+                                      src={photo.image_url}
+                                      alt={photo.title || photo.caption || 'Gallery image'}
+                                      fill
+                                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
+                                      <p className="text-white text-xs font-medium line-clamp-2">
+                                        {photo.caption || photo.title}
+                                      </p>
+                                    </div>
+                                  </motion.div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
+                )}
               </div>
             );
           })}
 
         {photos.length === 0 && (
           <div className="text-center py-24">
-            <p className="text-white/40 text-lg">
-              No gallery images found.
-            </p>
+            <p className="text-white/40 text-lg">No gallery images found.</p>
           </div>
         )}
       </div>
 
-      {/* Lightbox Modal - Keep the same */}
+      {/* Lightbox Modal (unchanged) */}
       <AnimatePresence>
         {selectedPhoto && (
           <motion.div
@@ -200,7 +246,89 @@ export default function GalleryArchive() {
             className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4"
             onClick={closeLightbox}
           >
-            {/* ... keep your existing lightbox code ... */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              className="absolute top-6 right-6 text-white/60 hover:text-white transition-colors z-10"
+              onClick={(e) => {
+                e.stopPropagation();
+                closeLightbox();
+              }}
+            >
+              <X className="w-8 h-8" />
+            </motion.button>
+
+            <motion.button
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              whileHover={{ scale: 1.1 }}
+              className="absolute left-6 text-white/40 hover:text-white transition-colors z-10 hidden md:block"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigatePhoto('prev');
+              }}
+            >
+              <ChevronLeft className="w-12 h-12" />
+            </motion.button>
+
+            <motion.button
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              whileHover={{ scale: 1.1 }}
+              className="absolute right-6 text-white/40 hover:text-white transition-colors z-10 hidden md:block"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigatePhoto('next');
+              }}
+            >
+              <ChevronRight className="w-12 h-12" />
+            </motion.button>
+
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: 'spring', damping: 20 }}
+              className="relative max-w-5xl w-full max-h-[85vh] rounded-2xl overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative w-full h-full min-h-[50vh]">
+                <Image
+                  src={selectedPhoto.image_url}
+                  alt={selectedPhoto.title || selectedPhoto.caption || 'Gallery image'}
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 1024px) 100vw, 80vw"
+                />
+              </div>
+
+              <motion.div
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent"
+              >
+                <div className="flex items-center gap-4 text-white/80 mb-2">
+                  <span className="text-sm font-mono bg-white/10 px-3 py-1 rounded-full">
+                    {selectedPhoto.year}
+                  </span>
+                  <span className="text-white/30">|</span>
+                  <span className="text-sm font-light">{selectedPhoto.event}</span>
+                </div>
+                <p className="text-white text-lg lg:text-xl font-medium max-w-2xl">
+                  {selectedPhoto.caption || selectedPhoto.title}
+                </p>
+                <div className="flex items-center gap-4 mt-2 text-white/40 text-xs">
+                  <span>
+                    {selectedIndex + 1} of {allPhotos.length}
+                  </span>
+                </div>
+              </motion.div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
