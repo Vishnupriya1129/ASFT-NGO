@@ -1,12 +1,36 @@
 {
-  "$schema": "./node_modules/turbo/schema.json",
-  "globalDependencies": [".env"],
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "DATABASE_URL",
+    "NEXTAUTH_URL",
+    "NEXTAUTH_SECRET",
+    "NEXT_PUBLIC_APP_URL"
+  ],
   "tasks": {
-    "build": { "dependsOn": ["^build"], "outputs": [".next/**", "dist/**"] },
-    "dev": { "cache": false, "persistent": true },
-    "lint": { "outputs": [] },
-    "typecheck": { "outputs": [] },
-    "test": { "outputs": ["coverage/**"] },
-    "test:e2e": { "cache": false }
+    "build": {
+      "outputs": [".next/**", "dist/**"],
+      "cache": true,
+      "dependsOn": ["^build"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "outputs": []
+    },
+    "lint": {
+      "outputs": [],
+      "cache": true,
+      "dependsOn": ["^lint"]
+    },
+    "typecheck": {
+      "outputs": [],
+      "cache": true,
+      "dependsOn": ["^typecheck"]
+    },
+    "test": {
+      "outputs": ["coverage/**"],
+      "cache": true,
+      "dependsOn": ["^build"]
+    }
   }
 }
