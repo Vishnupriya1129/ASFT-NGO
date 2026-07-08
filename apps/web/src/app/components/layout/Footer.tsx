@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa';
-import { MapPin, Phone, Mail } from 'lucide-react'; // keep lucide for map, phone, mail
+import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { MapPin, Phone, Mail } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -21,15 +21,27 @@ export function Footer() {
             </p>
             <div className="flex gap-3">
               {[
-                { Icon: FaFacebookF, label: 'Facebook', href: '#' },
-                { Icon: FaTwitter, label: 'Twitter', href: '#' },
-                { Icon: FaInstagram, label: 'Instagram', href: '#' },
-                { Icon: FaLinkedinIn, label: 'LinkedIn', href: '#' },
-                { Icon: FaYoutube, label: 'YouTube', href: '#' },
+                {
+                  Icon: FaFacebookF,
+                  label: 'Facebook',
+                  href: 'https://m.facebook.com/1673806749585918/',
+                },
+                {
+                  Icon: FaInstagram,
+                  label: 'Instagram',
+                  href: 'https://www.instagram.com/aram_saeivom_family?igsh=MWMwdzZkemNhOW1kdA==',
+                },
+                {
+                  Icon: FaYoutube,
+                  label: 'YouTube',
+                  href: 'https://youtube.com/channel/UCfxiR29gQPTZMdUOXrZZD3A?si=rLk5mI2m68pQfCQv',
+                },
               ].map(({ Icon, label, href }) => (
                 <a
                   key={label}
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white hover:bg-primary-600 hover:-translate-y-1 transition-all duration-300"
                 >
@@ -41,47 +53,56 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-5">
-              Quick Links
-            </h4>
-            <ul className="space-y-3">
-              {[
-                { label: 'Home', href: '/' },
-                { label: 'Programs', href: '/programs' },
-                { label: 'Campaigns', href: '/campaigns' },
-                { label: 'Education', href: '/education' },
-                { label: 'Gallery', href: '/gallery' },
-                { label: 'Donate', href: '/#donate' },
-              ].map(({ label, href }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-slate-300 hover:text-primary-400 hover:translate-x-1 transition-all duration-300 text-sm"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
+            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/" className="text-white/80 hover:text-white transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/programs" className="text-white/80 hover:text-white transition-colors">
+                  Programs
+                </Link>
+              </li>
+              <li>
+                <Link href="/events" className="text-white/80 hover:text-white transition-colors">
+                  Events
+                </Link>
+              </li>
+              <li>
+                <Link href="/volunteer" className="text-white/80 hover:text-white transition-colors">
+                  Join Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin" className="text-white/80 hover:text-white transition-colors">
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link href="/donate" className="text-white/80 hover:text-white transition-colors font-semibold">
+                  Donate
+                </Link>
+              </li>
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-5">
-              Contact Us
-            </h4>
+            <h4 className="text-lg font-semibold text-white mb-5">Contact Us</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-slate-300 text-sm">
                 <MapPin size={16} className="text-primary-400 mt-0.5 flex-shrink-0" />
-                <span>Bangalore, Karnataka, India</span>
+                <span>No.381, Transport Nagar, PTC Post, Madurai – 625022.</span>
               </li>
               <li className="flex items-center gap-3 text-slate-300 text-sm">
                 <Phone size={16} className="text-primary-400 flex-shrink-0" />
-                <span>+91 98765 43210</span>
+                <span>+91 85080 53583</span>
               </li>
               <li className="flex items-center gap-3 text-slate-300 text-sm">
                 <Mail size={16} className="text-primary-400 flex-shrink-0" />
-                <span>hello@arramseivom.org</span>
+                <span>aramsaeivom@gmail.com</span>
               </li>
             </ul>
           </div>

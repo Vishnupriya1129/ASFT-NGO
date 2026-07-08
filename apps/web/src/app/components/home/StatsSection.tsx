@@ -1,72 +1,75 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { Utensils, Home, GraduationCap, Users } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { Users, Building2, GraduationCap, Heart } from 'lucide-react';
 
 const stats = [
-  { icon: Utensils,       number: 50000, label: 'Meals Served Monthly',  suffix: '' },
-  { icon: Home,           number: 25,    label: 'Partner Orphanages',     suffix: '+' },
-  { icon: GraduationCap, number: 500,   label: 'Children in School',     suffix: '+' },
-  { icon: Users,          number: 120,   label: 'Active Volunteers',      suffix: '+' },
+  {
+    value: '500+',
+    label: 'Youths Empowered',
+    icon: Users,
+    description: 'Through skill development and mentorship',
+  },
+  {
+    value: '4',
+    label: 'Partnered Educational Institutions',
+    icon: Building2,
+    description: 'Schools and colleges across the region',
+  },
+  {
+    value: '40+',
+    label: 'Active Volunteers',
+    icon: Heart,
+    description: 'Committed to serving the community',
+  },
 ];
 
-function AnimatedNumber({ target, suffix }: { target: number; suffix: string }) {
-  const [count, setCount] = useState(0);
-  const ref   = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          let current = 0;
-          const step = target / 60;
-          const timer = setInterval(() => {
-            current += step;
-            if (current >= target) {
-              setCount(target);
-              clearInterval(timer);
-            } else {
-              setCount(Math.floor(current));
-            }
-          }, 25);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target]);
-
-  return (
-    <span ref={ref} className="font-serif text-4xl font-bold text-soil-dark block">
-      {count.toLocaleString()}
-      {count === target ? suffix : ''}
-    </span>
-  );
-}
-
 export function StatsSection() {
-  return (
-    <section className="py-20 bg-cloud relative" aria-label="Impact statistics">
-      {/* Top gradient line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-forest-mid via-sun-gold to-forest-mid" />
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map(({ icon: Icon, number, label, suffix }) => (
-            <div
-              key={label}
-              className="card p-10 text-center border-b-4 border-forest-mid group"
-            >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-leaf-pale rounded-2xl text-forest-mid mb-5 group-hover:bg-forest-mid group-hover:text-white transition-all duration-300">
-                <Icon size={28} />
-              </div>
-              <AnimatedNumber target={number} suffix={suffix} />
-              <p className="text-stone font-medium mt-2 text-sm">{label}</p>
-            </div>
-          ))}
+  return (
+    <section
+      ref={ref}
+      className="py-16 bg-gradient-to-b from-white to-slate-50"
+      aria-label="Impact statistics"
+    >
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-12">
+          <span className="section-tag">Our Impact</span>
+          <h2 className="section-heading mt-3">
+            Making a Difference Together
+          </h2>
+          <div className="divider-emerald mt-4" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: index * 0.15, duration: 0.6 }}
+                className="card-emerald text-center p-8"
+              >
+                <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon size={28} className="text-emerald-500" />
+                </div>
+                <div className="font-serif text-4xl md:text-5xl font-bold text-primary-500">
+                  {stat.value}
+                </div>
+                <div className="text-slate-700 font-semibold text-lg mt-2">
+                  {stat.label}
+                </div>
+                <div className="text-slate-500 text-sm mt-1">
+                  {stat.description}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

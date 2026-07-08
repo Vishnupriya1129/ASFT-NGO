@@ -23,12 +23,7 @@ const pages = [
     href: '/events',
     icon: CalendarDays,
   },
-  {
-    title: 'Gallery',
-    description: 'See our work through real stories, real smiles, and real Indian communities.',
-    href: '/gallery',
-    icon: Camera,
-  },
+ 
   {
     title: 'Impact',
     description: 'Numbers that matter: meals shared, children taught, communities lifted.',

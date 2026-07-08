@@ -9,20 +9,15 @@ const navItems = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Programs', href: '/programs' },
-  { label: 'Campaigns', href: '/campaigns' },
-  { label: 'Education', href: '/education' },
-  { label: 'Gallery', href: '/gallery' },
   { label: 'Events', href: '/events' },
-  { label: 'Volunteer', href: '/volunteer' },
-  { label: 'Impact', href: '/impact' },
+  { label: 'Join Us', href: '/volunteer' },        // ← Changed from "Volunteer"
+  { label: 'Dashboard', href: '/admin' },          // ← New Dashboard link
 ];
 
 export function Navbar() {
-  const [scrolled, setScrolled]   = useState(false);
-  const [menuOpen, setMenuOpen]   = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-
-  // Scroll listener
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -30,122 +25,140 @@ export function Navbar() {
   }, []);
 
   return (
-    <nav
-      role="navigation"
-      aria-label="Main navigation"
-      suppressHydrationWarning
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white shadow-lg py-3'
-          : 'bg-white/98 backdrop-blur-sm py-4'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-3 group shrink-0"
-          aria-label="Aram Seivom Family Trust Home"
-        >
-          <Image
-            src="/aram.png"
-            alt="Aram Seivom Family Trust"
-            width={60}
-            height={60}
-            priority
-            className="object-contain"
-          />
-          <div className="hidden sm:block">
-            <div className="font-bold text-base text-gray-900 leading-tight">
-              Aram Seivom Family Trust
-            </div>
-            <div className="text-xs text-primary-600 font-medium">
-              Youth Skill Development Organisation
-            </div>
-          </div>
-        </Link>
-
-        {/* Desktop Nav */}
-        <ul className="hidden lg:flex items-center gap-1" role="list">
-          {navItems.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors duration-300 rounded-md hover:bg-gray-50"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-          {/* Hardcoded Dashboard link (temporary) */}
-          <li>
-            <Link
-              href="/admin"
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors duration-300 rounded-md hover:bg-gray-50"
-            >
-              Dashboard
-            </Link>
-          </li>
-        </ul>
-
-        {/* CTA Section – only the Donate button */}
-        <div className="hidden lg:flex items-center gap-3">
+    <>
+      <nav
+        role="navigation"
+        aria-label="Main navigation"
+        suppressHydrationWarning
+        className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+          scrolled ? 'bg-white shadow-lg py-3' : 'bg-transparent py-5'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+          {/* Logo */}
           <Link
-            href="/#donate"
-            className="btn-primary-sm text-sm py-2.5 px-6 font-semibold"
+            href="/"
+            className="flex items-center gap-3 group shrink-0"
+            aria-label="Aram Seivom Family Trust Home"
           >
-            Donate
-          </Link>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="lg:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={menuOpen}
-        >
-          {menuOpen ? '✕' : '☰'}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden bg-white border-t border-gray-100"
-          >
-            <div className="px-4 py-4 space-y-2">
-              <ul className="space-y-1" role="list">
-                {navItems.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="block px-4 py-3 rounded-lg text-gray-700 font-medium hover:bg-primary-50 hover:text-primary-600 transition-all duration-300"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <div className="pt-3 border-t border-gray-100 mt-3">
-                <Link
-                  href="/#donate"
-                  className="block px-4 py-3 rounded-lg bg-primary-600 text-white font-semibold text-center hover:bg-primary-700 transition-colors duration-300"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Donate Now
-                </Link>
+            <Image
+              src="/logo.png"
+              alt="Aram Seivom Family Trust"
+              width={70}
+              height={70}
+              priority
+              className="object-contain"
+            />
+            <div className="hidden md:block">
+              <div
+                className={`font-bold text-xl leading-tight transition-colors duration-300 ${
+                  scrolled ? 'text-primary-500' : 'text-white'
+                }`}
+              >
+                Aram Seivom Family Trust
+              </div>
+              <div
+                className={`text-xs font-medium transition-colors duration-300 ${
+                  scrolled ? 'text-primary-600' : 'text-white/80'
+                }`}
+              >
+                Empowering Youth. Transforming Communities. Inspiring Change.
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+            <div className="md:hidden">
+              <div
+                className={`font-bold text-sm leading-tight transition-colors duration-300 ${
+                  scrolled ? 'text-primary-500' : 'text-white'
+                }`}
+              >
+                Aram Seivom
+              </div>
+            </div>
+          </Link>
+
+          {/* Desktop Nav */}
+          <ul
+            className={`hidden lg:flex items-center gap-1 transition-colors duration-300 ${
+              scrolled ? 'text-gray-700' : 'text-white'
+            }`}
+          >
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={`px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-md hover:bg-white/10 ${
+                    scrolled
+                      ? 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                      : 'text-white hover:text-white/80 hover:bg-white/10'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link
+                href="/donate"
+                className={`btn-primary text-sm py-2.5 px-5 ${
+                  !scrolled ? 'bg-white text-primary-500 hover:bg-white/90' : ''
+                }`}
+              >
+                Donate
+              </Link>
+            </li>
+          </ul>
+
+          {/* Mobile menu button */}
+          <button
+            className={`lg:hidden p-2 rounded-lg transition-colors ${
+              scrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'
+            }`}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
+        </div>
+
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="lg:hidden bg-white border-t border-gray-100"
+            >
+              <div className="px-4 py-4 space-y-2">
+                <ul className="space-y-1">
+                  {navItems.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className="block px-4 py-3 rounded-lg text-gray-700 font-medium hover:bg-primary-50 hover:text-primary-600 transition-all duration-300"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <div className="pt-3 border-t border-gray-100 mt-3">
+                  <Link
+                    href="/donate"
+                    className="btn-primary block px-4 py-3 text-center font-semibold"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Donate Now
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+    </>
   );
 }

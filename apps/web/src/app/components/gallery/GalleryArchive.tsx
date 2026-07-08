@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
@@ -18,7 +18,7 @@ type GalleryItem = {
   id: number;
   title: string;
   image_url: string;
-  caption: string;
+  caption?: string;
   year: number;
   event: string;
 };
@@ -26,6 +26,7 @@ type GalleryItem = {
 export default function GalleryArchive() {
   const [photos, setPhotos] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryItem | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [openYears, setOpenYears] = useState<Record<number, boolean>>({});
@@ -36,48 +37,54 @@ export default function GalleryArchive() {
   }, []);
 
   async function loadGallery() {
-    if (!supabase) return;
-
-    const { data, error } = await supabase
-      .from('gallery')
-      .select('*')
-      .order('year', { ascending: false })
-      .order('event', { ascending: true });
-
-    if (error) {
-      console.error(error);
+    console.log('🔍 Fetching gallery...');
+    if (!supabase) {
+      setError('Supabase client not available.');
+      setLoading(false);
       return;
     }
 
-    setPhotos((data as GalleryItem[]) || []);
-    setLoading(false);
+    try {
+      const { data, error } = await supabase
+        .from('gallery')
+        .select('*')
+        .order('year', { ascending: false })
+        .order('event', { ascending: true });
+
+      if (error) {
+        console.error('❌ Supabase error:', error);
+        setError(`Error: ${error.message}`);
+        setLoading(false);
+        return;
+      }
+
+      console.log('📊 Data received:', data?.length || 0, 'rows');
+      setPhotos(data || []);
+    } catch (err) {
+      console.error('💥 Unexpected:', err);
+      setError('Unexpected error occurred.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   const groupedGallery = useMemo(() => {
     const result: Record<number, Record<string, GalleryItem[]>> = {};
-
     photos.forEach((photo) => {
-      if (!result[photo.year]) {
-        result[photo.year] = {};
-      }
-      if (!result[photo.year][photo.event]) {
-        result[photo.year][photo.event] = [];
-      }
+      if (!result[photo.year]) result[photo.year] = {};
+      if (!result[photo.year][photo.event]) result[photo.year][photo.event] = [];
       result[photo.year][photo.event].push(photo);
     });
-
     return result;
   }, [photos]);
 
   const allPhotos = useMemo(() => photos, [photos]);
 
-  const toggleYear = (year: number) => {
+  const toggleYear = (year: number) =>
     setOpenYears((prev) => ({ ...prev, [year]: !prev[year] }));
-  };
 
-  const toggleEvent = (key: string) => {
+  const toggleEvent = (key: string) =>
     setOpenEvents((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
 
   const handlePhotoClick = (photo: GalleryItem) => {
     const index = allPhotos.findIndex((p) => p.id === photo.id);
@@ -92,29 +99,46 @@ export default function GalleryArchive() {
   };
 
   const navigatePhoto = (direction: 'prev' | 'next') => {
-    const currentIndex = allPhotos.findIndex((p) => p.id === selectedPhoto?.id);
-    let newIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
-    if (newIndex < 0) newIndex = allPhotos.length - 1;
-    if (newIndex >= allPhotos.length) newIndex = 0;
+    const current = allPhotos.findIndex((p) => p.id === selectedPhoto?.id);
+    const newIndex = (current + (direction === 'next' ? 1 : -1) + allPhotos.length) % allPhotos.length;
     setSelectedPhoto(allPhotos[newIndex]);
     setSelectedIndex(newIndex);
   };
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handler = (e: KeyboardEvent) => {
       if (!selectedPhoto) return;
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') navigatePhoto('prev');
       if (e.key === 'ArrowRight') navigatePhoto('next');
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
   }, [selectedPhoto]);
 
   if (loading) {
     return (
       <div className="text-center py-24 text-white/60">
-        Loading Gallery...
+        <div className="animate-spin w-8 h-8 border-4 border-sun-warm border-t-transparent rounded-full mx-auto mb-4" />
+        <p>Loading Gallery...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-24 text-red-400">
+        <p className="text-xl font-semibold">⚠️ {error}</p>
+        <p className="text-sm text-white/40 mt-2">Check console for details.</p>
+      </div>
+    );
+  }
+
+  if (photos.length === 0) {
+    return (
+      <div className="text-center py-24">
+        <p className="text-white/40 text-lg">No gallery images found.</p>
+        <p className="text-white/20 text-sm">Run the SQL to allow public read access.</p>
       </div>
     );
   }
@@ -123,17 +147,13 @@ export default function GalleryArchive() {
     <section className="py-10">
       <div className="max-w-7xl mx-auto px-6">
         {Object.entries(groupedGallery)
-          .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
+          .sort(([a], [b]) => Number(b) - Number(a))
           .map(([year, events]) => {
-            const totalPhotos = Object.values(events).reduce(
-              (acc, items) => acc + items.length,
-              0
-            );
+            const total = Object.values(events).reduce((acc, items) => acc + items.length, 0);
             const isYearOpen = openYears[Number(year)] ?? false;
 
             return (
               <div key={year} className="mb-6 border-b border-white/5 pb-6">
-                {/* Year Folder Header */}
                 <button
                   onClick={() => toggleYear(Number(year))}
                   className="flex items-center gap-3 w-full text-left hover:bg-white/5 rounded-lg p-3 transition-colors group"
@@ -144,9 +164,7 @@ export default function GalleryArchive() {
                     <Folder className="w-6 h-6 text-sun-warm/70 group-hover:text-sun-warm" />
                   )}
                   <span className="text-2xl font-serif text-white">{year}</span>
-                  <span className="text-white/40 text-sm font-mono">
-                    ({totalPhotos} photos)
-                  </span>
+                  <span className="text-white/40 text-sm font-mono">({total} photos)</span>
                   <span className="ml-auto">
                     {isYearOpen ? (
                       <ChevronDown className="w-5 h-5 text-white/40" />
@@ -156,7 +174,6 @@ export default function GalleryArchive() {
                   </span>
                 </button>
 
-                {/* Year Content */}
                 {isYearOpen && (
                   <div className="ml-8 mt-4 space-y-6">
                     {Object.entries(events).map(([event, items]) => {
@@ -165,7 +182,6 @@ export default function GalleryArchive() {
 
                       return (
                         <div key={event} className="border-l-2 border-white/10 pl-4">
-                          {/* Event Subfolder Header */}
                           <button
                             onClick={() => toggleEvent(eventKey)}
                             className="flex items-center gap-2 w-full text-left hover:bg-white/5 rounded-lg px-3 py-2 transition-colors group"
@@ -175,9 +191,7 @@ export default function GalleryArchive() {
                             ) : (
                               <Folder className="w-5 h-5 text-sun-warm/60 group-hover:text-sun-warm" />
                             )}
-                            <span className="text-lg font-semibold text-white/80">
-                              {event}
-                            </span>
+                            <span className="text-lg font-semibold text-white/80">{event}</span>
                             <span className="text-white/30 text-sm font-mono">
                               ({items.length} {items.length === 1 ? 'photo' : 'photos'})
                             </span>
@@ -190,24 +204,24 @@ export default function GalleryArchive() {
                             </span>
                           </button>
 
-                          {/* Event Content (Image Grid) */}
                           {isEventOpen && (
                             <div className="mt-3 ml-6">
                               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                                {items.map((photo, index) => (
+                                {items.map((photo, idx) => (
                                   <motion.div
                                     key={photo.id}
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                                    transition={{ duration: 0.3, delay: idx * 0.05 }}
                                     className="group relative rounded-lg overflow-hidden bg-white/5 border border-white/10 hover:border-sun-warm/50 transition-all duration-300 cursor-pointer aspect-square"
                                     onClick={() => handlePhotoClick(photo)}
                                   >
                                     <Image
                                       src={photo.image_url}
-                                      alt={photo.title || photo.caption || 'Gallery image'}
+                                      alt={photo.title || photo.caption || 'Gallery'}
                                       fill
                                       className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                     <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
@@ -228,15 +242,8 @@ export default function GalleryArchive() {
               </div>
             );
           })}
-
-        {photos.length === 0 && (
-          <div className="text-center py-24">
-            <p className="text-white/40 text-lg">No gallery images found.</p>
-          </div>
-        )}
       </div>
 
-      {/* Lightbox Modal (unchanged) */}
       <AnimatePresence>
         {selectedPhoto && (
           <motion.div
@@ -246,44 +253,25 @@ export default function GalleryArchive() {
             className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4"
             onClick={closeLightbox}
           >
+            {/* Close, prev, next buttons... (keep as before) */}
             <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
               whileHover={{ scale: 1.1, rotate: 90 }}
-              className="absolute top-6 right-6 text-white/60 hover:text-white transition-colors z-10"
-              onClick={(e) => {
-                e.stopPropagation();
-                closeLightbox();
-              }}
+              className="absolute top-6 right-6 text-white/60 hover:text-white z-10"
+              onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
             >
               <X className="w-8 h-8" />
             </motion.button>
-
             <motion.button
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
               whileHover={{ scale: 1.1 }}
-              className="absolute left-6 text-white/40 hover:text-white transition-colors z-10 hidden md:block"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigatePhoto('prev');
-              }}
+              className="absolute left-6 text-white/40 hover:text-white z-10 hidden md:block"
+              onClick={(e) => { e.stopPropagation(); navigatePhoto('prev'); }}
             >
               <ChevronLeft className="w-12 h-12" />
             </motion.button>
-
             <motion.button
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
               whileHover={{ scale: 1.1 }}
-              className="absolute right-6 text-white/40 hover:text-white transition-colors z-10 hidden md:block"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigatePhoto('next');
-              }}
+              className="absolute right-6 text-white/40 hover:text-white z-10 hidden md:block"
+              onClick={(e) => { e.stopPropagation(); navigatePhoto('next'); }}
             >
               <ChevronRight className="w-12 h-12" />
             </motion.button>
@@ -299,13 +287,13 @@ export default function GalleryArchive() {
               <div className="relative w-full h-full min-h-[50vh]">
                 <Image
                   src={selectedPhoto.image_url}
-                  alt={selectedPhoto.title || selectedPhoto.caption || 'Gallery image'}
+                  alt={selectedPhoto.title || 'Gallery'}
                   fill
                   className="object-contain"
                   sizes="(max-width: 1024px) 100vw, 80vw"
+                  priority
                 />
               </div>
-
               <motion.div
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -319,13 +307,11 @@ export default function GalleryArchive() {
                   <span className="text-white/30">|</span>
                   <span className="text-sm font-light">{selectedPhoto.event}</span>
                 </div>
-                <p className="text-white text-lg lg:text-xl font-medium max-w-2xl">
+                <p className="text-white text-lg lg:text-xl font-medium">
                   {selectedPhoto.caption || selectedPhoto.title}
                 </p>
-                <div className="flex items-center gap-4 mt-2 text-white/40 text-xs">
-                  <span>
-                    {selectedIndex + 1} of {allPhotos.length}
-                  </span>
+                <div className="text-white/40 text-xs mt-2">
+                  {selectedIndex + 1} of {allPhotos.length}
                 </div>
               </motion.div>
             </motion.div>

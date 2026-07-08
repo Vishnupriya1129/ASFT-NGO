@@ -4,16 +4,25 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+// Check if env vars are loaded
+console.log('🔍 Supabase URL:', supabaseUrl ? '✅ Loaded' : '❌ Missing');
+console.log('🔍 Supabase Anon Key:', supabaseAnonKey ? '✅ Loaded' : '❌ Missing');
+console.log('🔍 Supabase Service Key:', supabaseServiceKey ? '✅ Loaded' : '❌ Missing');
+
 export const supabase =
   supabaseUrl && supabaseAnonKey
     ? createClient(supabaseUrl, supabaseAnonKey)
     : null;
 
+if (!supabase) {
+  console.warn('⚠️ Supabase client is null. Check your environment variables.');
+}
+
 export const supabaseAdmin =
   supabaseUrl && (supabaseServiceKey || supabaseAnonKey)
     ? createClient(
         supabaseUrl,
-        (supabaseServiceKey || supabaseAnonKey)!,   // TypeScript now trusts this
+        (supabaseServiceKey || supabaseAnonKey)!,
         {
           auth: {
             autoRefreshToken: false,
