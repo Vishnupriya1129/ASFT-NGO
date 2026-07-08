@@ -42,7 +42,7 @@ export function Navbar() {
             aria-label="Aram Seivom Family Trust Home"
           >
             <Image
-              src="/logo.png"
+              src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/logo/1783500965142.png"
               alt="Aram Seivom Family Trust"
               width={70}
               height={70}
