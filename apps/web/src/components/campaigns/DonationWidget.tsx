@@ -9,27 +9,27 @@ declare global {
 }
 
 interface Props {
-  campaignId:    string;
+  campaignId: string;
   campaignTitle: string;
-  goalAmount:    number;
-  raisedAmount:  number;
+  goalAmount: number;
+  raisedAmount: number;
 }
 
 const presets = [500, 1000, 2000, 5000];
 
 export function DonationWidget({ campaignId, campaignTitle, goalAmount, raisedAmount }: Props) {
-  const [amount,   setAmount]   = useState(1000);
-  const [custom,   setCustom]   = useState('');
-  const [name,     setName]     = useState('');
-  const [email,    setEmail]    = useState('');
-  const [loading,  setLoading]  = useState(false);
+  const [amount, setAmount] = useState(1000);
+  const [custom, setCustom] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const finalAmount = custom ? parseInt(custom) : amount;
   const pct = Math.min((raisedAmount / goalAmount) * 100, 100);
 
   const handleDonate = async () => {
     if (!name || !email) { toast.error('Please enter your name and email'); return; }
-    if (finalAmount < 1)  { toast.error('Please enter a valid amount');       return; }
+    if (finalAmount < 1) { toast.error('Please enter a valid amount'); return; }
     setLoading(true);
     try {
       const res = await fetch('/api/orders', {
@@ -43,7 +43,7 @@ export function DonationWidget({ campaignId, campaignTitle, goalAmount, raisedAm
         key: razorpayKey,
         amount: orderAmount * 100,
         currency: 'INR',
-        name: 'Arram Seivom Family Trust',
+        name: 'Aram Saeivom Family Trust',
         description: campaignTitle,
         order_id: orderId,
         handler: async (resp: any) => {
@@ -64,7 +64,7 @@ export function DonationWidget({ campaignId, campaignTitle, goalAmount, raisedAm
       });
       rzp.open();
     } catch { toast.error('Payment failed. Please try again.'); }
-    finally  { setLoading(false); }
+    finally { setLoading(false); }
   };
 
   return (
@@ -86,11 +86,10 @@ export function DonationWidget({ campaignId, campaignTitle, goalAmount, raisedAm
           <button
             key={p}
             onClick={() => { setAmount(p); setCustom(''); }}
-            className={`py-3 rounded-2xl font-semibold text-sm transition-all ${
-              amount === p && !custom
+            className={`py-3 rounded-2xl font-semibold text-sm transition-all ${amount === p && !custom
                 ? 'bg-forest-mid text-white shadow-forest'
                 : 'bg-earth-cream text-soil-mid hover:bg-leaf-pale'
-            }`}
+              }`}
           >
             ₹{p.toLocaleString('en-IN')}
           </button>

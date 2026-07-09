@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-test.describe('Arram Seivom Family Trust — Donation Flow', () => {
+test.describe('Aram Saeivom Family Trust — Donation Flow', () => {
   test('homepage loads with correct title and theme', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/Arram Seivom Family Trust/);
+    await expect(page).toHaveTitle(/Aram Saeivom Family Trust/);
     await expect(page.locator('h1')).toContainText('Where Sky Meets Earth');
   });
 
@@ -36,7 +36,7 @@ test.describe('Arram Seivom Family Trust — Donation Flow', () => {
 
   test('volunteer form submission works', async ({ page }) => {
     await page.goto('/volunteer');
-    await page.fill('input[name="name"]',  'Test Volunteer');
+    await page.fill('input[name="name"]', 'Test Volunteer');
     await page.fill('input[name="email"]', 'test@test.com');
     await page.fill('input[name="phone"]', '9876543210');
     await page.selectOption('select[name="availability"]', 'weekends');

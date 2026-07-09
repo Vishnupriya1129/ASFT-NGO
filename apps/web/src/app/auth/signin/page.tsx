@@ -7,11 +7,11 @@ import { Leaf, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 export default function SignInPage() {
   const router = useRouter();
-  const [email, setEmail]       = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPwd, setShowPwd]   = useState(false);
-  const [error,   setError]     = useState('');
-  const [loading, setLoading]   = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +36,7 @@ export default function SignInPage() {
           <div className="w-16 h-16 bg-gradient-to-br from-forest-mid to-forest-light rounded-full flex items-center justify-center text-white mx-auto mb-4 shadow-forest">
             <Leaf size={28} />
           </div>
-            <h1 className="font-serif text-3xl text-soil-dark font-bold">Arram Seivom Family Trust</h1>
+          <h1 className="font-serif text-3xl text-soil-dark font-bold">Aram Saeivom Family Trust</h1>
           {error && (
             <div className="flex items-center gap-3 bg-red-50 text-red-700 border border-red-200 rounded-xl p-4 text-sm" role="alert">
               <AlertCircle size={18} className="flex-shrink-0" />
@@ -45,9 +45,9 @@ export default function SignInPage() {
           )}
         </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-            <div>
-              <label htmlFor="email" className="form-label">Email address</label>
+        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+          <div>
+            <label htmlFor="email" className="form-label">Email address</label>
             <input
               id="email"
               type="email"
@@ -95,7 +95,7 @@ export default function SignInPage() {
 
         <p className="text-center text-stone text-xs mt-8">
           <a href="/" className="hover:text-forest-mid transition-colors">
-            ← Back to Arram Seivom Family Trust
+            ← Back to Aram Saeivom Family Trust
           </a>
         </p>
       </div>

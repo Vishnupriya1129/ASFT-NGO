@@ -1,8 +1,8 @@
 interface ReceiptEmailOptions {
-  to:        string;
-  name:      string;
-  amount:    number;
-  currency:  string;
+  to: string;
+  name: string;
+  amount: number;
+  currency: string;
   paymentId: string;
 }
 
@@ -14,13 +14,13 @@ export async function sendReceiptEmail(opts: ReceiptEmailOptions) {
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Donation Receipt — Arram Seivom Family Trust</title>
+  <title>Donation Receipt — Aram Saeivom Family Trust</title>
 </head>
 <body style="font-family:Inter,sans-serif;background:#F9F9F9;padding:40px 0;">
   <div style="max-width:600px;margin:0 auto;background:white;border-radius:20px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.08);">
     <!-- Header -->
     <div style="background:linear-gradient(135deg,#2E7D32,#4CAF50);padding:40px;text-align:center;">
-      <h1 style="color:white;font-size:2em;margin:0;font-family:Georgia,serif;">🌱 Arram Seivom Family Trust</h1>
+      <h1 style="color:white;font-size:2em;margin:0;font-family:Georgia,serif;">🌱 Aram Saeivom Family Trust</h1>
       <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;">Where Sky Meets Earth, Hope Blooms</p>
     </div>
     <!-- Body -->
@@ -61,7 +61,7 @@ export async function sendReceiptEmail(opts: ReceiptEmailOptions) {
     <!-- Footer -->
     <div style="background:#3E2723;padding:24px;text-align:center;">
       <p style="color:rgba(255,255,255,0.6);font-size:0.85em;margin:0;">
-        © 2026 Arram Seivom Family Trust, Bangalore, Karnataka, India
+        © 2026 Aram Saeivom Family Trust, Bangalore, Karnataka, India
       </p>
     </div>
   </div>
@@ -80,9 +80,9 @@ export async function sendReceiptEmail(opts: ReceiptEmailOptions) {
         personalizations: [{ to: [{ email: to, name }] }],
         from: {
           email: process.env.EMAIL_FROM ?? 'noreply@seedandserve.org',
-          name: process.env.EMAIL_FROM_NAME ?? 'Arram Seivom Family Trust',
+          name: process.env.EMAIL_FROM_NAME ?? 'Aram Saeivom Family Trust',
         },
-        subject: 'Your donation receipt - Arram Seivom Family Trust',
+        subject: 'Your donation receipt - Aram Saeivom Family Trust',
         content: [{ type: 'text/html', value: html }],
       }),
     });

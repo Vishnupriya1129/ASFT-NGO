@@ -186,7 +186,7 @@ export function ProgramsSection() {
 
                 {/* Brand Name - Bottom Right */}
                 <div className="absolute bottom-4 right-6 text-white/30 text-xs font-serif tracking-widest">
-                  Aram Seivom Family Trust
+                  Aram Saeivom Family Trust
                 </div>
               </div>
             </div>
@@ -214,11 +214,10 @@ export function ProgramsSection() {
               <button
                 key={idx}
                 onClick={() => goToSlide(idx)}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  idx === currentIndex
+                className={`w-3 h-3 rounded-full transition-all ${idx === currentIndex
                     ? 'bg-primary-500 scale-125'
                     : 'bg-gray-300 hover:bg-gray-400'
-                }`}
+                  }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
             ))}

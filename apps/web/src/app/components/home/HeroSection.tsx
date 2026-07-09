@@ -73,7 +73,7 @@ export function HeroSection() {
         >
           <Image
             src={heroImages[currentIndex]}
-            alt="Aram Seivom Family Trust"
+            alt="Aram Saeivom Family Trust"
             fill
             className="object-cover"
             priority
@@ -91,7 +91,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.3 }}
         >
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white drop-shadow-lg">
-            Aram Seivom
+            Aram Saeivom
           </h1>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white/90 drop-shadow-md mt-1">
             Family Trust

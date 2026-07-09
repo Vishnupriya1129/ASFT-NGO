@@ -13,7 +13,7 @@ const events = [
     id: 1,
     title: 'ASFT – UGC NET Coaching Program',
     description:
-      'UGC NET coaching program, next batch on August 15. Limited seats available. Register now to secure your spot and enhance your preparation for the UGC NET exams for only Rs.3500.',
+      'UGC NET coaching program, next batch on August 15. Limited seats available. Register now to secure your spot and enhance your preparation for the UGC NET exams for only Rs.3500.Aram Saeivom Family Trust for a 6-month UGC-NET Coaching Programme running from 15 July 2026 to 17 December 2026.Key details:Fee: Rs. 3,500 per student for the full 6 monthsSchedule: 4 days a week - 3 days online + 1 Sunday contact classTests: Home test on the last Sunday of every month  Goal: Provide guidance, resources & practice to help students crack UGC-NET with confidenceTagline: Prepare Today. Qualify Tomorrow.Colleges are also encouraged to nominate students for this program.',
     date: 'August 15, 2026 - December 17, 2026',
     time: '6:00 PM – 8:00 PM (Mon/Wed)',
     location: 'Online (Zoom)',
@@ -26,7 +26,7 @@ const events = [
     id: 2,
     title: 'ASFT – VTBT Training Program',
     description:
-      'We are thrilled to announce our upcoming VTBT training program starting on July 31. This program is designed to equip participants with essential skills and knowledge for personal and professional growth. Don’t miss this opportunity to learn from experts and enhance your capabilities. This is our Volunteer Team Building Training program, which is a part of our ongoing efforts to empower individuals and foster community development.',
+      'We are thrilled to announce our upcoming VTBT training program starting on July 31. This program is designed to equip participants with essential skills and knowledge for personal and professional growth. Don’t miss this opportunity to learn from experts and enhance your capabilities. This is our Volunteer Team Building Training program, which is a part of our ongoing efforts to empower individuals and foster community development.About the Volunteer Team Building Training ProgramThe Volunteer Team Building Training Program (VTBT) by Aram Saeivom Family Trust is a capacity-building initiative designed to empower volunteers and students with the skills, mindset, and values needed for community service.What the program focuses on:Team Bonding & Self-Growth: Through icebreakers, reflections, and group activities, participants build trust, connections, and confidence.Leadership & Mindfulness: Sessions on self-awareness, leadership, and mindfulness help volunteers grow personally and take initiative.Social Skills & Community Engagement: Interactive discussions and training cover group dynamics, emotional wellness, and effective strategies for working with communities.Creativity & Action Planning: Engaging activities encourage teamwork, creativity, and practical planning for real-world impact.Overall Goal: To enhance the capacity of volunteers, nurture future leaders, and equip them to make a meaningful, positive impact in society.The July 31 session continues this journey of learning, collaboration, and service — bringing people together to learn, lead, and grow as a team.',
     date: 'July 31, 2026',
     time: '10:00 AM – 4:00 PM',
     location: 'Community Center, Anna Nagar',
@@ -38,8 +38,8 @@ const events = [
   {
     id: 3,
     title: 'New Mental Health Program Launching',
-    description:
-      'We are excited to announce our new Mental Health Training program starting next month. Free workshops and counseling sessions will be available for youth and families in need.',
+    description: `We are excited to announce our new Mental Health Training program starting next month. Free workshops and counseling sessions will be available for youth and families in need. Launching Soon: Mental Health Program by Aram Saeivom Family Trust
+This program focuses on creating awareness, providing support, and building skills for emotional well-being. Our goal is to empower individuals with tools for mindfulness, resilience, and healthy coping — so every person feels heard, supported, and valued.`,
     date: 'Upcoming',
     time: 'TBA',
     location: 'Various locations',
@@ -51,8 +51,8 @@ const events = [
   {
     id: 4,
     title: 'ASFT – Thuyam! City Cleanup Drive',
-    description:
-      'Keep our city clean! We’re organising தூயம்\'26 on 19th July 2026. We need volunteers and venue suggestions – please share your ideas within the next 2 days. Your support helps make this a success!',
+    description: `Keep our city clean! We’re organising தூயம்'26 on 19th July 2026. We need volunteers and venue suggestions – please share your ideas within the next 2 days. Your support helps make this a success!.தூயம்'26 – Keep Our City Clean
+Aram Saeivom Family Trust is organizing தூயம்'26, a city cleanup initiative scheduled for 19th July 2026. To make the biggest impact, we are currently finalizing the location for the cleanup drive. We invite all members to share suggestions for suitable places in the city within the next 2 days.Let’s come together to make our city cleaner and greener. Your ideas matter!`,
     date: 'July 19, 2026',
     time: '7:00 AM – 10:00 AM',
     location: 'Marina Beach, Chennai',

@@ -4,7 +4,7 @@ import { DonationSection } from '@/app/components/home/DonationSection';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Donate | Arram Seivom Family Trust',
+  title: 'Donate | Aram Saeivom Family Trust',
   description: 'Support our mission – every donation plants a seed of hope.',
 };
 

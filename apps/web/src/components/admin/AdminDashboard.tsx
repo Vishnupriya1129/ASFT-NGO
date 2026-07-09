@@ -8,17 +8,17 @@ import {
 } from 'lucide-react';
 
 interface Stats {
-  totalDonations:  number;
-  totalRaised:     number;
+  totalDonations: number;
+  totalRaised: number;
   activeCampaigns: number;
   totalVolunteers: number;
 }
 
 interface Props {
-  stats:           Stats;
+  stats: Stats;
   recentDonations: any[];
-  campaigns:       any[];
-  session:         any;
+  campaigns: any[];
+  session: any;
 }
 
 function StatCard({ icon: Icon, label, value, sub, color }: any) {
@@ -51,7 +51,7 @@ export function AdminDashboard({ stats, recentDonations, campaigns, session }: P
               <Leaf size={20} />
             </div>
             <div>
-              <div className="font-serif text-xl font-bold text-gradient-gold">Arram Seivom Family Trust</div>
+              <div className="font-serif text-xl font-bold text-gradient-gold">Aram Saeivom Family Trust</div>
               <div className="text-white/50 text-xs">{session.user.role}</div>
             </div>
           </div>
@@ -59,12 +59,12 @@ export function AdminDashboard({ stats, recentDonations, campaigns, session }: P
 
         <nav className="flex-1 p-4 space-y-1" aria-label="Admin navigation">
           {[
-            { icon: Home,      label: 'Dashboard',  href: '/admin' },
-            { icon: Heart,     label: 'Donations',  href: '/admin/donations' },
-            { icon: Leaf,      label: 'Campaigns',  href: '/admin/campaigns' },
-            { icon: Calendar,  label: 'Events',     href: '/admin/events' },
-            { icon: Users,     label: 'Volunteers', href: '/admin/volunteers' },
-            { icon: FileText,  label: 'Audit Logs', href: '/admin/audit' },
+            { icon: Home, label: 'Dashboard', href: '/admin' },
+            { icon: Heart, label: 'Donations', href: '/admin/donations' },
+            { icon: Leaf, label: 'Campaigns', href: '/admin/campaigns' },
+            { icon: Calendar, label: 'Events', href: '/admin/events' },
+            { icon: Users, label: 'Volunteers', href: '/admin/volunteers' },
+            { icon: FileText, label: 'Audit Logs', href: '/admin/audit' },
           ].map(({ icon: Icon, label, href }) => (
             <Link
               key={href}
@@ -185,10 +185,9 @@ export function AdminDashboard({ stats, recentDonations, campaigns, session }: P
                   <div key={c.id} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-charcoal text-sm line-clamp-1 flex-1 mr-3">{c.title}</span>
-                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                        c.status === 'PUBLISHED' ? 'badge-status-published' :
-                        c.status === 'DRAFT'     ? 'badge-status-draft'     : 'badge-status-archived'
-                      }`}>{c.status}</span>
+                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${c.status === 'PUBLISHED' ? 'badge-status-published' :
+                          c.status === 'DRAFT' ? 'badge-status-draft' : 'badge-status-archived'
+                        }`}>{c.status}</span>
                     </div>
                     <div className="progress-bar">
                       <div className="progress-fill" style={{ width: `${pct}%` }} />

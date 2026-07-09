@@ -10,7 +10,7 @@ const announcements = [
     id: 1,
     title: " ASFT – UGC NET Coaching Program",
     description:
-      'UGC NET coaching program, next batch on August 15. Limited seats available. Register now to secure your spot and enhance your preparation for the UGC NET exams for only Rs.3500.',
+      'UGC NET coaching program, next batch on August 15.',
     date: 'August 15, 2026 - December 17, 2026',
     icon: HeartHandshakeIcon,
   },
@@ -18,8 +18,8 @@ const announcements = [
     id: 2,
     title: ' ASFT – VTBT training program july 31',
     description:
-      'We are thrilled to announce our upcoming VTBT training program starting on July 31. This program is designed to equip participants with essential skills and knowledge for personal and professional growth. Don’t miss this opportunity to learn from experts and enhance your capabilities.This is our Volunteer Team Building Training program, which is a part of our ongoing efforts to empower individuals and foster community development. Join us for an enriching experience that will help you make a positive impact in your community.',
-    date: 'Agust 15, 2026',
+      'We are thrilled to announce our upcoming VTBT training program starting on July 31.',
+    date: 'July 31, 2026',
     icon: Calendar,
   },
   {
@@ -34,7 +34,7 @@ const announcements = [
     id: 4,
     title: 'ASFT – Thuyam! City Cleanup Drive',
     description:
-      'Keep our city clean! We’re organising தூயம்\'26 on 19th July 2026. We need volunteers and venue suggestions – please share your ideas within the next 2 days. Your support helps make this a success!',
+      'Keep our city clean! We’re organising தூயம்\'26 on 19th July 2026.!',
     date: 'July 19, 2026',
     icon: Heart,
   },

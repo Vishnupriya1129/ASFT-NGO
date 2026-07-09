@@ -23,7 +23,7 @@ const pages = [
     href: '/events',
     icon: CalendarDays,
   },
- 
+
   {
     title: 'Impact',
     description: 'Numbers that matter: meals shared, children taught, communities lifted.',
@@ -46,7 +46,7 @@ export function ExploreSection() {
           <span className="section-tag">Explore</span>
           <h2 className="font-serif text-5xl text-soil-dark mb-5">Separate pages for every part of our mission</h2>
           <p className="text-stone text-lg leading-relaxed">
-            Discover the programs, education work, events, impact stories, and volunteer opportunities that make Arram Seivom Family Trust a true Indian community movement.
+            Discover the programs, education work, events, impact stories, and volunteer opportunities that make Aram Saeivom Family Trust a true Indian community movement.
           </p>
         </div>
 
