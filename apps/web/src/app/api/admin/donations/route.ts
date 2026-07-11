@@ -1,70 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { supabaseAdmin } from '@/lib/supabase';
 
-type DonationWithCampaign = {
-  id: string;
-  donorName: string;
-  donorEmail: string;
-  amount: number;
-  currency: string;
-  status: string;
-  razorpayPaymentId: string | null;
-  createdAt: Date;
-  campaign: { title: string } | null;
-};
+export async function GET() {
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name) { return cookieStore.get(name)?.value; },
+        set() {},
+        remove() {},
+      },
+    }
+  );
 
-export async function GET(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'EDITOR')) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const url    = new URL(req.url);
-  const format = url.searchParams.get('format');
-  const page   = parseInt(url.searchParams.get('page')  ?? '1');
-  const limit  = parseInt(url.searchParams.get('limit') ?? '50');
+  const { data, error } = await supabaseAdmin
+    .from('donations')
+    .select('*')
+    .order('created_at', { ascending: false });
 
-  const [donations, total] = await Promise.all([
-    prisma.donation.findMany({
-      orderBy: { createdAt: 'desc' },
-      skip:  (page - 1) * limit,
-      take:  limit,
-      include: { campaign: { select: { title: true } } },
-    }),
-    prisma.donation.count(),
-  ]);
-
-  if (format === 'csv') {
-    const rows = [
-      ['ID', 'Name', 'Email', 'Amount', 'Currency', 'Status', 'Campaign', 'Payment ID', 'Date'],
-      ...(donations as DonationWithCampaign[]).map((d) => [
-        d.id, d.donorName, d.donorEmail, d.amount, d.currency, d.status,
-        d.campaign?.title ?? '', d.razorpayPaymentId ?? '', d.createdAt.toISOString(),
-      ]),
-    ];
-    const csv  = rows.map((r) => r.join(',')).join('\n');
-    return new NextResponse(csv, {
-      headers: {
-        'Content-Type': 'text/csv',
-        'Content-Disposition': `attachment; filename="donations-${Date.now()}.csv"`,
-      },
-    });
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  const totals = await prisma.donation.aggregate({
-    where:  { status: 'SUCCESS' },
-    _sum:   { amount: true },
-    _count: { id: true },
-  });
-
-  return NextResponse.json({
-    data: donations,
-    pagination: { page, limit, total, pages: Math.ceil(total / limit) },
-    summary: {
-      totalRaised: totals._sum.amount ?? 0,
-      totalDonors: totals._count.id ?? 0,
-    },
-  });
+  return NextResponse.json(data);
 }

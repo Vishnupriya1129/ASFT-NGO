@@ -1,6 +1,5 @@
 'use client';
 
-import { ThemeToggle } from '@/app/components/ui/ThemeToggle';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -31,7 +30,7 @@ export function Navbar() {
       aria-label="Main navigation"
       suppressHydrationWarning
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        scrolled ? 'bg-white dark:bg-slate-900 shadow-lg py-3' : 'bg-transparent py-5'
+        scrolled ? 'bg-white shadow-lg py-3' : 'bg-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
@@ -52,14 +51,14 @@ export function Navbar() {
           <div className="hidden md:block">
             <div
               className={`font-bold text-xl leading-tight transition-colors duration-300 ${
-                scrolled ? 'text-primary-500 dark:text-primary-400' : 'text-white'
+                scrolled ? 'text-primary-500' : 'text-white'
               }`}
             >
               Aram Saeivom Family Trust
             </div>
             <div
               className={`text-xs font-medium transition-colors duration-300 ${
-                scrolled ? 'text-primary-600 dark:text-primary-300' : 'text-white/80'
+                scrolled ? 'text-primary-600' : 'text-white/80'
               }`}
             >
               Empowering Youth. Transforming Communities. Inspiring Change.
@@ -68,7 +67,7 @@ export function Navbar() {
           <div className="md:hidden">
             <div
               className={`font-bold text-sm leading-tight transition-colors duration-300 ${
-                scrolled ? 'text-primary-500 dark:text-primary-400' : 'text-white'
+                scrolled ? 'text-primary-500' : 'text-white'
               }`}
             >
               Aram Saeivom
@@ -79,7 +78,7 @@ export function Navbar() {
         {/* Desktop Nav */}
         <ul
           className={`hidden lg:flex items-center gap-1 transition-colors duration-300 ${
-            scrolled ? 'text-gray-700 dark:text-gray-200' : 'text-white'
+            scrolled ? 'text-gray-700' : 'text-white'
           }`}
         >
           {navItems.map((item) => (
@@ -88,7 +87,7 @@ export function Navbar() {
                 href={item.href}
                 className={`px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-md hover:bg-white/10 ${
                   scrolled
-                    ? 'text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-slate-700'
+                    ? 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
                     : 'text-white hover:text-white/80 hover:bg-white/10'
                 }`}
               >
@@ -96,10 +95,6 @@ export function Navbar() {
               </Link>
             </li>
           ))}
-          {/* ✅ THEME TOGGLE - Desktop */}
-          <li>
-            <ThemeToggle />
-          </li>
           <li>
             <Link
               href="/donate"
@@ -115,9 +110,7 @@ export function Navbar() {
         {/* Mobile menu button */}
         <button
           className={`lg:hidden p-2 rounded-lg transition-colors ${
-            scrolled
-              ? 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700'
-              : 'text-white hover:bg-white/10'
+            scrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'
           }`}
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -135,7 +128,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-700"
+            className="lg:hidden bg-white border-t border-gray-100"
           >
             <div className="px-4 py-4 space-y-2">
               <ul className="space-y-1">
@@ -143,19 +136,15 @@ export function Navbar() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="block px-4 py-3 rounded-lg text-gray-700 dark:text-gray-200 font-medium hover:bg-primary-50 dark:hover:bg-slate-700 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
+                      className="block px-4 py-3 rounded-lg text-gray-700 font-medium hover:bg-primary-50 hover:text-primary-600 transition-all duration-300"
                       onClick={() => setMenuOpen(false)}
                     >
                       {item.label}
                     </Link>
                   </li>
                 ))}
-                {/* ✅ THEME TOGGLE - Mobile */}
-                <li className="px-4 py-3">
-                  <ThemeToggle />
-                </li>
               </ul>
-              <div className="pt-3 border-t border-gray-100 dark:border-slate-700 mt-3">
+              <div className="pt-3 border-t border-gray-100 mt-3">
                 <Link
                   href="/donate"
                   className="btn-primary block px-4 py-3 text-center font-semibold"

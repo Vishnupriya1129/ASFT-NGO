@@ -2,164 +2,133 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
 interface DonationSettings {
-  id?: string;
+  id: number;
   upi_id: string;
   account_name: string;
-  bank_name: string;
   account_number: string;
   ifsc_code: string;
-  qr_image_url: string;
-  phone: string;
+  bank_name: string;
   email: string;
 }
 
-export default function DonationSettingsPage() {
-  const [settings, setSettings] = useState<DonationSettings>({
-    upi_id: '',
-    account_name: '',
-    bank_name: '',
-    account_number: '',
-    ifsc_code: '',
-    qr_image_url: '',
-    phone: '',
-    email: '',
-  });
-
+export default function AdminDonation() {
+  const router = useRouter();
+  const [settings, setSettings] = useState<DonationSettings | null>(null);
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    loadSettings();
-  }, []);
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/admin/login');
+        return;
+      }
+      loadSettings();
+    };
+    checkAuth();
+  }, [router]);
 
-  async function loadSettings() {
-    if (!supabase) {
-      console.error('Supabase is not configured');
-      return;
-    }
-
-    const { data, error } = await supabase
+  const loadSettings = async () => {
+    const { data } = await supabase
       .from('donation_settings')
       .select('*')
       .limit(1)
       .single();
+    if (data) setSettings(data);
+    setLoading(false);
+  };
 
-    if (error) {
-      console.error('Load error:', error);
-      return;
-    }
-
-    if (data) {
-      setSettings(data);
-    }
-  }
-
-  async function saveSettings() {
-    if (!supabase) {
-      console.error('Supabase is not configured');
-      return;
-    }
-
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
     setSaving(true);
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const data = {
+      upi_id: formData.get('upi_id') as string,
+      account_name: formData.get('account_name') as string,
+      account_number: formData.get('account_number') as string,
+      ifsc_code: formData.get('ifsc_code') as string,
+      bank_name: formData.get('bank_name') as string,
+      email: formData.get('email') as string,
+    };
 
-    const { data: existing, error: existingError } = await supabase
-      .from('donation_settings')
-      .select('id');
-
-    if (existingError) {
-      console.error(existingError);
-      setSaving(false);
-      return;
-    }
-
-    let error = null;
-
-    if (existing && existing.length > 0) {
-      const { error: updateError } = await supabase
-        .from('donation_settings')
-        .update(settings)
-        .eq('id', existing[0].id);
-
-      error = updateError;
+    if (settings?.id) {
+      await supabase.from('donation_settings').update(data).eq('id', settings.id);
     } else {
-      const { error: insertError } = await supabase
-        .from('donation_settings')
-        .insert([settings]);
-
-      error = insertError;
+      await supabase.from('donation_settings').insert(data);
     }
-
-    if (error) {
-      console.error(error);
-    } else {
-      console.log('Donation settings saved');
-    }
-
     setSaving(false);
-  }
+    loadSettings();
+    alert('Donation settings saved!');
+  };
+
+  if (loading) return <div className="p-10 text-gray-500">Loading...</div>;
 
   return (
-    <div className="p-8 max-w-3xl">
-      <h1 className="text-3xl font-bold mb-8">Donation Settings CMS</h1>
-
-      <div className="space-y-4">
-        <input
-          className="border p-3 w-full"
-          placeholder="UPI ID"
-          value={settings.upi_id}
-          onChange={(e) => setSettings({ ...settings, upi_id: e.target.value })}
-        />
-        <input
-          className="border p-3 w-full"
-          placeholder="Account Name"
-          value={settings.account_name}
-          onChange={(e) => setSettings({ ...settings, account_name: e.target.value })}
-        />
-        <input
-          className="border p-3 w-full"
-          placeholder="Bank Name"
-          value={settings.bank_name}
-          onChange={(e) => setSettings({ ...settings, bank_name: e.target.value })}
-        />
-        <input
-          className="border p-3 w-full"
-          placeholder="Account Number"
-          value={settings.account_number}
-          onChange={(e) => setSettings({ ...settings, account_number: e.target.value })}
-        />
-        <input
-          className="border p-3 w-full"
-          placeholder="IFSC Code"
-          value={settings.ifsc_code}
-          onChange={(e) => setSettings({ ...settings, ifsc_code: e.target.value })}
-        />
-        <input
-          className="border p-3 w-full"
-          placeholder="QR Image URL"
-          value={settings.qr_image_url}
-          onChange={(e) => setSettings({ ...settings, qr_image_url: e.target.value })}
-        />
-        <input
-          className="border p-3 w-full"
-          placeholder="Phone"
-          value={settings.phone}
-          onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
-        />
-        <input
-          className="border p-3 w-full"
-          placeholder="Email"
-          value={settings.email}
-          onChange={(e) => setSettings({ ...settings, email: e.target.value })}
-        />
-
-        <button
-          onClick={saveSettings}
-          disabled={saving}
-          className="bg-green-600 text-white px-6 py-3 rounded disabled:opacity-50"
-        >
-          {saving ? 'Saving...' : 'Save Donation Settings'}
-        </button>
+    <div className="min-h-screen bg-gray-100 p-10">
+      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
+        <h1 className="text-2xl font-bold text-primary-500 mb-6">Donation Settings</h1>
+        <form onSubmit={handleSave} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium">UPI ID</label>
+            <input
+              name="upi_id"
+              defaultValue={settings?.upi_id || ''}
+              className="w-full border rounded-lg px-4 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">Account Name</label>
+            <input
+              name="account_name"
+              defaultValue={settings?.account_name || ''}
+              className="w-full border rounded-lg px-4 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">Account Number</label>
+            <input
+              name="account_number"
+              defaultValue={settings?.account_number || ''}
+              className="w-full border rounded-lg px-4 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">IFSC Code</label>
+            <input
+              name="ifsc_code"
+              defaultValue={settings?.ifsc_code || ''}
+              className="w-full border rounded-lg px-4 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">Bank Name</label>
+            <input
+              name="bank_name"
+              defaultValue={settings?.bank_name || ''}
+              className="w-full border rounded-lg px-4 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">Email</label>
+            <input
+              name="email"
+              defaultValue={settings?.email || ''}
+              className="w-full border rounded-lg px-4 py-2"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={saving}
+            className="w-full bg-primary-500 text-white py-3 rounded-lg hover:bg-primary-600 transition disabled:opacity-50"
+          >
+            {saving ? 'Saving...' : 'Save Donation Settings'}
+          </button>
+        </form>
       </div>
     </div>
   );

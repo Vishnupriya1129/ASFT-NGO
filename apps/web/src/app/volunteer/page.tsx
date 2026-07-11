@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Heart, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -9,29 +10,39 @@ export const metadata: Metadata = {
   description: 'Join our mission. Volunteer with us and help transform communities.',
 };
 
-// Replace with your actual Google Form URL
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSflPi3hdVtPvNNviAmOZZ5e0VewvOxxo5uCsMQBFnnlkzsITA/viewform?usp=send_form&pli=1&authuser=0';
+// ✅ Replace with your actual Google Form URL
+const GOOGLE_FORM_URL = 'https://forms.gle/YOUR_GOOGLE_FORM_ID';
 
 export default function VolunteerPage() {
   return (
     <>
       <Navbar />
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white pt-24">
-        {/* Hero Section */}
-        <section className="relative bg-primary-500 text-white py-20 overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="w-full h-full bg-black/20" />
+        {/* Hero Section with Background Image */}
+        <section className="relative h-[400px] sm:h-[500px] flex items-center justify-center overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-images/2026/Uvagai/IMG_4423.JPG"
+              alt="Volunteers in action"
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Dark overlay for text readability */}
+            <div className="absolute inset-0 bg-black/50" />
           </div>
-          <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+
+          {/* Content */}
+          <div className="relative z-10 max-w-4xl mx-auto px-6 text-center text-white">
             <span className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-widest border border-white/30">
-              <Heart size={16} /> Join Our Movement
+              <Heart size={16} /> Be the Change
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold mt-6 drop-shadow-lg">
-              Be the Change
+              Volunteer With Us
             </h1>
             <p className="text-white/90 text-lg max-w-2xl mx-auto mt-4 leading-relaxed">
-              Volunteer with Aram Saeivom Family Trust and help us plant seeds of hope
-              in our communities.
+              Join Aram Saeivom Family Trust and help us plant seeds of hope in our communities.
             </p>
           </div>
         </section>
@@ -68,7 +79,7 @@ export default function VolunteerPage() {
               </p>
             </div>
 
-            {/* Optional: Quick info about volunteering */}
+            {/* Quick Info */}
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-100 pt-8">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary-500">🌟</div>

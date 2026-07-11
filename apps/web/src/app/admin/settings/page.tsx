@@ -2,122 +2,110 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
-export default function SettingsPage() {
-  const [value, setValue] = useState('');
-  const [label, setLabel] = useState('');
-  const [stats, setStats] = useState<any[]>([]);
+interface Setting {
+  key: string;
+  value: string;
+  description?: string;
+}
 
-  async function loadStats() {
-    if (!supabase) {
-      console.error('Supabase is not configured');
-      return;
-    }
+const SETTING_KEYS = [
+  { key: 'site_title', label: 'Site Title', description: 'Shown in browser tab and header' },
+  { key: 'tagline', label: 'Tagline', description: 'Shown under the logo' },
+  { key: 'contact_email', label: 'Contact Email', description: 'Email shown in footer' },
+  { key: 'contact_phone', label: 'Contact Phone', description: 'Phone number in footer' },
+  { key: 'facebook_url', label: 'Facebook URL', description: 'Social media link' },
+  { key: 'instagram_url', label: 'Instagram URL', description: 'Social media link' },
+  { key: 'youtube_url', label: 'YouTube URL', description: 'Social media link' },
+  { key: 'linkedin_url', label: 'LinkedIn URL', description: 'Social media link' },
+  { key: 'announcement_banner', label: 'Announcement Banner', description: 'Shown at top of site' },
+  { key: 'default_donation', label: 'Default Donation Amount', description: 'Preselected amount (₹)' },
+];
 
-    const { data, error } = await supabase
-      .from('stats')
-      .select('*')
-      .order('display_order', { ascending: true });
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    setStats(data || []);
-  }
-
-  async function addStat() {
-    if (!supabase) {
-      console.error('Supabase is not configured');
-      return;
-    }
-
-    const { error } = await supabase
-      .from('stats')
-      .insert([
-        {
-          value,
-          label,
-          display_order: stats.length + 1,
-        },
-      ]);
-
-    if (error) {
-      alert(error.message);
-      return;
-    }
-
-    setValue('');
-    setLabel('');
-
-    loadStats();
-  }
-
-  async function deleteStat(id: number) {
-    if (!supabase) {
-      console.error('Supabase is not configured');
-      return;
-    }
-
-    await supabase
-      .from('stats')
-      .delete()
-      .eq('id', id);
-
-    loadStats();
-  }
+export default function AdminSettings() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [settings, setSettings] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    loadStats();
-  }, []);
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/admin/login');
+        return;
+      }
+      loadSettings();
+    };
+    checkAuth();
+  }, [router]);
+
+  const loadSettings = async () => {
+    const { data } = await supabase
+      .from('settings')
+      .select('*');
+    if (data) {
+      const map: Record<string, string> = {};
+      data.forEach((s: Setting) => map[s.key] = s.value);
+      setSettings(map);
+    }
+    setLoading(false);
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    
+    const updates = SETTING_KEYS.map(({ key }) => ({
+      key,
+      value: settings[key] || '',
+    }));
+
+    const { error } = await supabase
+      .from('settings')
+      .upsert(updates, { onConflict: 'key' });
+
+    if (error) {
+      alert('Error: ' + error.message);
+    } else {
+      alert('Settings saved!');
+    }
+    setSaving(false);
+  };
+
+  if (loading) return <div className="p-10 text-gray-500">Loading...</div>;
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Hero Statistics CMS</h1>
+    <div className="min-h-screen bg-gray-100 p-10">
+      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-primary-500">Settings</h1>
+        </div>
 
-      <div className="space-y-4 max-w-lg">
-        <input
-          className="border p-3 w-full"
-          placeholder="Value (50K+)"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-
-        <input
-          className="border p-3 w-full"
-          placeholder="Label (Meals/Month)"
-          value={label}
-          onChange={(e) => setLabel(e.target.value)}
-        />
-
-        <button
-          onClick={addStat}
-          className="bg-green-600 text-white px-5 py-2 rounded"
-        >
-          Add Statistic
-        </button>
-      </div>
-
-      <div className="mt-10 space-y-4">
-        {stats.map((item) => (
-          <div
-            key={item.id}
-            className="border p-4 rounded flex justify-between items-center"
-          >
-            <div>
-              <div className="font-bold text-xl">{item.value}</div>
-              <div className="text-gray-600">{item.label}</div>
+        <form onSubmit={handleSave} className="space-y-4">
+          {SETTING_KEYS.map(({ key, label, description }) => (
+            <div key={key}>
+              <label className="block text-sm font-medium text-gray-700">
+                {label}
+                <span className="text-xs text-gray-400 ml-2">({description})</span>
+              </label>
+              <input
+                type="text"
+                value={settings[key] || ''}
+                onChange={(e) => setSettings({ ...settings, [key]: e.target.value })}
+                className="w-full border rounded-lg px-4 py-2 mt-1"
+              />
             </div>
-
-            <button
-              onClick={() => deleteStat(item.id)}
-              className="bg-red-500 text-white px-3 py-1 rounded"
-            >
-              Delete
-            </button>
-          </div>
-        ))}
+          ))}
+          <button
+            type="submit"
+            disabled={saving}
+            className="w-full bg-primary-500 text-white py-3 rounded-lg hover:bg-primary-600 transition disabled:opacity-50"
+          >
+            {saving ? 'Saving...' : 'Save Settings'}
+          </button>
+        </form>
       </div>
     </div>
   );

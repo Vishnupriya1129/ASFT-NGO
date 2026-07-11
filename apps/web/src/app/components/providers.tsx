@@ -1,26 +1,28 @@
-// app/components/providers.tsx
 'use client';
 
-import { SessionProvider } from 'next-auth/react';
-import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
-export function Providers({ children }: { children: React.ReactNode }) {
+interface ProvidersProps {
+  children: ReactNode;
+}
+
+export function Providers({ children }: ProvidersProps) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
-          queries: { staleTime: 60 * 1000, retry: 1 },
+          queries: {
+            staleTime: 60 * 1000,
+            retry: 1,
+          },
         },
       })
   );
 
   return (
-    <SessionProvider>
-      <QueryClientProvider client={queryClient}>
-        {children}
-      </QueryClientProvider>
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
   );
 }

@@ -2,155 +2,227 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
+import { Plus, Pencil, Trash, X } from 'lucide-react';
 
-export default function EventsAdminPage() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [location, setLocation] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [eventDate, setEventDate] = useState('');
-  const [events, setEvents] = useState<any[]>([]);
+interface Event {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  location: string;
+  image_url: string;
+  status: string;
+}
+
+export default function AdminEvents() {
+  const router = useRouter();
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState<Event | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    loadEvents();
-  }, []);
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/admin/login');
+        return;
+      }
+      loadEvents();
+    };
+    checkAuth();
+  }, [router]);
 
-  async function loadEvents() {
-    if (!supabase) {
-      console.error('Supabase is not configured');
-      return;
-    }
-
-    const { data, error } = await supabase
+  const loadEvents = async () => {
+    const { data } = await supabase
       .from('events')
       .select('*')
-      .order('event_date', { ascending: true });
+      .order('id', { ascending: false });
+    if (data) setEvents(data);
+    setLoading(false);
+  };
 
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    setEvents(data || []);
-  }
-
-  async function addEvent() {
-    if (!supabase) {
-      console.error('Supabase is not configured');
-      return;
-    }
-
-    const { error } = await supabase
-      .from('events')
-      .insert([
-        {
-          title,
-          description,
-          location,
-          image_url: imageUrl,
-          event_date: eventDate,
-        },
-      ]);
-
-    if (error) {
-      alert(error.message);
-      return;
-    }
-
-    setTitle('');
-    setDescription('');
-    setLocation('');
-    setImageUrl('');
-    setEventDate('');
-
+  const handleDelete = async (id: number) => {
+    if (!confirm('Delete this event?')) return;
+    await supabase.from('events').delete().eq('id', id);
     loadEvents();
-  }
+  };
 
-  async function deleteEvent(id: number) {
-    if (!supabase) {
-      console.error('Supabase is not configured');
-      return;
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const data = {
+      title: formData.get('title') as string,
+      description: formData.get('description') as string,
+      date: formData.get('date') as string,
+      time: formData.get('time') as string,
+      location: formData.get('location') as string,
+      image_url: formData.get('image_url') as string,
+      status: formData.get('status') as string || 'upcoming',
+    };
+
+    if (editing) {
+      await supabase.from('events').update(data).eq('id', editing.id);
+    } else {
+      await supabase.from('events').insert(data);
     }
-
-    await supabase
-      .from('events')
-      .delete()
-      .eq('id', id);
-
+    setShowForm(false);
+    setEditing(null);
     loadEvents();
-  }
+  };
+
+  if (loading) return <div className="p-10 text-gray-500">Loading...</div>;
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Events CMS</h1>
+    <div className="min-h-screen bg-gray-100 p-10">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-primary-500">Events</h1>
+          <button
+            onClick={() => { setEditing(null); setShowForm(true); }}
+            className="btn-primary inline-flex items-center gap-2"
+          >
+            <Plus size={18} /> Add Event
+          </button>
+        </div>
 
-      <div className="space-y-4 max-w-xl">
-        <input
-          className="border p-3 w-full"
-          placeholder="Event Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-
-        <textarea
-          className="border p-3 w-full"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <input
-          className="border p-3 w-full"
-          placeholder="Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-
-        <input
-          className="border p-3 w-full"
-          placeholder="Image URL"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-        />
-
-        <input
-          type="date"
-          className="border p-3 w-full"
-          value={eventDate}
-          onChange={(e) => setEventDate(e.target.value)}
-        />
-
-        <button
-          onClick={addEvent}
-          className="bg-green-600 text-white px-5 py-2 rounded"
-        >
-          Add Event
-        </button>
-      </div>
-
-      <div className="mt-10 space-y-4">
-        {events.map((event) => (
-          <div key={event.id} className="border p-4 rounded">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="font-bold text-lg">{event.title}</h2>
-                <p className="text-gray-600">{event.location}</p>
-                <p className="text-sm text-gray-500">
-                  {new Date(event.event_date).toLocaleDateString()}
-                </p>
-              </div>
-
+        {/* Form Modal */}
+        {showForm && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl max-w-lg w-full p-8 relative">
               <button
-                onClick={() => deleteEvent(event.id)}
-                className="bg-red-500 text-white px-3 py-1 rounded"
+                onClick={() => { setShowForm(false); setEditing(null); }}
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
               >
-                Delete
+                <X size={24} />
               </button>
+              <h2 className="text-xl font-bold mb-4">
+                {editing ? 'Edit Event' : 'Add Event'}
+              </h2>
+              <form onSubmit={handleSave} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium">Title</label>
+                  <input
+                    name="title"
+                    defaultValue={editing?.title || ''}
+                    className="w-full border rounded-lg px-4 py-2"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Description</label>
+                  <textarea
+                    name="description"
+                    defaultValue={editing?.description || ''}
+                    className="w-full border rounded-lg px-4 py-2 h-20"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Date</label>
+                  <input
+                    name="date"
+                    defaultValue={editing?.date || ''}
+                    className="w-full border rounded-lg px-4 py-2"
+                    placeholder="e.g., July 19, 2026"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Time</label>
+                  <input
+                    name="time"
+                    defaultValue={editing?.time || ''}
+                    className="w-full border rounded-lg px-4 py-2"
+                    placeholder="e.g., 7:00 AM – 10:00 AM"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Location</label>
+                  <input
+                    name="location"
+                    defaultValue={editing?.location || ''}
+                    className="w-full border rounded-lg px-4 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Image URL</label>
+                  <input
+                    name="image_url"
+                    defaultValue={editing?.image_url || ''}
+                    className="w-full border rounded-lg px-4 py-2"
+                    placeholder="https://..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Status</label>
+                  <select
+                    name="status"
+                    defaultValue={editing?.status || 'upcoming'}
+                    className="w-full border rounded-lg px-4 py-2"
+                  >
+                    <option value="upcoming">Upcoming</option>
+                    <option value="ongoing">Ongoing</option>
+                  </select>
+                </div>
+                <button type="submit" className="w-full bg-primary-500 text-white py-2 rounded-lg hover:bg-primary-600">
+                  {editing ? 'Update' : 'Create'} Event
+                </button>
+              </form>
             </div>
-
-            <p className="mt-3">{event.description}</p>
           </div>
-        ))}
+        )}
+
+        {/* List */}
+        <div className="bg-white rounded-xl shadow overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {events.map((e) => (
+                <tr key={e.id}>
+                  <td className="px-6 py-4">{e.title}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">{e.date || '—'}</td>
+                  <td className="px-6 py-4">
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      e.status === 'ongoing' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {e.status || 'upcoming'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 flex gap-2">
+                    <button
+                      onClick={() => { setEditing(e); setShowForm(true); }}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      <Pencil size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(e.id)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <Trash size={18} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {events.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                    No events yet. Click "Add Event" to create one.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

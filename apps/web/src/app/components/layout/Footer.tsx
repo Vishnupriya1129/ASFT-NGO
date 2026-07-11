@@ -1,6 +1,10 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn, FaLocationArrow, FaLandmark } from 'react-icons/fa';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn, FaLocationArrow } from 'react-icons/fa';
+import { Mail, Phone } from 'lucide-react';
+import { getSettings } from '@/lib/settings';
 
 const socialLinks = [
   {
@@ -23,18 +27,28 @@ const socialLinks = [
     label: 'LinkedIn',
     href: 'https://in.linkedin.com/company/aram-saeivom-family-trust',
   },
-  {
-    Icon: FaLandmark,
-    label: 'New Location',
-    href: 'https://www.google.com/maps/place/R4H3%2B445,+Transport+Nagar,+Tamil+Nadu+625022/@9.8277139,78.1018706,438m/data=!3m1!1e3!4m13!1m7!3m6!1s0x3b00d07db7f2f9a3:0x2c535b9873f86ddc!2sR4H3%2B445,+Transport+Nagar,+Tamil+Nadu+625022!3b1!8m2!3d9.8277625!4d78.1028594!3m4!1s0x3b00d07db7f2f9a3:0x2c535b9873f86ddc!8m2!3d9.8277625!4d78.1028594!10m1!2e57?entry=ttu&g_ep=EgoyMDI2MDcwNi4wIKXMDSoASAFQAw%3D%3D',
-  }
 ];
 
 export function Footer() {
-  //✅ Old address – displayed as static text
-  const oldAddress = 'No.381, Transport Nagar, PTC Post, Madurai – 625022., Tamil Nadu, India';
-  const newLocation = 'R4H3+445, Transport Nagar, Tamil Nadu 625022';
-  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(newLocation)}`;
+  const [settings, setSettings] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      const data = await getSettings();
+      setSettings(data || {});
+    };
+    loadSettings();
+  }, []);
+
+  // ✅ Static address – displayed as text
+  const address = 'No.381, Transport Nagar, PTC Post, Madurai – 625022.';
+  // ✅ Clickable location URL (Google Maps)
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+
+  const contactEmail = settings.contact_email || 'aramsaeivom@gmail.com';
+  const contactPhone = settings.contact_phone || '+91 85080 53583';
+  const siteTitle = settings.site_title || 'Aram Saeivom Family Trust';
+  const tagline = settings.tagline || 'Empowering youth, transforming communities, and inspiring lasting change.';
 
   return (
     <footer className="bg-primary-900 text-white">
@@ -42,10 +56,8 @@ export function Footer() {
         {/* Top row: Brand + Donate/Volunteer buttons */}
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-xl">
-            <h2 className="text-2xl font-semibold">Aram Saeivom Family Trust</h2>
-            <p className="mt-3 text-sm text-white/80">
-              Empowering youth, transforming communities, and inspiring lasting change.
-            </p>
+            <h2 className="text-2xl font-semibold">{siteTitle}</h2>
+            <p className="mt-3 text-sm text-white/80">{tagline}</p>
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -60,41 +72,35 @@ export function Footer() {
 
         {/* Contact details */}
         <div className="mt-10 grid grid-cols-1 gap-4 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-3">
-          {/* Email – icon + text clickable */}
+          {/* Email */}
           <div className="flex items-center gap-3 text-sm text-white/80">
             <a
-              href="mailto:aramsaeivom@gmail.com"
+              href={`mailto:${contactEmail}`}
               className="text-primary-400 hover:text-primary-300 transition-colors flex-shrink-0"
               aria-label="Send email"
             >
               <Mail size={18} />
             </a>
-            <a
-              href="mailto:aramsaeivom@gmail.com"
-              className="hover:text-white transition-colors"
-            >
-              aramsaeivom@gmail.com
+            <a href={`mailto:${contactEmail}`} className="hover:text-white transition-colors">
+              {contactEmail}
             </a>
           </div>
 
-          {/* Phone – icon + text clickable */}
+          {/* Phone */}
           <div className="flex items-center gap-3 text-sm text-white/80">
             <a
-              href="tel:+918508053583"
+              href={`tel:${contactPhone.replace(/\s/g, '')}`}
               className="text-primary-400 hover:text-primary-300 transition-colors flex-shrink-0"
               aria-label="Call us"
             >
               <Phone size={18} />
             </a>
-            <a
-              href="tel:+918508053583"
-              className="hover:text-white transition-colors"
-            >
-              +91 85080 53583
+            <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="hover:text-white transition-colors">
+              {contactPhone}
             </a>
           </div>
 
-          {/* Address – icon clickable, text not linked */}
+          {/* Location – Static text + Clickable icon */}
           <div className="flex items-center gap-3 text-sm text-white/80 sm:col-span-2 lg:col-span-1">
             <a
               href={mapUrl}
@@ -103,9 +109,9 @@ export function Footer() {
               className="text-primary-400 hover:text-primary-300 transition-colors flex-shrink-0"
               aria-label="Open location in Google Maps"
             >
-              <MapPin size={18} />
+              <FaLocationArrow size={18} />
             </a>
-            <span>{newLocation}</span>
+            <span>{address}</span>
           </div>
         </div>
 

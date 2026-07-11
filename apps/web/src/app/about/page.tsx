@@ -156,6 +156,13 @@ export default function AboutPage() {
               <a href="/volunteer" className="btn-primary">
                 Become a Volunteer
               </a>
+              <Image
+                            src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-images/2026/Just%20Ride/20260101_113843.jp"
+                            alt="Events banner"
+                            fill
+                            className="object-cover"
+                            priority
+                          />
               <a href="/#donate" className="btn-secondary">
                 Support Our Work
               </a>
