@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 // ✅ Replace with your actual Google Form URL
-const GOOGLE_FORM_URL = 'https://forms.gle/YOUR_GOOGLE_FORM_ID';
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSflPi3hdVtPvNNviAmOZZ5e0VewvOxxo5uCsMQBFnnlkzsITA/viewform?usp=send_form&pli=1&authuser=0';
 
 export default function VolunteerPage() {
   return (
