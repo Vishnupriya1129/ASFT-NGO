@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
 export default function AdminLogin() {
@@ -8,17 +8,6 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  // If already logged in, redirect to admin
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        window.location.href = '/admin';
-      }
-    };
-    checkSession();
-  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,8 +26,8 @@ export default function AdminLogin() {
     }
 
     if (data.session) {
-      // ✅ Force redirect with a full page reload
-      window.location.href = '/admin';
+      // ✅ Force a full page reload to /admin
+      window.location.replace('/admin');
     } else {
       setError('Login failed. Please try again.');
       setLoading(false);

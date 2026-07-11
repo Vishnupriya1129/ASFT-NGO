@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import {
-  Image,
+  Home,
   Megaphone,
   Calendar,
   Heart,
   BarChart3,
   Settings,
-  Home,
+  Image,
 } from 'lucide-react';
 
 const cards = [
@@ -28,14 +28,28 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const checkAuth = async () => {
+      // First check: try to get the session
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        // No session – redirect to login
-        window.location.href = '/admin/login';
+      
+      if (session) {
+        setLoading(false);
         return;
       }
-      setLoading(false);
+
+      // Second attempt: check if there's a cookie but session not loaded yet
+      // Wait a moment and try again
+      setTimeout(async () => {
+        const { data: { session: retrySession } } = await supabase.auth.getSession();
+        if (retrySession) {
+          setLoading(false);
+          return;
+        }
+        
+        // No session at all – redirect to login
+        window.location.href = '/admin/login';
+      }, 1000);
     };
+    
     checkAuth();
   }, []);
 
@@ -67,6 +81,7 @@ export default function AdminDashboard() {
             Sign Out
           </button>
         </div>
+
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
           {cards.map((card) => {
             const Icon = card.icon;
