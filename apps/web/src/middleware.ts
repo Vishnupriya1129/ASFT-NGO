@@ -3,8 +3,9 @@ import type { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
 export async function middleware(req: NextRequest) {
-  // ✅ Allow login page – don't redirect
+  // Allow login page
   if (req.nextUrl.pathname === '/admin/login') {
+    console.log('🔓 Login page allowed');
     return NextResponse.next();
   }
 
@@ -14,18 +15,23 @@ export async function middleware(req: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name) { return req.cookies.get(name)?.value; },
+        get(name) {
+          const value = req.cookies.get(name)?.value;
+          console.log(`🍪 Cookie ${name}:`, value ? 'exists' : 'null');
+          return value;
+        },
         set(name, value, options) {
+          console.log(`🍪 Setting cookie ${name}`);
           res.cookies.set({
             name,
             value,
             ...options,
-            // ✅ IMPORTANT FOR PRODUCTION
             sameSite: 'lax',
             secure: process.env.NODE_ENV === 'production',
           });
         },
         remove(name, options) {
+          console.log(`🍪 Removing cookie ${name}`);
           res.cookies.set({
             name,
             value: '',
@@ -38,9 +44,11 @@ export async function middleware(req: NextRequest) {
   );
 
   const { data: { session } } = await supabase.auth.getSession();
+  console.log('👤 Session found:', session ? 'Yes' : 'No');
 
-  // ✅ If no session, redirect to login
+  // If accessing /admin/* without session, redirect to login
   if (!session && req.nextUrl.pathname.startsWith('/admin')) {
+    console.log('🔀 Redirecting to /admin/login');
     return NextResponse.redirect(new URL('/admin/login', req.url));
   }
 

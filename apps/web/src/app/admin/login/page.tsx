@@ -26,10 +26,11 @@ export default function AdminLogin() {
     }
 
     if (data.session) {
-      // ✅ Force a full page reload to /admin
-      window.location.replace('/admin');
+      console.log('✅ Session created:', data.session);
+      // Force full page reload
+      window.location.href = '/admin';
     } else {
-      setError('Login failed. Please try again.');
+      setError('Login failed');
       setLoading(false);
     }
   };
