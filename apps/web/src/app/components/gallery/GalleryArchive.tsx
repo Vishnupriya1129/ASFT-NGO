@@ -119,18 +119,18 @@ export default function GalleryArchive() {
 
   if (loading) {
     return (
-      <div className="text-center py-24 text-white/60">
-        <div className="animate-spin w-8 h-8 border-4 border-sun-warm border-t-transparent rounded-full mx-auto mb-4" />
-        <p>Loading Gallery...</p>
+      <div className="text-center py-24">
+        <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-sm text-gray-500">Loading gallery...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center py-24 text-red-400">
-        <p className="text-xl font-semibold">⚠️ {error}</p>
-        <p className="text-sm text-white/40 mt-2">Check console for details.</p>
+      <div className="text-center py-24">
+        <p className="text-red-600 font-medium">⚠️ {error}</p>
+        <p className="text-sm text-gray-400 mt-2">Please refresh and try again.</p>
       </div>
     );
   }
@@ -138,14 +138,16 @@ export default function GalleryArchive() {
   if (photos.length === 0) {
     return (
       <div className="text-center py-24">
-        <p className="text-white/40 text-lg">No gallery images found.</p>
-        <p className="text-white/20 text-sm">Run the SQL to allow public read access.</p>
+        <div className="text-5xl mb-4 text-gray-300">🖼️</div>
+        <p className="text-gray-500 font-medium">No gallery images found.</p>
+        <p className="text-sm text-gray-400 mt-1">Check back soon for updates.</p>
       </div>
     );
   }
 
   return (
-    <section className="py-10">
+    // 🌿 RICH EARTHY GREEN BACKGROUND
+    <section className="py-10" style={{ backgroundColor: '#dce8d5' }}>
       <div className="max-w-7xl mx-auto px-6">
         {Object.entries(groupedGallery)
           .sort(([a], [b]) => Number(b) - Number(a))
@@ -154,23 +156,23 @@ export default function GalleryArchive() {
             const isYearOpen = openYears[Number(year)] ?? false;
 
             return (
-              <div key={year} className="mb-6 border-b border-white/5 pb-6">
+              <div key={year} className="mb-6 border-b border-green-200/50 pb-6 last:border-0">
                 <button
                   onClick={() => toggleYear(Number(year))}
-                  className="flex items-center gap-3 w-full text-left hover:bg-white/5 rounded-lg p-3 transition-colors group"
+                  className="flex items-center gap-3 w-full text-left hover:bg-white/40 rounded-lg p-3 transition-colors group"
                 >
                   {isYearOpen ? (
-                    <FolderOpen className="w-6 h-6 text-sun-warm" />
+                    <FolderOpen className="w-5 h-5 text-green-800" />
                   ) : (
-                    <Folder className="w-6 h-6 text-sun-warm/70 group-hover:text-sun-warm" />
+                    <Folder className="w-5 h-5 text-green-700/60 group-hover:text-green-800" />
                   )}
-                  <span className="text-2xl font-serif text-white">{year}</span>
-                  <span className="text-white/40 text-sm font-mono">({total} photos)</span>
+                  <span className="text-xl font-semibold text-green-900">{year}</span>
+                  <span className="text-green-700/50 text-sm">({total} photos)</span>
                   <span className="ml-auto">
                     {isYearOpen ? (
-                      <ChevronDown className="w-5 h-5 text-white/40" />
+                      <ChevronDown className="w-4 h-4 text-green-700" />
                     ) : (
-                      <ChevronRightIcon className="w-5 h-5 text-white/40" />
+                      <ChevronRightIcon className="w-4 h-4 text-green-700" />
                     )}
                   </span>
                 </button>
@@ -182,25 +184,25 @@ export default function GalleryArchive() {
                       const isEventOpen = openEvents[eventKey] ?? false;
 
                       return (
-                        <div key={event} className="border-l-2 border-white/10 pl-4">
+                        <div key={event} className="border-l-2 border-green-200/50 pl-4">
                           <button
                             onClick={() => toggleEvent(eventKey)}
-                            className="flex items-center gap-2 w-full text-left hover:bg-white/5 rounded-lg px-3 py-2 transition-colors group"
+                            className="flex items-center gap-2 w-full text-left hover:bg-white/40 rounded-lg px-3 py-2 transition-colors group"
                           >
                             {isEventOpen ? (
-                              <FolderOpen className="w-5 h-5 text-sun-warm/80" />
+                              <FolderOpen className="w-4 h-4 text-green-700" />
                             ) : (
-                              <Folder className="w-5 h-5 text-sun-warm/60 group-hover:text-sun-warm" />
+                              <Folder className="w-4 h-4 text-green-600/60 group-hover:text-green-700" />
                             )}
-                            <span className="text-lg font-semibold text-white/80">{event}</span>
-                            <span className="text-white/30 text-sm font-mono">
-                              ({items.length} {items.length === 1 ? 'photo' : 'photos'})
+                            <span className="text-sm font-medium text-green-800">{event}</span>
+                            <span className="text-green-600/50 text-xs">
+                              ({items.length})
                             </span>
                             <span className="ml-auto">
                               {isEventOpen ? (
-                                <ChevronDown className="w-4 h-4 text-white/30" />
+                                <ChevronDown className="w-3 h-3 text-green-700" />
                               ) : (
-                                <ChevronRightIcon className="w-4 h-4 text-white/30" />
+                                <ChevronRightIcon className="w-3 h-3 text-green-700" />
                               )}
                             </span>
                           </button>
@@ -211,24 +213,27 @@ export default function GalleryArchive() {
                                 {items.map((photo, idx) => (
                                   <motion.div
                                     key={photo.id}
-                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.3, delay: idx * 0.05 }}
-                                    className="group relative rounded-lg overflow-hidden bg-white/5 border border-white/10 hover:border-sun-warm/50 transition-all duration-300 cursor-pointer aspect-square"
+                                    transition={{ duration: 0.3, delay: idx * 0.04 }}
+                                    className="group relative rounded-lg overflow-hidden bg-white/90 border border-green-200/60 hover:border-green-400 transition-all duration-300 cursor-pointer aspect-square shadow-sm hover:shadow-md"
                                     onClick={() => handlePhotoClick(photo)}
                                   >
                                     <Image
                                       src={photo.image_url}
                                       alt={photo.title || photo.caption || 'Gallery'}
                                       fill
-                                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                    <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-green-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-green-900/80 to-transparent">
                                       <p className="text-white text-xs font-medium line-clamp-2">
                                         {photo.caption || photo.title}
                                       </p>
+                                    </div>
+                                    <div className="absolute top-2 right-2 bg-green-900/80 text-white/90 text-[10px] font-medium px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                      {photo.year}
                                     </div>
                                   </motion.div>
                                 ))}
@@ -251,38 +256,34 @@ export default function GalleryArchive() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-green-950/95 backdrop-blur-sm flex items-center justify-center p-4"
             onClick={closeLightbox}
           >
-            {/* Close, prev, next buttons... (keep as before) */}
-            <motion.button
-              whileHover={{ scale: 1.1, rotate: 90 }}
-              className="absolute top-6 right-6 text-white/60 hover:text-white z-10"
-              onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
+            <button
+              onClick={closeLightbox}
+              className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
             >
-              <X className="w-8 h-8" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              className="absolute left-6 text-white/40 hover:text-white z-10 hidden md:block"
+              <X className="w-6 h-6" />
+            </button>
+            <button
               onClick={(e) => { e.stopPropagation(); navigatePhoto('prev'); }}
+              className="absolute left-4 text-white/20 hover:text-white transition-colors hidden md:block"
             >
-              <ChevronLeft className="w-12 h-12" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              className="absolute right-6 text-white/40 hover:text-white z-10 hidden md:block"
+              <ChevronLeft className="w-10 h-10" />
+            </button>
+            <button
               onClick={(e) => { e.stopPropagation(); navigatePhoto('next'); }}
+              className="absolute right-4 text-white/20 hover:text-white transition-colors hidden md:block"
             >
-              <ChevronRight className="w-12 h-12" />
-            </motion.button>
+              <ChevronRight className="w-10 h-10" />
+            </button>
 
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: 'spring', damping: 20 }}
-              className="relative max-w-5xl w-full max-h-[85vh] rounded-2xl overflow-hidden"
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="relative max-w-5xl w-full max-h-[85vh] rounded-lg overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative w-full h-full min-h-[50vh]">
@@ -295,26 +296,19 @@ export default function GalleryArchive() {
                   priority
                 />
               </div>
-              <motion.div
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent"
-              >
-                <div className="flex items-center gap-4 text-white/80 mb-2">
-                  <span className="text-sm font-mono bg-white/10 px-3 py-1 rounded-full">
-                    {selectedPhoto.year}
-                  </span>
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-green-950/80 to-transparent">
+                <div className="flex items-center gap-3 text-white/60 text-xs mb-1">
+                  <span className="bg-white/10 px-2 py-0.5 rounded text-green-300">{selectedPhoto.year}</span>
                   <span className="text-white/30">|</span>
-                  <span className="text-sm font-light">{selectedPhoto.event}</span>
+                  <span className="text-white/50">{selectedPhoto.event}</span>
                 </div>
-                <p className="text-white text-lg lg:text-xl font-medium">
+                <p className="text-white text-sm font-medium">
                   {selectedPhoto.caption || selectedPhoto.title}
                 </p>
-                <div className="text-white/40 text-xs mt-2">
+                <div className="text-white/30 text-xs mt-1">
                   {selectedIndex + 1} of {allPhotos.length}
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -88,14 +88,15 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white drop-shadow-lg">
-            Aram Saeivom
-          </h1>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white/90 drop-shadow-md mt-1">
-            Family Trust
-          </h2>
-        </motion.div>
-      </div>
+         <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif font-bold text-white drop-shadow-lg whitespace-nowrap">
+      Aram Saeivom Family Trust
+    </h1>
+    <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white/90 drop-shadow-md mt-2">
+      Empowering Youth through Learning, Leadership & Service.
+    </h2>
+  </motion.div>
+</div>
+
 
       {/* ====== LEFT ARROW ====== */}
       <button

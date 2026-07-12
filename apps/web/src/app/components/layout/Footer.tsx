@@ -38,7 +38,7 @@ const socialLinks = [
   {
     Icon: FaSearchLocation,
     label: 'Search Location',
-    href: 'https://www.google.com/maps/search/?api=1&query=R4H3+445, Transport Nagar, Tamil Nadu 625022',
+    href: 'https://maps.app.goo.gl/deooKm4CgME9BSjE7',
   },
 ];
 
@@ -66,7 +66,7 @@ export function Footer() {
   // Static address
   const address = 'No.381, Transport Nagar, PTC Post, Madurai – 625022.';
   const addressLine1 = 'R4H3+445, Transport Nagar, Tamil Nadu 625022';
-  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressLine1)}`;
+  const mapUrl = `https://maps.app.goo.gl/deooKm4CgME9BSjE7`;
 
   // Safely access settings with fallbacks
   const contactEmail = settings?.contact_email || 'aramsaeivom@gmail.com';

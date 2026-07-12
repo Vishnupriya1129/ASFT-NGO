@@ -1,6 +1,6 @@
-import { createClient } from '@/lib/supabase/server'; // ✅ server version for Server Component
-import { Navbar } from '@/app/components/layout/Navbar';
-import { Footer } from '@/app/components/layout/Footer';
+import { Navbar } from '@/app/components/layout/Navbar';   // ✅ Correct path
+import { Footer } from '@/app/components/layout/Footer';   // ✅ Correct path
+import { createClient } from '@/lib/supabase/server';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, MapPin, Clock, ArrowRight } from 'lucide-react';
@@ -21,7 +21,7 @@ interface Announcement {
 
 async function getAnnouncements() {
   console.log('🔍 Fetching announcements...');
-  const supabase = createClient(); // ✅ create client inside function
+  const supabase = createClient();
   
   const { data, error } = await supabase
     .from('announcements')
