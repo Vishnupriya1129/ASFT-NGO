@@ -1,18 +1,86 @@
-import { createClient } from '@supabase/supabase-js';
+// lib/supabase.ts
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+import { NextRequest, NextResponse } from 'next/server'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+// ============================================
+// 1. FOR SERVER ACTIONS & ROUTE HANDLERS
+// ============================================
+export function createClient() {
+  const cookieStore = cookies()
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        },
+        set(name: string, value: string, options: any) {
+          // THE FIX: Explicitly force secure & sameSite in production
+          cookieStore.set({
+            name,
+            value,
+            ...options,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            path: '/',
+          })
+        },
+        remove(name: string, options: any) {
+          cookieStore.set({
+            name,
+            value: '',
+            ...options,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            path: '/',
+            maxAge: 0,
+          })
+        },
+      },
+    }
+  )
+}
 
-export const supabaseAdmin = createClient(
-  supabaseUrl,
-  supabaseServiceKey || supabaseAnonKey,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  }
-);
+// ============================================
+// 2. FOR MIDDLEWARE (Req/Res cookie handling)
+// ============================================
+export function createMiddlewareClient(req: NextRequest, res: NextResponse) {
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return req.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: any) {
+          // Set on both request AND response to ensure middleware sees it
+          req.cookies.set({ name, value, ...options })
+          res.cookies.set({
+            name,
+            value,
+            ...options,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            path: '/',
+          })
+        },
+        remove(name: string, options: any) {
+          req.cookies.set({ name, value: '', ...options })
+          res.cookies.set({
+            name,
+            value: '',
+            ...options,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            path: '/',
+            maxAge: 0,
+          })
+        },
+      },
+    }
+  )
+}
