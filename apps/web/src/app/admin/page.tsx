@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';   // 👈 import the function
+
 import Link from 'next/link';
 import {
   Home,
@@ -25,10 +27,10 @@ const cards = [
 
 export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
+  const supabase = createClient();   // 👈 create the client instance
 
   useEffect(() => {
     const checkAuth = async () => {
-      // First check: try to get the session
       const { data: { session } } = await supabase.auth.getSession();
       
       if (session) {
@@ -36,22 +38,19 @@ export default function AdminDashboard() {
         return;
       }
 
-      // Second attempt: check if there's a cookie but session not loaded yet
-      // Wait a moment and try again
+      // Second attempt: wait a moment and retry
       setTimeout(async () => {
         const { data: { session: retrySession } } = await supabase.auth.getSession();
         if (retrySession) {
           setLoading(false);
           return;
         }
-        
-        // No session at all – redirect to login
         window.location.href = '/admin/login';
       }, 1000);
     };
     
     checkAuth();
-  }, []);
+  }, [supabase]);   // 👈 add supabase to dependency array (though it's stable, good practice)
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();

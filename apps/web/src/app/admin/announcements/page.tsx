@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { Plus, Pencil, Trash, X } from 'lucide-react';
+
+const supabase = createClient();
 
 interface Announcement {
   id: number;

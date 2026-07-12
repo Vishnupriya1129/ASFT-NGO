@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Plus, Trash, X } from 'lucide-react';
+
+const supabase = createClient();
 
 interface GalleryItem {
   id: number;

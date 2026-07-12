@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
 interface Setting {
@@ -28,6 +28,7 @@ export default function AdminSettings() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [settings, setSettings] = useState<Record<string, string>>({});
+  const supabase = createClient(); // ✅ moved inside component
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -39,7 +40,7 @@ export default function AdminSettings() {
       loadSettings();
     };
     checkAuth();
-  }, [router]);
+  }, [router, supabase]);
 
   const loadSettings = async () => {
     const { data } = await supabase

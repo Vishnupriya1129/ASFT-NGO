@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabase';  // ✅ Use admin client
+import { createClient } from '@/lib/supabase/server'; // ✅ server version for Server Component
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import Image from 'next/image';
@@ -20,9 +20,10 @@ interface Announcement {
 }
 
 async function getAnnouncements() {
-  console.log('🔍 Fetching announcements with admin client...');
+  console.log('🔍 Fetching announcements...');
+  const supabase = createClient(); // ✅ create client inside function
   
-  const { data, error } = await supabaseAdmin  // ✅ Admin client (bypasses RLS)
+  const { data, error } = await supabase
     .from('announcements')
     .select('*')
     .order('id', { ascending: false });
@@ -33,8 +34,6 @@ async function getAnnouncements() {
   }
 
   console.log(`✅ Fetched ${data?.length || 0} announcements`);
-  console.log('📊 Data:', data);
-
   return { data: data || [], error: null };
 }
 

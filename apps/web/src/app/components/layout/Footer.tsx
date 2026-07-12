@@ -2,9 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn, FaLocationArrow } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn, FaLocationArrow, FaSearchLocation } from 'react-icons/fa';
 import { Mail, Phone } from 'lucide-react';
-import { getSettings } from '@/lib/settings';
+import { createClient } from '@/lib/supabase/client';
+
+// ✅ Define the type for your settings
+interface Settings {
+  contact_email?: string;
+  contact_phone?: string;
+  site_title?: string;
+  tagline?: string;
+}
 
 const socialLinks = [
   {
@@ -27,28 +35,44 @@ const socialLinks = [
     label: 'LinkedIn',
     href: 'https://in.linkedin.com/company/aram-saeivom-family-trust',
   },
+  {
+    Icon: FaSearchLocation,
+    label: 'Search Location',
+    href: 'https://www.google.com/maps/search/?api=1&query=R4H3+445, Transport Nagar, Tamil Nadu 625022',
+  },
 ];
 
 export function Footer() {
-  const [settings, setSettings] = useState<Record<string, string>>({});
+  const [settings, setSettings] = useState<Settings | null>(null);
 
   useEffect(() => {
     const loadSettings = async () => {
-      const data = await getSettings();
-      setSettings(data || {});
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from('settings')
+        .select('*')
+        .single();
+      
+      if (data) {
+        setSettings(data);
+      } else {
+        // If no data, set empty object to prevent null errors
+        setSettings({});
+      }
     };
     loadSettings();
   }, []);
 
-  // ✅ Static address – displayed as text
+  // Static address
   const address = 'No.381, Transport Nagar, PTC Post, Madurai – 625022.';
-  // ✅ Clickable location URL (Google Maps)
-  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  const addressLine1 = 'R4H3+445, Transport Nagar, Tamil Nadu 625022';
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressLine1)}`;
 
-  const contactEmail = settings.contact_email || 'aramsaeivom@gmail.com';
-  const contactPhone = settings.contact_phone || '+91 85080 53583';
-  const siteTitle = settings.site_title || 'Aram Saeivom Family Trust';
-  const tagline = settings.tagline || 'Empowering youth, transforming communities, and inspiring lasting change.';
+  // Safely access settings with fallbacks
+  const contactEmail = settings?.contact_email || 'aramsaeivom@gmail.com';
+  const contactPhone = settings?.contact_phone || '+91 85080 53583';
+  const siteTitle = settings?.site_title || 'Aram Saeivom Family Trust';
+  const tagline = settings?.tagline || 'Empowering youth, transforming communities, and inspiring lasting change.';
 
   return (
     <footer className="bg-primary-900 text-white">
@@ -100,7 +124,7 @@ export function Footer() {
             </a>
           </div>
 
-          {/* Location – Static text + Clickable icon */}
+          {/* Location */}
           <div className="flex items-center gap-3 text-sm text-white/80 sm:col-span-2 lg:col-span-1">
             <a
               href={mapUrl}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/client'; // ✅ client version
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -13,6 +13,8 @@ export default function AdminLogin() {
     e.preventDefault();
     setError('');
     setLoading(true);
+
+    const supabase = createClient(); // ✅ create the client here
 
     const { error, data } = await supabase.auth.signInWithPassword({
       email: email.trim(),
@@ -27,7 +29,6 @@ export default function AdminLogin() {
 
     if (data.session) {
       console.log('✅ Session created:', data.session);
-      // Force full page reload
       window.location.href = '/admin';
     } else {
       setError('Login failed');

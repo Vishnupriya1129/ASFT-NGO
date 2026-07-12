@@ -1,14 +1,10 @@
-// lib/supabase.ts
+// lib/supabase/server.ts
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
-// ============================================
-// 1. FOR SERVER ACTIONS & ROUTE HANDLERS
-// ============================================
 export function createClient() {
   const cookieStore = cookies()
-
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -18,7 +14,6 @@ export function createClient() {
           return cookieStore.get(name)?.value
         },
         set(name: string, value: string, options: any) {
-          // THE FIX: Explicitly force secure & sameSite in production
           cookieStore.set({
             name,
             value,
@@ -44,9 +39,7 @@ export function createClient() {
   )
 }
 
-// ============================================
-// 2. FOR MIDDLEWARE (Req/Res cookie handling)
-// ============================================
+// For middleware (req/res cookie handling)
 export function createMiddlewareClient(req: NextRequest, res: NextResponse) {
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -57,7 +50,6 @@ export function createMiddlewareClient(req: NextRequest, res: NextResponse) {
           return req.cookies.get(name)?.value
         },
         set(name: string, value: string, options: any) {
-          // Set on both request AND response to ensure middleware sees it
           req.cookies.set({ name, value, ...options })
           res.cookies.set({
             name,

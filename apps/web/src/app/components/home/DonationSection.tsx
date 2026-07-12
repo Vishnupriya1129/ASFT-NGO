@@ -5,9 +5,10 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Heart, QrCode, Building2, Copy, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/client';
 
 export function DonationSection() {
+  const supabase = createClient();  
   const [activeTab, setActiveTab] = useState<'qr' | 'bank'>('qr');
   const [copied, setCopied] = useState<string | null>(null);
   const [settings, setSettings] = useState<any>(null);

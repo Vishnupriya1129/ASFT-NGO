@@ -17,16 +17,14 @@ export function HeroSection() {
   const [direction, setDirection] = useState(0);
 
   const nextSlide = useCallback(() => {
-    const next = (currentIndex + 1) % heroImages.length;
     setDirection(1);
-    setCurrentIndex(next);
-  }, [currentIndex]);
+    setCurrentIndex((prev) => (prev + 1) % heroImages.length);
+  }, []);
 
   const prevSlide = useCallback(() => {
-    const prev = (currentIndex - 1 + heroImages.length) % heroImages.length;
     setDirection(-1);
-    setCurrentIndex(prev);
-  }, [currentIndex]);
+    setCurrentIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000);
@@ -116,8 +114,6 @@ export function HeroSection() {
       >
         <ChevronRight size={28} />
       </button>
-
-      {/* Slide counter removed – trust name now occupies that spot */}
     </section>
   );
 }

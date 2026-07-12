@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/client';
 import { Megaphone, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Announcement {
@@ -24,6 +24,8 @@ export function AnnouncementsSection() {
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const supabase = createClient();
+
   useEffect(() => {
     const loadAnnouncements = async () => {
       const { data } = await supabase
@@ -34,7 +36,7 @@ export function AnnouncementsSection() {
       setLoading(false);
     };
     loadAnnouncements();
-  }, []);
+  }, [supabase]);
 
   // Auto-scroll every 3 seconds
   useEffect(() => {

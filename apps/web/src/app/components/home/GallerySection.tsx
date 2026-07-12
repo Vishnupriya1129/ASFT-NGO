@@ -1,101 +1,90 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Camera } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/client'; // ✅ fixed import
 
 export function GallerySection() {
   const [galleryItems, setGalleryItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClient(); // ✅ create the client instance
 
   useEffect(() => {
-    loadGallery();
-  }, []);
+    const fetchGallery = async () => {
+      const { data, error } = await supabase
+        .from('gallery')
+        .select('*')
+        .limit(6)
+        .order('id', { ascending: false });
 
-  async function loadGallery() {
-  if (!supabase) {
-    console.error('Supabase is not configured');
-    return;
+      if (data) setGalleryItems(data);
+      setLoading(false);
+    };
+
+    fetchGallery();
+  }, [supabase]);
+
+  if (loading) {
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-gray-500">Loading gallery...</p>
+        </div>
+      </section>
+    );
   }
 
-  const { data, error } = await supabase
-    .from('gallery')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Gallery fetch error:', error);
-    return;
-  }
-
-  setGalleryItems(data || []);
-}
+  if (galleryItems.length === 0) return null;
 
   return (
-    <section
-      id="gallery"
-      className="py-24 bg-soil-dark"
-      aria-label="Gallery of our work"
-    >
+    <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-2 bg-white/10 text-sun-warm px-5 py-2 rounded-full text-sm font-semibold uppercase tracking-widest mb-5">
-            <Camera size={14} /> Moments of Impact
+        <div className="text-center mb-12">
+          <span className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-widest">
+            <Camera size={16} /> Our Gallery
           </span>
-          <h2 className="font-serif text-5xl text-sun-pale mb-5">
-            Stories from the Soil
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary-900 mt-4">
+            Capturing Moments of Change
           </h2>
-          <p className="text-white/60 text-lg">
-            Real faces, real places, real change. Every photograph is a testament to the
-            resilience of the human spirit.
+          <p className="text-gray-600 max-w-2xl mx-auto mt-2">
+            Glimpses of our journey, events, and the lives we touch.
           </p>
         </div>
 
-        {/* Masonry‑style grid (matching the normal code layout) */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
-          {galleryItems.length > 0 ? (
-            galleryItems.map((item) => {
-              const { id, image_url, title, caption, alt, span } = item;
-              return (
-                <motion.div
-                  key={id || item.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.05 }} // subtle stagger
-                  className={`relative rounded-2xl overflow-hidden cursor-pointer group shadow-xl ${
-                    span === 'large'
-                      ? 'col-span-2 row-span-2'
-                      : span === 'wide'
-                      ? 'col-span-2'
-                      : ''
-                  }`}
-                >
-                  <Image
-                    src={image_url}
-                    alt={alt || title || 'Gallery image'}
-                    width={800}
-                    height={600}
-                    className="w-full h-full object-cover brightness-85 group-hover:brightness-65 group-hover:scale-110 transition-all duration-500"
-                    loading="lazy"
-                  />
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end p-6">
-                    <div className="text-white transform translate-y-5 group-hover:translate-y-0 transition-transform duration-400">
-                      <p className="font-semibold text-base">{title}</p>
-                      <p className="text-white/70 text-sm mt-1">{caption}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })
-          ) : (
-            // Optional loading/empty state – you can replace with a skeleton or message
-            <div className="col-span-full text-center text-white/50 py-12 text-sm">
-              Loading gallery…
-            </div>
-          )}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {galleryItems.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer"
+            >
+              <Image
+                src={item.image_url}
+                alt={item.title || 'Gallery'}
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
+                <p className="text-white text-xs font-medium line-clamp-2">
+                  {item.caption || item.title}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="text-center mt-8">
+          <a
+            href="/gallery"
+            className="inline-flex items-center gap-2 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
+          >
+            View Full Gallery →
+          </a>
         </div>
       </div>
     </section>
