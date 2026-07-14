@@ -1,18 +1,29 @@
-import { Metadata } from 'next';
+'use client';
+
+import { useState } from 'react';
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, Shield, Banknote, QrCode, Building2, Copy, Check, ArrowRight } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: 'Donate | Aram Saeivom Family Trust',
-  description: 'Support our mission. Every donation helps us create lasting change in communities across Tamil Nadu.',
-};
+import Head from 'next/head';
+import { Heart, Shield, QrCode, Building2, Copy, Check, ArrowRight } from 'lucide-react';
 
 export default function DonatePage() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <>
+      <Head>
+        <title>Donate | Aram Saeivom Family Trust</title>
+        <meta name="description" content="Support our mission. Every donation helps us create lasting change in communities across Tamil Nadu." />
+      </Head>
+
       <Navbar />
       <main className="min-h-screen bg-white pt-24">
 
@@ -86,10 +97,11 @@ export default function DonatePage() {
                 <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-between">
                   <span className="text-sm font-mono text-gray-700">aramsaeivom@upi</span>
                   <button 
-                    onClick={() => navigator.clipboard.writeText('aramsaeivom@upi')}
-                    className="text-primary-600 hover:text-primary-700 text-sm flex items-center gap-1"
+                    onClick={() => handleCopy('aramsaeivom@upi')}
+                    className="text-primary-600 hover:text-primary-700 text-sm flex items-center gap-1 transition-colors"
                   >
-                    <Copy size={14} /> Copy
+                    {copied ? <Check size={14} /> : <Copy size={14} />}
+                    {copied ? 'Copied!' : 'Copy'}
                   </button>
                 </div>
               </div>
@@ -151,32 +163,6 @@ export default function DonatePage() {
             </p>
             <div className="mt-6 inline-block bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20">
               <span className="text-sm font-medium tracking-wider">Registration No: XXXXXXXXX</span>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== IMPACT ===== */}
-        <section className="py-16 bg-white border-t border-gray-100">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="text-2xl font-serif font-bold text-primary-800 mb-4">
-              Your Support Creates Impact
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-              <div className="bg-gray-50 rounded-xl p-6">
-                <div className="text-3xl mb-2">🍲</div>
-                <p className="font-bold text-gray-800">Meals Served</p>
-                <p className="text-2xl font-bold text-primary-600">12,000+</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-6">
-                <div className="text-3xl mb-2">👨‍👩‍👧‍👦</div>
-                <p className="font-bold text-gray-800">Families Helped</p>
-                <p className="text-2xl font-bold text-primary-600">1,500+</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-6">
-                <div className="text-3xl mb-2">📚</div>
-                <p className="font-bold text-gray-800">Programs</p>
-                <p className="text-2xl font-bold text-primary-600">60+</p>
-              </div>
             </div>
           </div>
         </section>

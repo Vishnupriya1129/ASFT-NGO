@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Heart, Globe, Users } from 'lucide-react';
+import { ArrowRight, Heart, Globe, Users, Handshake } from 'lucide-react';
 
 export function AboutPreview() {
   return (
@@ -32,19 +32,23 @@ export function AboutPreview() {
               life, one family, one community at a time.
             </p>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="text-center">
+            {/* Stats — 4 Columns */}
+            <div className="flex flex-wrap gap-4 mb-8">
+              <div className="flex-1 min-w-[80px] text-center bg-gray-50 rounded-xl p-4 border border-gray-100">
                 <p className="text-2xl font-bold text-primary-600">8+</p>
-                <p className="text-sm text-gray-500">Years of Service</p>
+                <p className="text-xs text-gray-500">Years of Service</p>
               </div>
-              <div className="text-center">
+              <div className="flex-1 min-w-[80px] text-center bg-gray-50 rounded-xl p-4 border border-gray-100">
                 <p className="text-2xl font-bold text-primary-600">50+</p>
-                <p className="text-sm text-gray-500">Programs</p>
+                <p className="text-xs text-gray-500">Programs</p>
               </div>
-              <div className="text-center">
+              <div className="flex-1 min-w-[80px] text-center bg-gray-50 rounded-xl p-4 border border-gray-100">
                 <p className="text-2xl font-bold text-primary-600">1000+</p>
-                <p className="text-sm text-gray-500">Lives Impacted</p>
+                <p className="text-xs text-gray-500">Lives Impacted</p>
+              </div>
+              <div className="flex-1 min-w-[80px] text-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <p className="text-2xl font-bold text-primary-600">18G/12A</p>
+                <p className="text-xs text-gray-500">Registered Trust</p>
               </div>
             </div>
 
@@ -57,7 +61,7 @@ export function AboutPreview() {
             </Link>
           </motion.div>
 
-          {/* Right: Image Grid */}
+          {/* ✅ RIGHT: 4 IMAGE BOXES */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -65,22 +69,35 @@ export function AboutPreview() {
             viewport={{ once: true }}
             className="grid grid-cols-2 gap-4"
           >
-            <div className="relative h-64 rounded-xl overflow-hidden shadow-lg">
+            {/* Box 1: Heart */}
+            <div className="relative h-48 rounded-xl overflow-hidden shadow-lg">
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
-              <div className="relative w-full h-full bg-primary-200 flex items-center justify-center">
-                <Heart size={48} className="text-primary-500 opacity-60" />
+              <div className="relative w-full h-full bg-rose-100 flex items-center justify-center">
+                <Heart size={40} className="text-rose-500 opacity-60" />
               </div>
             </div>
-            <div className="relative h-64 rounded-xl overflow-hidden shadow-lg mt-8">
+
+            {/* Box 2: Users */}
+            <div className="relative h-48 rounded-xl overflow-hidden shadow-lg">
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
-              <div className="relative w-full h-full bg-green-200 flex items-center justify-center">
-                <Users size={48} className="text-green-600 opacity-60" />
+              <div className="relative w-full h-full bg-blue-100 flex items-center justify-center">
+                <Users size={40} className="text-blue-500 opacity-60" />
               </div>
             </div>
-            <div className="relative h-64 rounded-xl overflow-hidden shadow-lg col-span-2">
+
+            {/* Box 3: Globe */}
+            <div className="relative h-48 rounded-xl overflow-hidden shadow-lg">
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
-              <div className="relative w-full h-full bg-blue-200 flex items-center justify-center">
-                <Globe size={48} className="text-blue-600 opacity-60" />
+              <div className="relative w-full h-full bg-emerald-100 flex items-center justify-center">
+                <Globe size={40} className="text-emerald-500 opacity-60" />
+              </div>
+            </div>
+
+            {/* ✅ Box 4: Handshake (NEW) */}
+            <div className="relative h-48 rounded-xl overflow-hidden shadow-lg">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
+              <div className="relative w-full h-full bg-amber-100 flex items-center justify-center">
+                <Handshake size={40} className="text-amber-500 opacity-60" />
               </div>
             </div>
           </motion.div>
