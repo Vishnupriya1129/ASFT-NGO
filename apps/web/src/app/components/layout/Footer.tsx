@@ -99,13 +99,13 @@ export function Footer() {
           {/* Email */}
           <div className="flex items-center gap-3 text-sm text-white/80">
             <a
-              href={`mailto:${contactEmail}`}
+              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${contactEmail}`} target="_blank" rel="noopener noreferrer"
               className="text-primary-400 hover:text-primary-300 transition-colors flex-shrink-0"
               aria-label="Send email"
             >
               <Mail size={18} />
             </a>
-            <a href={`mailto:${contactEmail}`} className="hover:text-white transition-colors">
+            <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${contactEmail}`} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
               {contactEmail}
             </a>
           </div>

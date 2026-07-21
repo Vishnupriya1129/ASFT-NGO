@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { Heart, Users, Target, Award, Clock, MapPin, Mail, ArrowRight, CheckCircle } from 'lucide-react';
 import { Testimonials } from '@/app/components/common/Testimonials';
 

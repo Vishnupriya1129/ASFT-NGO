@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { createClient } from '@/lib/supabase/client';
 
 const supabase = createClient();
@@ -159,7 +159,7 @@ export default function HeroAdminPage() {
             {hero.hero_image && (
               <div className="mt-4">
                 <Image
-                  src={hero.hero_image}
+                  src={hero.hero_image || "/placeholder.svg"}
                   alt="Hero"
                   width={350}
                   height={220}
@@ -188,7 +188,7 @@ export default function HeroAdminPage() {
             {hero.secondary_image && (
               <div className="mt-4">
                 <Image
-                  src={hero.secondary_image}
+                  src={hero.secondary_image || "/placeholder.svg"}
                   alt="Secondary"
                   width={250}
                   height={180}
@@ -283,3 +283,4 @@ export default function HeroAdminPage() {
     </main>
   );
 }
+

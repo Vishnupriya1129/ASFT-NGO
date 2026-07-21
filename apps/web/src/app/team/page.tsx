@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { Calendar, Link, Mail } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -80,7 +80,7 @@ export default function TeamPage() {
                 <div className="relative h-64 w-full overflow-hidden bg-primary-50 flex items-center justify-center">
                   {member.image ? (
                     <Image
-                      src={member.image}
+                      src={member.image || "/placeholder.svg"}
                       alt={member.name}
                       fill
                       className="object-cover"
@@ -101,7 +101,7 @@ export default function TeamPage() {
                     </span>
                     <span className="flex items-center gap-1">
                       <Mail size={14} />
-                      <a href={`mailto:${member.email}`} className="hover:text-primary-600 transition">
+                      <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${member.email}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 transition">
                         Email
                       </a>
                     </span>

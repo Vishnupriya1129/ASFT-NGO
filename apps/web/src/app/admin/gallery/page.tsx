@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { Plus, Trash, X } from 'lucide-react';
 
 const supabase = createClient();
@@ -128,7 +128,7 @@ export default function AdminGallery() {
             <div key={item.id} className="bg-white rounded-xl shadow overflow-hidden">
               <div className="relative h-40 bg-gray-200">
                 <Image
-                  src={item.image_url}
+                  src={item.image_url || "/placeholder.svg"}
                   alt={item.title}
                   fill
                   className="object-cover"
@@ -156,3 +156,4 @@ export default function AdminGallery() {
     </div>
   );
 }
+

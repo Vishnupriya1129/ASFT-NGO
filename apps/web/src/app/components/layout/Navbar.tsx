@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
@@ -21,7 +21,7 @@ type NavItemWithDropdown = {
 
 type NavItemType = NavItem | NavItemWithDropdown;
 
-const navItems = [
+const navItems: NavItemType[] = [
   { label: 'Home', href: '/' },
   {
     label: 'About',
@@ -33,19 +33,22 @@ const navItems = [
       { label: 'Contact', href: '/contact' },
     ]
   },
-  { 
-    label: 'Programs', 
-    href: '/programs',
-    dropdown: [
-      { label: 'All Programs', href: '/programs' },
-      { label: 'Observation Days', href: '/programs/observation-days' },
-    ]
-  },
+  {
+  label: 'Programs',
+  href: '/programs',
+  dropdown: [
+    { label: 'All Programs', href: '/programs' },
+    { label: 'Odyssey', href: '/programs/odyssey' },
+    { label: 'THOOYAM \'26', href: '/programs/thooayam-26' },
+    { label: 'Observation Days', href: '/programs/observation-days' },
+  ]
+},
   { label: 'Gallery', href: '/gallery' },
   { label: 'Events', href: '/events' },
   { label: 'Join Us', href: '/volunteer' },
   { label: 'Dashboard', href: '/admin' },
 ];
+
 // ✅ Type guard to check if item has dropdown
 function hasDropdown(item: NavItemType): item is NavItemWithDropdown {
   return 'dropdown' in item && Array.isArray((item as NavItemWithDropdown).dropdown);
@@ -95,7 +98,7 @@ export function Navbar() {
           aria-label="Aram Saeivom Family Trust Home"
         >
           <Image
-            src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/logo/ar.png"
+            src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/logo/asftt.png"
             alt="Aram Saeivom Family Trust"
             width={70}
             height={70}

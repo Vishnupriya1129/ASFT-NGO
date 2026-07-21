@@ -1,7 +1,7 @@
 import { Navbar } from '@/app/components/layout/Navbar';   // ✅ Correct path
 import { Footer } from '@/app/components/layout/Footer';   // ✅ Correct path
 import { createClient } from '@/lib/supabase/server';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import Link from 'next/link';
 import { Calendar, MapPin, Clock, ArrowRight } from 'lucide-react';
 
@@ -91,7 +91,7 @@ export default async function EventsPage() {
                   {item.image && (
                     <div className="relative h-56 w-full overflow-hidden bg-slate-200">
                       <Image
-                        src={item.image}
+                        src={item.image || "/placeholder.svg"}
                         alt={item.alt || item.title}
                         fill
                         className="object-cover"

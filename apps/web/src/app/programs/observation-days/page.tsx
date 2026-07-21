@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import Link from 'next/link'; // ✅ Add this
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { Calendar, Heart, Leaf, Smile } from 'lucide-react';
 
 export const metadata: Metadata = {

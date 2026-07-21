@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
 import {
@@ -12,6 +12,7 @@ import {
   FolderOpen,
   ChevronDown,
   ChevronRight as ChevronRightIcon,
+  Camera,
 } from 'lucide-react';
 
 type GalleryItem = {
@@ -61,6 +62,12 @@ export default function GalleryArchive() {
 
       console.log('📊 Data received:', data?.length || 0, 'rows');
       setPhotos(data || []);
+      
+      // Auto-open first year
+      if (data && data.length > 0) {
+        const years = [...new Set(data.map(p => p.year))];
+        setOpenYears({ [years[0]]: true });
+      }
     } catch (err) {
       console.error('💥 Unexpected:', err);
       setError('Unexpected error occurred.');
@@ -119,36 +126,48 @@ export default function GalleryArchive() {
 
   if (loading) {
     return (
-      <div className="text-center py-24">
-        <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-sm text-gray-500">Loading gallery...</p>
+      <div className="text-center py-16">
+        <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-sm text-emerald-300/60">Loading gallery...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center py-24">
-        <p className="text-red-600 font-medium">⚠️ {error}</p>
-        <p className="text-sm text-gray-400 mt-2">Please refresh and try again.</p>
+      <div className="text-center py-16">
+        <p className="text-red-400 font-medium">⚠️ {error}</p>
+        <p className="text-sm text-emerald-300/40 mt-2">Please refresh and try again.</p>
       </div>
     );
   }
 
   if (photos.length === 0) {
     return (
-      <div className="text-center py-24">
-        <div className="text-5xl mb-4 text-gray-300">🖼️</div>
-        <p className="text-gray-500 font-medium">No gallery images found.</p>
-        <p className="text-sm text-gray-400 mt-1">Check back soon for updates.</p>
+      <div className="text-center py-16">
+        <div className="text-5xl mb-4 text-emerald-500/30">🖼️</div>
+        <p className="text-emerald-300/60 font-medium">No gallery images found.</p>
+        <p className="text-sm text-emerald-300/30 mt-1">Check back soon for updates.</p>
       </div>
     );
   }
 
   return (
-    // 🌿 RICH EARTHY GREEN BACKGROUND
-    <section className="py-10" style={{ backgroundColor: '#dce8d5' }}>
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="py-2">
+      {/* ✨ Gallery Header with Photo Count */}
+      <div className="flex items-center justify-between mb-6 px-1">
+        <div className="flex items-center gap-3">
+          <Camera className="w-5 h-5 text-emerald-400" />
+          <span className="text-sm font-medium text-emerald-300/80">
+            {photos.length} photos across {Object.keys(groupedGallery).length} years
+          </span>
+        </div>
+        <span className="text-xs text-emerald-300/40 bg-emerald-500/10 px-3 py-1 rounded-full backdrop-blur-sm border border-emerald-500/20">
+          Click a year to explore
+        </span>
+      </div>
+
+      <div className="space-y-4">
         {Object.entries(groupedGallery)
           .sort(([a], [b]) => Number(b) - Number(a))
           .map(([year, events]) => {
@@ -156,83 +175,86 @@ export default function GalleryArchive() {
             const isYearOpen = openYears[Number(year)] ?? false;
 
             return (
-              <div key={year} className="mb-6 border-b border-green-200/50 pb-6 last:border-0">
+              <div key={year} className="border-b border-emerald-500/20 pb-4 last:border-0">
+                {/* Year Header */}
                 <button
                   onClick={() => toggleYear(Number(year))}
-                  className="flex items-center gap-3 w-full text-left hover:bg-white/40 rounded-lg p-3 transition-colors group"
+                  className="flex items-center gap-3 w-full text-left hover:bg-emerald-500/10 rounded-xl p-3 transition-all duration-300 group"
                 >
-                  {isYearOpen ? (
-                    <FolderOpen className="w-5 h-5 text-green-800" />
-                  ) : (
-                    <Folder className="w-5 h-5 text-green-700/60 group-hover:text-green-800" />
-                  )}
-                  <span className="text-xl font-semibold text-green-900">{year}</span>
-                  <span className="text-green-700/50 text-sm">({total} photos)</span>
+                  <div className={`p-2 rounded-lg transition-all duration-300 ${isYearOpen ? 'bg-emerald-500/20' : 'bg-emerald-500/5'}`}>
+                    {isYearOpen ? (
+                      <FolderOpen className="w-5 h-5 text-emerald-400" />
+                    ) : (
+                      <Folder className="w-5 h-5 text-emerald-500/50 group-hover:text-emerald-400" />
+                    )}
+                  </div>
+                  <span className="text-lg font-semibold text-white">{year}</span>
+                  <span className="text-emerald-400/60 text-sm">({total} photos)</span>
                   <span className="ml-auto">
                     {isYearOpen ? (
-                      <ChevronDown className="w-4 h-4 text-green-700" />
+                      <ChevronDown className="w-4 h-4 text-emerald-400" />
                     ) : (
-                      <ChevronRightIcon className="w-4 h-4 text-green-700" />
+                      <ChevronRightIcon className="w-4 h-4 text-emerald-400" />
                     )}
                   </span>
                 </button>
 
                 {isYearOpen && (
-                  <div className="ml-8 mt-4 space-y-6">
+                  <div className="ml-12 mt-3 space-y-4">
                     {Object.entries(events).map(([event, items]) => {
                       const eventKey = `${year}-${event}`;
                       const isEventOpen = openEvents[eventKey] ?? false;
 
                       return (
-                        <div key={event} className="border-l-2 border-green-200/50 pl-4">
+                        <div key={event} className="border-l-2 border-emerald-500/20 pl-4">
                           <button
                             onClick={() => toggleEvent(eventKey)}
-                            className="flex items-center gap-2 w-full text-left hover:bg-white/40 rounded-lg px-3 py-2 transition-colors group"
+                            className="flex items-center gap-2 w-full text-left hover:bg-emerald-500/10 rounded-lg px-3 py-2 transition-all duration-300 group"
                           >
                             {isEventOpen ? (
-                              <FolderOpen className="w-4 h-4 text-green-700" />
+                              <FolderOpen className="w-4 h-4 text-emerald-400" />
                             ) : (
-                              <Folder className="w-4 h-4 text-green-600/60 group-hover:text-green-700" />
+                              <Folder className="w-4 h-4 text-emerald-500/40 group-hover:text-emerald-400" />
                             )}
-                            <span className="text-sm font-medium text-green-800">{event}</span>
-                            <span className="text-green-600/50 text-xs">
+                            <span className="text-sm font-medium text-emerald-200/80">{event}</span>
+                            <span className="text-emerald-400/50 text-xs">
                               ({items.length})
                             </span>
                             <span className="ml-auto">
                               {isEventOpen ? (
-                                <ChevronDown className="w-3 h-3 text-green-700" />
+                                <ChevronDown className="w-3 h-3 text-emerald-400" />
                               ) : (
-                                <ChevronRightIcon className="w-3 h-3 text-green-700" />
+                                <ChevronRightIcon className="w-3 h-3 text-emerald-400" />
                               )}
                             </span>
                           </button>
 
                           {isEventOpen && (
                             <div className="mt-3 ml-6">
-                              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                                 {items.map((photo, idx) => (
                                   <motion.div
                                     key={photo.id}
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ duration: 0.3, delay: idx * 0.04 }}
-                                    className="group relative rounded-lg overflow-hidden bg-white/90 border border-green-200/60 hover:border-green-400 transition-all duration-300 cursor-pointer aspect-square shadow-sm hover:shadow-md"
+                                    className="group relative rounded-xl overflow-hidden bg-[#0a1628]/50 border border-emerald-500/20 hover:border-emerald-400/60 transition-all duration-300 cursor-pointer aspect-square shadow-sm hover:shadow-lg hover:-translate-y-1"
                                     onClick={() => handlePhotoClick(photo)}
                                   >
                                     <Image
-                                      src={photo.image_url}
+                                      src={photo.image_url || '/placeholder.svg' || "/placeholder.svg"}
                                       alt={photo.title || photo.caption || 'Gallery'}
                                       fill
                                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-green-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                    <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-green-900/80 to-transparent">
-                                      <p className="text-white text-xs font-medium line-clamp-2">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-[#0a1628]/90 to-transparent">
+                                      <p className="text-white/90 text-xs font-medium line-clamp-2">
                                         {photo.caption || photo.title}
                                       </p>
                                     </div>
-                                    <div className="absolute top-2 right-2 bg-green-900/80 text-white/90 text-[10px] font-medium px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="absolute top-2 right-2 bg-emerald-500/20 text-emerald-300 text-[10px] font-medium px-1.5 py-0.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm border border-emerald-500/20">
                                       {photo.year}
                                     </div>
                                   </motion.div>
@@ -250,30 +272,31 @@ export default function GalleryArchive() {
           })}
       </div>
 
+      {/* Lightbox — Navy Blue + Emerald */}
       <AnimatePresence>
         {selectedPhoto && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-green-950/95 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-[#0a1628]/95 backdrop-blur-xl flex items-center justify-center p-4"
             onClick={closeLightbox}
           >
             <button
               onClick={closeLightbox}
-              className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors z-10"
             >
               <X className="w-6 h-6" />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigatePhoto('prev'); }}
-              className="absolute left-4 text-white/20 hover:text-white transition-colors hidden md:block"
+              className="absolute left-4 text-white/20 hover:text-white transition-colors hidden md:block z-10"
             >
               <ChevronLeft className="w-10 h-10" />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigatePhoto('next'); }}
-              className="absolute right-4 text-white/20 hover:text-white transition-colors hidden md:block"
+              className="absolute right-4 text-white/20 hover:text-white transition-colors hidden md:block z-10"
             >
               <ChevronRight className="w-10 h-10" />
             </button>
@@ -283,12 +306,12 @@ export default function GalleryArchive() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="relative max-w-5xl w-full max-h-[85vh] rounded-lg overflow-hidden"
+              className="relative max-w-5xl w-full max-h-[85vh] rounded-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative w-full h-full min-h-[50vh]">
+              <div className="relative w-full h-full min-h-[50vh] bg-[#0a1628]/50">
                 <Image
-                  src={selectedPhoto.image_url}
+                  src={selectedPhoto.image_url || '/placeholder.svg' || "/placeholder.svg"}
                   alt={selectedPhoto.title || 'Gallery'}
                   fill
                   className="object-contain"
@@ -296,9 +319,11 @@ export default function GalleryArchive() {
                   priority
                 />
               </div>
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-green-950/80 to-transparent">
+              <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-[#0a1628]/95 to-transparent">
                 <div className="flex items-center gap-3 text-white/60 text-xs mb-1">
-                  <span className="bg-white/10 px-2 py-0.5 rounded text-green-300">{selectedPhoto.year}</span>
+                  <span className="bg-emerald-500/30 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                    {selectedPhoto.year}
+                  </span>
                   <span className="text-white/30">|</span>
                   <span className="text-white/50">{selectedPhoto.event}</span>
                 </div>
@@ -313,6 +338,6 @@ export default function GalleryArchive() {
           </motion.div>
         )}
       </AnimatePresence>
-    </section>
+    </div>
   );
 }

@@ -4,7 +4,7 @@ import { Footer } from '@/app/components/layout/Footer';
 import { getProgramBySlug, getSubPrograms, getPrograms } from '@/lib/programs';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { ArrowRight, ChevronLeft, Home } from 'lucide-react';
 
 interface ProgramPageProps {

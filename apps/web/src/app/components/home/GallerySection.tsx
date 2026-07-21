@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { motion } from 'framer-motion';
 import { Camera } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client'; // ✅ fixed import
@@ -63,7 +63,7 @@ export function GallerySection() {
               className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer"
             >
               <Image
-                src={item.image_url}
+                src={item.image_url || '/placeholder.svg' || "/placeholder.svg"}
                 alt={item.title || 'Gallery'}
                 fill
                 className="object-cover group-hover:scale-110 transition-transform duration-500"

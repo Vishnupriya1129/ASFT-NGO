@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { motion } from 'framer-motion';
 import { Heart, QrCode, Building2, Copy, Check } from 'lucide-react';
 import toast from 'react-hot-toast';

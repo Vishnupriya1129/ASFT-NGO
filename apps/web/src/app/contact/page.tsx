@@ -39,7 +39,7 @@ export default function ContactPage() {
                 <Mail size={24} className="text-primary-600" />
               </div>
               <h3 className="font-bold text-gray-800 mb-2">Email</h3>
-              <a href="mailto:aramsaeivom@gmail.com" className="text-gray-600 hover:text-primary-600 transition">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=aramsaeivom@gmail.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary-600 transition">
                 aramsaeivom@gmail.com
               </a>
             </div>
@@ -69,7 +69,7 @@ export default function ContactPage() {
           {/* Google Map */}
           <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-200 mb-12">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.123456789!2d78.123456789!3d9.123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMDcnMjQuNiJOIDc4wrAwNyc0Mi40IkU!5e0!3m2!1sen!2sin!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.123456789!2d78.123456789!3d9.123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00d07db7f2f9a3%3A0x2c535b9873f86ddc!2sR4H3%2B445%20Transport%20Nagar%2C%20Tamil%20Nadu%20625022!5e0!3m2!1sen!2sin!4v1730000000000"
               width="100%"
               height="400"
               style={{ border: 0 }}

@@ -30,6 +30,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
+      </head>
       <body className="bg-cloud text-charcoal antialiased overflow-x-hidden">
         <Providers>
           {children}

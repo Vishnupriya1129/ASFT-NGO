@@ -1,7 +1,7 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
+import Image from '@/components/ui/SafeImage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -57,7 +57,6 @@ export function HeroSection() {
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* Background Images with Slide Transition */}
       <AnimatePresence initial={false} custom={direction} mode="wait">
         <motion.div
           key={currentIndex}
@@ -70,35 +69,33 @@ export function HeroSection() {
           className="absolute inset-0"
         >
           <Image
-            src={heroImages[currentIndex]}
+            src={heroImages[currentIndex] || '/placeholder.svg'}
             alt="Aram Saeivom Family Trust"
             fill
             className="object-cover"
             priority
           />
-          {/* Dark overlay for text readability */}
           <div className="absolute inset-0 bg-black/35" />
         </motion.div>
       </AnimatePresence>
 
-      {/* ====== BRAND NAME – BOTTOM CENTER ====== */}
+      {/* Brand Name */}
       <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-10 text-center px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
-         <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif font-bold text-white drop-shadow-lg whitespace-nowrap">
-      Aram Saeivom Family Trust
-    </h1>
-    <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white/90 drop-shadow-md mt-2">
-      Empowering Youth through Learning, Leadership & Service.
-    </h2>
-  </motion.div>
-</div>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white drop-shadow-lg">
+            Aram Saeivom
+          </h1>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white/90 drop-shadow-md mt-1">
+            Family Trust
+          </h2>
+        </motion.div>
+      </div>
 
-
-      {/* ====== LEFT ARROW ====== */}
+      {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
         className="absolute left-4 top-1/2 -translate-y-1/2 z-20 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 backdrop-blur-sm p-3 rounded-full transition-all duration-300"
@@ -107,7 +104,6 @@ export function HeroSection() {
         <ChevronLeft size={28} />
       </button>
 
-      {/* ====== RIGHT ARROW ====== */}
       <button
         onClick={nextSlide}
         className="absolute right-4 top-1/2 -translate-y-1/2 z-20 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 backdrop-blur-sm p-3 rounded-full transition-all duration-300"

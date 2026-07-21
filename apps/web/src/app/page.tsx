@@ -17,15 +17,18 @@ export default function HomePage() {
       <Navbar />
       <main id="main-content" className="w-full">
         <HeroSection />
+        <DonateVolunteerCTA />
+         <AboutPreview />
         {/* <HeroButtons />  ❌ REMOVED */}
-        <VideoSection />
+       
         <AnnouncementsSection />
         <MissionVisionSection />
         <FounderNote />
-        <DonateVolunteerCTA />
-        <AboutPreview />
+        
+       
         {/* <StatsSection /> */}
         <ProgramsSection />
+         <VideoSection />
       </main>
       <Footer />
     </>
