@@ -1,15 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from '@/components/ui/SafeImage';
+import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Camera } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client'; // ✅ fixed import
+import { createClient } from '@/lib/supabase/client';
+import { Camera, ArrowRight } from 'lucide-react';
+
+interface GalleryItem {
+  id: number;
+  title: string;
+  image_url: string;
+  caption?: string;
+}
 
 export function GallerySection() {
-  const [galleryItems, setGalleryItems] = useState<any[]>([]);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient(); // ✅ create the client instance
+  const supabase = createClient();
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -60,13 +68,15 @@ export function GallerySection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer"
+              className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer bg-gray-100"
             >
               <Image
-                src={item.image_url || '/placeholder.svg' || "/placeholder.svg"}
-                alt={item.title || 'Gallery'}
+                src={item.image_url || '/placeholder.svg'}
+                alt={item.caption || item.title || 'Gallery image'}
                 fill
                 className="object-cover group-hover:scale-110 transition-transform duration-500"
+                loading="lazy"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
@@ -79,12 +89,12 @@ export function GallerySection() {
         </div>
 
         <div className="text-center mt-8">
-          <a
+          <Link
             href="/gallery"
             className="inline-flex items-center gap-2 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
           >
-            View Full Gallery →
-          </a>
+            View Full Gallery <ArrowRight size={18} />
+          </Link>
         </div>
       </div>
     </section>

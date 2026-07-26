@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import Image from '@/components/ui/SafeImage';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
 import {
@@ -39,7 +39,6 @@ export default function GalleryArchive() {
   }, []);
 
   async function loadGallery() {
-    console.log('🔍 Fetching gallery...');
     if (!supabase) {
       setError('Supabase client not available.');
       setLoading(false);
@@ -60,10 +59,8 @@ export default function GalleryArchive() {
         return;
       }
 
-      console.log('📊 Data received:', data?.length || 0, 'rows');
       setPhotos(data || []);
       
-      // Auto-open first year
       if (data && data.length > 0) {
         const years = [...new Set(data.map(p => p.year))];
         setOpenYears({ [years[0]]: true });
@@ -154,7 +151,7 @@ export default function GalleryArchive() {
 
   return (
     <div className="py-2">
-      {/* ✨ Gallery Header with Photo Count */}
+      {/* Gallery Header */}
       <div className="flex items-center justify-between mb-6 px-1">
         <div className="flex items-center gap-3">
           <Camera className="w-5 h-5 text-emerald-400" />
@@ -242,11 +239,12 @@ export default function GalleryArchive() {
                                     onClick={() => handlePhotoClick(photo)}
                                   >
                                     <Image
-                                      src={photo.image_url || '/placeholder.svg' || "/placeholder.svg"}
-                                      alt={photo.title || photo.caption || 'Gallery'}
+                                      src={photo.image_url || '/placeholder.svg'}
+                                      alt={photo.caption || photo.title || 'Gallery image'}
                                       fill
                                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                      loading="lazy"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                     <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-[#0a1628]/90 to-transparent">
@@ -272,7 +270,7 @@ export default function GalleryArchive() {
           })}
       </div>
 
-      {/* Lightbox — Navy Blue + Emerald */}
+      {/* Lightbox */}
       <AnimatePresence>
         {selectedPhoto && (
           <motion.div
@@ -285,18 +283,21 @@ export default function GalleryArchive() {
             <button
               onClick={closeLightbox}
               className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors z-10"
+              aria-label="Close lightbox"
             >
               <X className="w-6 h-6" />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigatePhoto('prev'); }}
               className="absolute left-4 text-white/20 hover:text-white transition-colors hidden md:block z-10"
+              aria-label="Previous image"
             >
               <ChevronLeft className="w-10 h-10" />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigatePhoto('next'); }}
               className="absolute right-4 text-white/20 hover:text-white transition-colors hidden md:block z-10"
+              aria-label="Next image"
             >
               <ChevronRight className="w-10 h-10" />
             </button>
@@ -311,8 +312,8 @@ export default function GalleryArchive() {
             >
               <div className="relative w-full h-full min-h-[50vh] bg-[#0a1628]/50">
                 <Image
-                  src={selectedPhoto.image_url || '/placeholder.svg' || "/placeholder.svg"}
-                  alt={selectedPhoto.title || 'Gallery'}
+                  src={selectedPhoto.image_url || '/placeholder.svg'}
+                  alt={selectedPhoto.caption || selectedPhoto.title || 'Gallery image'}
                   fill
                   className="object-contain"
                   sizes="(max-width: 1024px) 100vw, 80vw"

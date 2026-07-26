@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Image from '@/components/ui/SafeImage';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -70,7 +70,7 @@ export function HeroSection() {
         >
           <Image
             src={heroImages[currentIndex] || '/placeholder.svg'}
-            alt="Aram Saeivom Family Trust"
+            alt="Aram Saeivom Family Trust - Empowering communities through compassion and action"
             fill
             className="object-cover"
             priority

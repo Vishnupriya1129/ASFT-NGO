@@ -10,7 +10,20 @@ import { ProgramsSection } from '@/app/components/home/ProgramsSection';
 import { FounderNote } from '@/app/components/home/FounderNote';
 import { DonateVolunteerCTA } from '@/app/components/home/DonateVolunteerCTA';
 import { AboutPreview } from '@/app/components/home/AboutPreview';
+import dynamic from 'next/dynamic';
 
+// ✅ Lazy load heavy components (Gallery is heavy)
+const GallerySection = dynamic(
+  () => import('@/app/components/home/GallerySection').then(mod => mod.GallerySection),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-32 flex items-center justify-center bg-gray-50 rounded-xl">
+        <p className="text-gray-400 text-sm">Loading gallery...</p>
+      </div>
+    )
+  }
+);
 export default function HomePage() {
   return (
     <>
