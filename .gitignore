@@ -32,3 +32,4 @@ Thumbs.db
 *.png
 # Added by ggshield
 .cache_ggshield
+.turbo/

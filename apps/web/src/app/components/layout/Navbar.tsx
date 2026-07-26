@@ -22,7 +22,7 @@ type NavItemWithDropdown = {
 type NavItemType = NavItem | NavItemWithDropdown;
 
 const navItems: NavItemType[] = [
-  { label: 'Home', href: '/' },
+ // { label: 'Home', href: '/' },//
   {
     label: 'About',
     href: '/about',
@@ -38,9 +38,6 @@ const navItems: NavItemType[] = [
   href: '/programs',
   dropdown: [
     { label: 'All Programs', href: '/programs' },
-    { label: 'Odyssey', href: '/programs/odyssey' },
-    { label: 'THOOYAM \'26', href: '/programs/thooayam-26' },
-    { label: 'Observation Days', href: '/programs/observation-days' },
   ]
 },
   { label: 'Gallery', href: '/gallery' },
