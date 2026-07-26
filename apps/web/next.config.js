@@ -17,9 +17,11 @@ const nextConfig = {
     minimumCacheTTL: 60,
   },
   compress: true,
+  // ✅ ADD THESE HEADERS FOR BETTER CACHING
   async headers() {
     return [
       {
+        // Cache static assets for 1 year
         source: '/_next/static/(.*)',
         headers: [
           {
@@ -29,6 +31,7 @@ const nextConfig = {
         ],
       },
       {
+        // Cache images for 1 year
         source: '/images/(.*)',
         headers: [
           {
@@ -37,7 +40,43 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // Cache fonts for 1 year
+        source: '/fonts/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Cache favicon for 1 week
+        source: '/favicon.ico',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=604800, immutable',
+          },
+        ],
+      },
+      {
+        // Cache robots.txt for 1 week
+        source: '/robots.txt',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=604800, immutable',
+          },
+        ],
+      },
     ];
+  },
+  // ✅ ADD THIS FOR BETTER COMPRESSION
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
   },
 };
 
