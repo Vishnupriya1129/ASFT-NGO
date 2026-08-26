@@ -88,7 +88,8 @@ const teamMembers = [
   },
 ];
 
-// ✅ Safe Image Component
+// ✅ FIXED: Safe Image Component – Full Face Visible, No Cut-Off
+// ✅ FINAL FIX: Show full face – NO CUT-OFF
 function TeamMemberImage({ src, name }: { src: string | null | undefined; name: string }) {
   const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2);
   
@@ -101,28 +102,29 @@ function TeamMemberImage({ src, name }: { src: string | null | undefined; name: 
   }
 
   return (
-    <img 
-      src={src} 
-      alt={name} 
-      className="w-full h-full object-cover rounded-full shadow-xl"
-      onError={(e) => {
-        const target = e.target as HTMLImageElement;
-        target.style.display = 'none';
-        const parent = target.parentElement;
-        if (parent) {
-          const placeholder = document.createElement('div');
-          placeholder.className = 'w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-600/20 to-[#0F223D]/20 rounded-full';
-          const span = document.createElement('span');
-          span.className = 'text-4xl font-serif text-[#0F223D]/30';
-          span.textContent = initials;
-          placeholder.appendChild(span);
-          parent.appendChild(placeholder);
-        }
-      }}
-    />
+    <div className="w-full h-full rounded-full overflow-hidden bg-white">
+      <img 
+        src={src} 
+        alt={name} 
+        className="w-full h-full object-contain object-center"
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.style.display = 'none';
+          const parent = target.parentElement;
+          if (parent) {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-600/20 to-[#0F223D]/20 rounded-full';
+            const span = document.createElement('span');
+            span.className = 'text-4xl font-serif text-[#0F223D]/30';
+            span.textContent = initials;
+            placeholder.appendChild(span);
+            parent.appendChild(placeholder);
+          }
+        }}
+      />
+    </div>
   );
 }
-
 // ============================================
 // MAIN PAGE
 // ============================================
