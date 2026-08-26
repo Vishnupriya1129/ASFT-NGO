@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from '@/components/ui/SafeImage';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
-// ✅ Define types properly
+// ✅ Define types
 type NavItem = {
   label: string;
   href: string;
@@ -22,7 +22,6 @@ type NavItemWithDropdown = {
 type NavItemType = NavItem | NavItemWithDropdown;
 
 const navItems: NavItemType[] = [
- // { label: 'Home', href: '/' },//
   {
     label: 'About',
     href: '/about',
@@ -34,19 +33,17 @@ const navItems: NavItemType[] = [
     ]
   },
   {
-  label: 'Programs',
-  href: '/programs',
-  dropdown: [
-    { label: 'All Programs', href: '/programs' },
-  ]
-},
+    label: 'Programs',
+    href: '/programs',
+    dropdown: [
+      { label: 'All Programs', href: '/programs' },
+    ]
+  },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Events', href: '/events' },
   { label: 'Join Us', href: '/volunteer' },
-  { label: 'Dashboard', href: '/admin' },
 ];
 
-// ✅ Type guard to check if item has dropdown
 function hasDropdown(item: NavItemType): item is NavItemWithDropdown {
   return 'dropdown' in item && Array.isArray((item as NavItemWithDropdown).dropdown);
 }
@@ -88,23 +85,31 @@ export function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-        {/* Logo */}
+        {/* Logo – Perfectly Round */}
         <Link
           href="/"
           className="flex items-center gap-3 group shrink-0"
           aria-label="Aram Saeivom Family Trust Home"
         >
-          <Image
-            src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/logo/asftt.png"
-            alt="Aram Saeivom Family Trust"
-            width={70}
-            height={70}
-            priority
-            className="object-contain"
-          />
+          <div className="relative w-16 h-16 sm:w-20 md:w-24 lg:w-28 transition-transform duration-300 hover:scale-105">
+            {/* Solid white background + gold border to make the circle full */}
+            <div className="absolute inset-0 rounded-full bg-white border-2 border-[#C9A227] shadow-lg shadow-[#C9A227]/20" />
+            {/* Inner subtle glow */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#C9A227]/10 to-transparent" />
+            {/* Image – centered and covering the circle */}
+            <div className="absolute inset-0 rounded-full overflow-hidden">
+              <Image
+                src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/logo/asftt.png"
+                alt="Aram Saeivom Family Trust"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+          </div>
           <div className="hidden md:block">
             <div
-              className={`font-bold text-xl leading-tight transition-colors duration-300 ${
+              className={`font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight transition-colors duration-300 ${
                 scrolled ? 'text-primary-600' : 'text-white'
               }`}
             >
@@ -113,7 +118,7 @@ export function Navbar() {
           </div>
           <div className="md:hidden">
             <div
-              className={`font-bold text-sm leading-tight transition-colors duration-300 ${
+              className={`font-bold text-base sm:text-lg leading-tight transition-colors duration-300 ${
                 scrolled ? 'text-primary-600' : 'text-white'
               }`}
             >
@@ -122,7 +127,7 @@ export function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Nav */}
+        {/* Desktop Nav – Bigger Links */}
         <ul className="hidden lg:flex items-center gap-1">
           {navItems.map((item) => {
             const hasDropdownItems = hasDropdown(item);
@@ -140,24 +145,23 @@ export function Navbar() {
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <button
-                    className={`px-4 py-2 text-sm font-medium transition-all duration-300 rounded-md flex items-center gap-1 ${
+                    className={`px-4 py-2 text-base md:text-lg font-semibold transition-all duration-300 rounded-md flex items-center gap-1 ${
                       scrolled
                         ? active
                           ? 'text-primary-600 bg-primary-50'
                           : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
                         : active
-                        ? 'text-white bg-white/20'
-                        : 'text-white hover:text-white/80 hover:bg-white/10'
+                          ? 'text-white bg-white/20'
+                          : 'text-white hover:text-white/80 hover:bg-white/10'
                     }`}
                   >
                     {item.label}
                     <ChevronDown
-                      size={14}
+                      size={16}
                       className={`transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
                     />
                   </button>
 
-                  {/* Dropdown */}
                   <AnimatePresence>
                     {isDropdownOpen && (
                       <motion.div
@@ -165,7 +169,7 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className={`absolute top-full left-0 mt-1 w-48 rounded-lg shadow-xl overflow-hidden ${
+                        className={`absolute top-full left-0 mt-1 w-56 rounded-lg shadow-xl overflow-hidden ${
                           scrolled ? 'bg-white' : 'bg-white/95 backdrop-blur-md'
                         } border border-gray-100`}
                       >
@@ -178,7 +182,7 @@ export function Navbar() {
                             <Link
                               key={subItem.label}
                               href={subItem.href}
-                              className={`block px-4 py-2.5 text-sm transition-colors ${
+                              className={`block px-4 py-3 text-base transition-colors ${
                                 subActive
                                   ? 'bg-primary-50 text-primary-600 font-medium'
                                   : 'text-gray-700 hover:bg-gray-50 hover:text-primary-600'
@@ -200,14 +204,14 @@ export function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`px-4 py-2 text-sm font-medium transition-all duration-300 rounded-md relative ${
+                  className={`px-4 py-2 text-base md:text-lg font-semibold transition-all duration-300 rounded-md relative ${
                     scrolled
                       ? active
                         ? 'text-primary-600 bg-primary-50'
                         : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
                       : active
-                      ? 'text-white bg-white/20'
-                      : 'text-white hover:text-white/80 hover:bg-white/10'
+                        ? 'text-white bg-white/20'
+                        : 'text-white hover:text-white/80 hover:bg-white/10'
                   }`}
                 >
                   {item.label}
@@ -227,8 +231,10 @@ export function Navbar() {
           <li>
             <Link
               href="/donate"
-              className={`btn-primary text-sm py-2.5 px-5 ${
-                !scrolled ? 'bg-white text-primary-600 hover:bg-white/90' : ''
+              className={`text-base md:text-lg font-bold px-6 py-2.5 rounded-full transition shadow-lg ${
+                scrolled
+                  ? 'bg-primary-500 text-white hover:bg-primary-600'
+                  : 'bg-white text-primary-600 hover:bg-white/90'
               }`}
             >
               Donate
@@ -265,7 +271,7 @@ export function Navbar() {
                   if (hasDropdown(item)) {
                     return (
                       <div key={item.label}>
-                        <div className="px-4 py-3 font-medium text-gray-700">
+                        <div className="px-4 py-3 font-medium text-gray-700 text-base">
                           {item.label}
                         </div>
                         <div className="pl-4 space-y-1">
@@ -273,7 +279,7 @@ export function Navbar() {
                             <Link
                               key={subItem.label}
                               href={subItem.href}
-                              className="block px-4 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-all"
+                              className="block px-4 py-2.5 rounded-lg text-base text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-all"
                               onClick={() => setMenuOpen(false)}
                             >
                               {subItem.label}
@@ -287,7 +293,7 @@ export function Navbar() {
                     <li key={item.href}>
                       <Link
                         href={item.href}
-                        className={`block px-4 py-3 rounded-lg font-medium transition-all ${
+                        className={`block px-4 py-3 rounded-lg font-medium text-base transition-all ${
                           isActive(item.href)
                             ? 'bg-primary-50 text-primary-600'
                             : 'text-gray-700 hover:bg-primary-50 hover:text-primary-600'
@@ -303,7 +309,7 @@ export function Navbar() {
               <div className="pt-3 border-t border-gray-100 mt-3">
                 <Link
                   href="/donate"
-                  className="btn-primary block px-4 py-3 text-center font-semibold"
+                  className="btn-primary block px-4 py-3 text-center font-semibold text-base"
                   onClick={() => setMenuOpen(false)}
                 >
                   Donate Now

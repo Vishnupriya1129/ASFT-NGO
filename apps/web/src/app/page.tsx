@@ -1,7 +1,6 @@
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import { HeroSection } from '@/app/components/home/HeroSection';
-// import { HeroButtons } from '@/app/components/home/HeroButtons';  // ❌ REMOVED
 import { VideoSection } from '@/app/components/home/VideoSection';
 import { AnnouncementsSection } from '@/app/components/home/AnnouncementsSection';
 import { StatsSection } from '@/app/components/home/StatsSection';
@@ -31,14 +30,10 @@ export default function HomePage() {
       <main id="main-content" className="w-full">
         <HeroSection />
         <DonateVolunteerCTA />
-         <AboutPreview />
-        {/* <HeroButtons />  ❌ REMOVED */}
-       
+        <AboutPreview />
         <AnnouncementsSection />
         <MissionVisionSection />
         <FounderNote />
-        
-       
         {/* <StatsSection /> */}
         <ProgramsSection />
          <VideoSection />
