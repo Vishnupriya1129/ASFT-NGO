@@ -1,48 +1,44 @@
-'use client';
-
-import NextImage from 'next/image';
-import { useState, useEffect } from 'react';
+﻿'use client';
 
 interface SafeImageProps {
-    src: string | null | undefined;
-    alt: string;
-    fill?: boolean;
-    className?: string;
-    priority?: boolean;
-    sizes?: string;
-    width?: number;
-    height?: number;
-    style?: React.CSSProperties;
+  src: string | null | undefined;
+  alt: string;
+  className?: string;
+  fill?: boolean;
+  width?: number;
+  height?: number;
+  priority?: boolean;
+  fallbackSrc?: string;
 }
 
-export default function SafeImage({ src, alt, ...props }: SafeImageProps) {
-    const [isClient, setIsClient] = useState(false);
-    const [error, setError] = useState(false);
+export default function SafeImage({
+  src,
+  alt,
+  className = '',
+  fill = false,
+  width = 400,
+  height = 300,
+}: SafeImageProps) {
+  // If no src, render nothing (no fallback)
+  if (!src) return null;
 
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
-    if (!isClient || !src || error) {
-        return (
-            <div
-                className="w-full h-full bg-gray-100 flex items-center justify-center"
-                style={{ minHeight: '100px' }}
-            >
-                <span className="text-gray-400 text-sm">No Image</span>
-            </div>
-        );
-    }
-
+  if (fill) {
     return (
-        <NextImage
-            src={src}
-            alt={alt}
-            {...props}
-            onError={() => setError(true)}
-            suppressHydrationWarning
-        />
+      <img
+        src={src}
+        alt={alt}
+        className={`absolute inset-0 w-full h-full object-cover ${className}`}
+      />
     );
-}
+  }
 
-export { SafeImage };
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      width={width}
+      height={height}
+    />
+  );
+}

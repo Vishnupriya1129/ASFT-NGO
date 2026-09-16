@@ -22,7 +22,7 @@ export default function VolunteerPage() {
   {/* Background Image — Full width, no cut */}
   <div className="absolute inset-0">
     <Image
-      src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-images/2024/Child%20Safety%20Program/_MG_2426.JPG"
+      src="https://res.cloudinary.com/kvatjwwc/image/upload/v1789558498/IMG_2516.jpg"
       alt="Join us in making a difference"
       fill
       className="object-cover"

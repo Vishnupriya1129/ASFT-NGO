@@ -6,10 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const heroImages = [
-  'https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-images/2023/Anniversary/IMG_2472.JPG',
-  'https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-images/2024/Child%20Safety%20Program/IMG_2547.JPG',
-  'https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-images/2024/Happiness%20Day/IMG_7834.JPG',
-  'https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-images/2026/Mental%20Health%20Training/IMG_2953.jpg',
+  'https://res.cloudinary.com/kvatjwwc/image/upload/v1789558471/IMG_2472.jpg',
+  'https://res.cloudinary.com/kvatjwwc/image/upload/v1789558848/IMG_4423.jpg',
+  'https://res.cloudinary.com/kvatjwwc/image/upload/v1789558499/IMG_2547.jpg',
+  'https://res.cloudinary.com/kvatjwwc/image/upload/v1789558585/IMG_2497.jpg',
 ];
 
 export function HeroSection() {
@@ -30,15 +30,6 @@ export function HeroSection() {
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
   }, [nextSlide]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') prevSlide();
-      if (e.key === 'ArrowRight') nextSlide();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [prevSlide, nextSlide]);
 
   const slideVariants = {
     enter: (direction: number) => ({
@@ -69,8 +60,8 @@ export function HeroSection() {
           className="absolute inset-0"
         >
           <Image
-            src={heroImages[currentIndex] || '/placeholder.svg'}
-            alt="Aram Saeivom Family Trust - Empowering communities through compassion and action"
+            src={heroImages[currentIndex]}
+            alt="Aram Saeivom Family Trust"
             fill
             className="object-cover"
             priority
@@ -79,23 +70,6 @@ export function HeroSection() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Brand Name */}
-      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-10 text-center px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-        >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white drop-shadow-lg">
-            Aram Saeivom
-          </h1>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white/90 drop-shadow-md mt-1">
-            Family Trust
-          </h2>
-        </motion.div>
-      </div>
-
-      {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
         className="absolute left-4 top-1/2 -translate-y-1/2 z-20 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 backdrop-blur-sm p-3 rounded-full transition-all duration-300"
@@ -111,6 +85,21 @@ export function HeroSection() {
       >
         <ChevronRight size={28} />
       </button>
+
+      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-10 text-center px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white drop-shadow-lg">
+            Aram Saeivom
+          </h1>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-white/90 drop-shadow-md mt-1">
+            Family Trust
+          </h2>
+        </motion.div>
+      </div>
     </section>
   );
 }

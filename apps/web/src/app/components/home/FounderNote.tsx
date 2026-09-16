@@ -105,7 +105,7 @@ export function FounderNote() {
                   >
                     <div className="relative w-full h-full">
                       <Image
-                        src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-images/2024/Anniversary/_MG_8239.JPG"
+                        src="https://res.cloudinary.com/kvatjwwc/image/upload/v1789557742/_MG_2559.jpg"
                         alt="Balasubramanian — Founder, Aram Saeivom Family Trust"
                         fill
                         className="object-cover object-[center_30%] transition-transform duration-700 ease-out group-hover:scale-105"

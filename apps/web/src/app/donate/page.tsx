@@ -98,7 +98,7 @@ export default function DonatePage() {
                   <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 text-center border border-white/30">
                     <div className="relative w-48 h-48 mx-auto bg-white rounded-xl overflow-hidden border border-gray-200 shadow-md">
                       <Image
-                        src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/QR/qr.png"
+                        src="https://res.cloudinary.com/kvatjwwc/image/upload/v1789557702/qr_1.png"
                         alt="UPI QR Code"
                         fill
                         className="object-contain p-2"

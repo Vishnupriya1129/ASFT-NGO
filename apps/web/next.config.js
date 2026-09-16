@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -12,12 +13,16 @@ const nextConfig = {
         hostname: 'ui-avatars.com',
         pathname: '/api/**',
       },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
   },
   compress: true,
-  // ✅ ADD THESE HEADERS FOR BETTER CACHING
+  // ✅ Add these headers for better caching
   async headers() {
     return [
       {
@@ -72,11 +77,11 @@ const nextConfig = {
       },
     ];
   },
-  // ✅ ADD THIS FOR BETTER COMPRESSION
+  // ✅ Remove console logs in production
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'],
-    } : false,
+    removeConsole: process.env.NODE_ENV === 'production'
+      ? { exclude: ['error', 'warn'] }
+      : false,
   },
 };
 

@@ -99,7 +99,7 @@ export function Navbar() {
             {/* Image – centered and covering the circle */}
             <div className="absolute inset-0 rounded-full overflow-hidden">
               <Image
-                src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/logo/asftt.png"
+                src="https://res.cloudinary.com/kvatjwwc/image/upload/v1789557687/ar.png"
                 alt="Aram Saeivom Family Trust"
                 fill
                 className="object-cover"

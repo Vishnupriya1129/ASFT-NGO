@@ -48,7 +48,7 @@ export default async function EventsPage() {
         <section className="relative h-[400px] sm:h-[500px] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-images/2026/Uvagai/20260321_181154.jpg"
+              src="https://res.cloudinary.com/kvatjwwc/image/upload/v1789558579/IMG_8901.jpg"
               alt="Events and announcements"
               fill
               className="object-cover"

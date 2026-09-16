@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: process.env.NEXT_PUBLIC_APP_URL,
     siteName: 'Aram Saeivom Family Trust',
-    images: [{ url: 'https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-%20images/2026/just-ride/20260104_165523.jpg', width: 1200, height: 630, alt: 'Aram Saeivom Family Trust' }],
+    images: [{ url: 'https://res.cloudinary.com/kvatjwwc/image/upload/v1789559022/20260104_165523.jpg', width: 1200, height: 630, alt: 'Aram Saeivom Family Trust' }],
   },
   twitter: { card: 'summary_large_image', creator: '@seedandserve' },
 };

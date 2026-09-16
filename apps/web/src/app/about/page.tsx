@@ -17,7 +17,7 @@ export default async function AboutPage() {
         <section className="relative h-[400px] sm:h-[500px] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://vixzstrzqhwswhibzfdq.supabase.co/storage/v1/object/public/content-images/content-images/2023/Anniversary/_MG_2559.JPG"
+              src="https://res.cloudinary.com/kvatjwwc/image/upload/v1789558526/_MG_8246.jpg"
               alt="Aram Saeivom Family Trust - About Us"
               fill
               className="object-cover"

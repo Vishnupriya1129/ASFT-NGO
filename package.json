@@ -1,42 +1,18 @@
 {
   "name": "seed-and-serve",
-  "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "services/*"
-  ],
   "scripts": {
-    "dev": "turbo run dev --filter=@seed-and-serve/web",
-    "build": "turbo run build --filter=@seed-and-serve/web",
-    "lint": "turbo run lint --filter=@seed-and-serve/web",
-    "typecheck": "turbo run typecheck --filter=@seed-and-serve/web",
-    "test": "turbo run test --filter=@seed-and-serve/web",
-    "test:e2e": "turbo run test:e2e --filter=@seed-and-serve/web",
-    "db:push": "cd apps/web && npx prisma db push",
-    "db:migrate": "cd apps/web && npx prisma migrate deploy",
-    "db:seed": "cd apps/web && npx ts-node prisma/seed.ts",
-    "db:studio": "cd apps/web && npx prisma studio"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^21.2.0",
-    "commitlint": "^21.2.0",
-    "eslint": "^10.6.0",
-    "husky": "^9.1.7",
-    "prettier": "^3.9.4",
-    "turbo": "^2.10.3"
+    "turbo": "latest"
   },
-  "engines": {
-    "node": ">=20.0.0"
-  },
-  "packageManager": "npm@11.18.0",
-  "dependencies": {
-    "@supabase/ssr": "^0.12.0",
-    "@supabase/supabase-js": "^2.110.0",
-    "lucide-react": "^1.23.0",
-    "react-hot-toast": "^2.6.0",
-    "react-icons": "^5.7.0",
-    "react-youtube": "^10.1.0"
+  "packageManager": "npm@10.0.0",
+  "workspaces": ["apps/*", "packages/*"],
+  "overrides": {
+    "@types/react": "18.2.79",
+    "@types/react-dom": "18.2.25"
   }
 }

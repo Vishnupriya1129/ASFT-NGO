@@ -9,6 +9,7 @@ import { ProgramsSection } from '@/app/components/home/ProgramsSection';
 import { FounderNote } from '@/app/components/home/FounderNote';
 import { DonateVolunteerCTA } from '@/app/components/home/DonateVolunteerCTA';
 import { AboutPreview } from '@/app/components/home/AboutPreview';
+import { ContactSection } from '@/app/components/home/ContactSection';
 import dynamic from 'next/dynamic';
 
 // ✅ Lazy load heavy components (Gallery is heavy)
@@ -28,7 +29,7 @@ export default function HomePage() {
     <>
       <Navbar />
       <main id="main-content" className="w-full">
-        <HeroSection />
+       <HeroSection /> 
         <DonateVolunteerCTA />
         <AboutPreview />
         <AnnouncementsSection />
@@ -37,6 +38,7 @@ export default function HomePage() {
         {/* <StatsSection /> */}
         <ProgramsSection />
          <VideoSection />
+         <ContactSection />
       </main>
       <Footer />
     </>
