@@ -1,0 +1,14 @@
+cd "C:\Users\vishn\seed and serve\admin"
+
+@'
+../turbo.json
+../.turbo
+../node_modules
+../apps
+../src
+../public
+../infra
+../scripts
+'@ | Out-File -FilePath ".vercelignore" -Encoding UTF8
+
+Get-Content .vercelignore
