@@ -1,14 +1,5 @@
-cd "C:\Users\vishn\seed and serve\admin"
-
-@'
+﻿# Ignore parent Turbo config so Vercel doesn't detect Turbo
 ../turbo.json
 ../.turbo
-../node_modules
-../apps
-../src
-../public
-../infra
-../scripts
-'@ | Out-File -FilePath ".vercelignore" -Encoding UTF8
-
-Get-Content .vercelignore
+../package.json
+../package-lock.json
