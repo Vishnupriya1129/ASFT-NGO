@@ -34,9 +34,9 @@ const teamMembers = [
   {
     id: 2,
     name: 'Madhupriya',
-    role: 'Trustee',
+    role: 'Core Team Member',
     years: 8,
-    bio: 'A dedicated trustee committed to the mission of empowering communities through education and healthcare.',
+    bio: 'A dedicated core team member committed to the mission of empowering communities through education and healthcare.',
     image: 'https://res.cloudinary.com/kvatjwwc/image/upload/v1789557462/madhupriya.jpg',
     testimonial: null,
     linkedin: null,
@@ -56,9 +56,9 @@ const teamMembers = [
   {
     id: 4,
     name: 'Santhanasibi M',
-    role: 'Graphic Designer & Trustee',
+    role: 'Graphic Designer & Core Team Member',
     years: 3,
-    bio: 'A creative professional and trustee who brings design thinking and visual communication skills to the organization.',
+    bio: 'A creative professional and core team member who brings design thinking and visual communication skills to the organization.',
     image: 'https://res.cloudinary.com/kvatjwwc/image/upload/v1789557651/sibi.jpg',
     testimonial: 'After joining the Aram Seivom Family Trust, I gained valuable skills through the various programs conducted there. I learned leadership qualities, teamwork, and how to effectively manage and coordinate a team.',
     linkedin: 'https://www.linkedin.com/in/santhana-sibi-m-aa40302a6',
@@ -67,9 +67,9 @@ const teamMembers = [
   {
     id: 5,
     name: 'Vigneshwar M',
-    role: 'Aspirant & Trustee',
+    role: 'Aspirant & Core Team Member',
     years: 3,
-    bio: 'A passionate trustee dedicated to understanding and addressing social issues through community engagement and leadership.',
+    bio: 'A passionate core team member dedicated to understanding and addressing social issues through community engagement and leadership.',
     image: 'https://res.cloudinary.com/kvatjwwc/image/upload/v1789557664/v.jpg',
     testimonial: 'Joining ASF helped me see the world through the eyes of a social worker, helped me understand social values & how impactful the work we do for the society. Personally it made me a better person, team player and a leader.',
     linkedin: null,
@@ -78,7 +78,7 @@ const teamMembers = [
   {
     id: 6,
     name: 'Shiva S',
-    role: 'Creative Head, Graphene.Ai & Trustee',
+    role: 'Creative Head, Graphene.Ai & Core Team Member',
     years: 9.5,
     bio: 'Core team member since the beginning of ASF. Shiva brings creative leadership and strategic vision to the organization.',
     image: 'https://res.cloudinary.com/kvatjwwc/image/upload/v1789557718/siva.png',
@@ -88,8 +88,7 @@ const teamMembers = [
   },
 ];
 
-// ✅ FIXED: Safe Image Component – Full Face Visible, No Cut-Off
-// ✅ FINAL FIX: Show full face – NO CUT-OFF
+// ✅ Safe Image Component — Full Face Visible, No Cut-Off
 function TeamMemberImage({ src, name }: { src: string | null | undefined; name: string }) {
   const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2);
   
@@ -125,19 +124,20 @@ function TeamMemberImage({ src, name }: { src: string | null | undefined; name: 
     </div>
   );
 }
+
 // ============================================
 // MAIN PAGE
 // ============================================
 export default function TeamPage() {
   const founder = teamMembers.find(m => m.isFounder);
-  const trustees = teamMembers.filter(m => !m.isFounder);
+  const coreTeamMembers = teamMembers.filter(m => !m.isFounder);
   const testimonialMembers = teamMembers.filter(m => m.testimonial);
 
   return (
     <>
       <Head>
-        <title>Our Team | Aram Saeivom Family Trust</title>
-        <meta name="description" content="Meet the dedicated trustees and team members behind Aram Saeivom Family Trust." />
+        <title>Our Core Team | Aram Saeivom Family Trust</title>
+        <meta name="description" content="Meet the dedicated core team members behind Aram Saeivom Family Trust." />
       </Head>
 
       <Navbar />
@@ -212,13 +212,13 @@ export default function TeamPage() {
           </section>
         )}
 
-        {/* ===== TRUSTEES GRID ===== */}
+        {/* ===== CORE TEAM MEMBERS GRID ===== */}
         <section className="py-20 max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <span className="inline-block bg-[#C9A227]/10 text-[#C9A227] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-[0.2em] border border-[#C9A227]/20 mb-4">
-              Trustees
+              Core Team
             </span>
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#0F223D]">Our Trustees</h2>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#0F223D]">Our Core Team Members</h2>
             <div className="w-16 h-1 bg-[#C9A227] mx-auto mt-4 rounded-full" />
             <p className="text-gray-500 max-w-2xl mx-auto mt-4 text-sm">
               Each member brings unique expertise and a shared commitment to serving communities with integrity and compassion.
@@ -226,7 +226,7 @@ export default function TeamPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {trustees.map((member) => (
+            {coreTeamMembers.map((member) => (
               <motion.div
                 key={member.id}
                 initial={{ opacity: 0, y: 30 }}

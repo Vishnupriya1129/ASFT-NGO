@@ -1,18 +1,17 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import { getSubPrograms } from '@/lib/programs';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Bike, Heart, Target, Handshake, Calendar, Sparkles } from 'lucide-react';
+import { ArrowRight, Heart, Target, Handshake, Calendar, Sparkles } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Civic Engagement Activities | Aram Saeivom Family Trust',
-  description: 'Explore our civic engagement activities — Just Ride, Relief Works, Health, Humanitarian, and Observation Days.',
+  description: 'Explore our civic engagement activities â€” Relief Works, Health, Humanitarian, and Observation Days.',
 };
 
 const subItemsMap = [
-  { slug: 'just-ride', title: 'Just Ride', icon: Bike, color: 'amber', description: 'Outdoor education combining cycling, adventure, and environmental awareness.' },
   { slug: 'relief-works', title: 'Relief Works', icon: Heart, color: 'rose', description: 'Emergency response and disaster relief for communities in crisis.' },
   { slug: 'health', title: 'Health Programs', icon: Target, color: 'teal', description: 'Empowering communities through healthcare access and health education.' },
   { slug: 'humanitarian', title: 'Humanitarian Programs', icon: Handshake, color: 'indigo', description: 'Delivering compassion, dignity, and hope to the most vulnerable.' },
@@ -46,7 +45,7 @@ export default async function CivicEngagementPage() {
           <div className="absolute inset-0 bg-black/20" />
           <div className="relative z-10 max-w-4xl mx-auto px-6 text-center text-white">
             <span className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-widest border border-white/30 mb-4">
-              Odyssey → Civic Engagement
+              Odyssey â†’ Civic Engagement
             </span>
             <h1 className="text-4xl sm:text-5xl font-serif font-bold drop-shadow-lg">
               Civic Engagement Activities
@@ -108,7 +107,7 @@ export default async function CivicEngagementPage() {
               href="/programs/odyssey"
               className="inline-flex items-center gap-2 text-gray-500 hover:text-emerald-600 transition-colors"
             >
-              ← Back to Odyssey
+              â† Back to Odyssey
             </Link>
           </div>
         </section>

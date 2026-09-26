@@ -1,5 +1,17 @@
 import { createClient } from '@/lib/supabase/server';
 
+// ✅ Rich breakdown format (new)
+export interface YearBreakdown {
+  title?: string;
+  summary?: string;
+  details?: string[];
+  location?: string;
+  impact?: string;
+}
+
+// ✅ Backward compatible — accepts old string/array formats and new object format
+export type YearBreakdownData = YearBreakdown | string | string[];
+
 export interface Program {
   id: number;
   slug: string;
@@ -8,7 +20,7 @@ export interface Program {
   content: string;
   parent_slug: string | null;
   image_urls: string[];
-  year_breakdown: Record<string, string[]> | null;
+  year_breakdown: Record<string, YearBreakdownData> | null;
   sort_order: number;
   is_active: boolean;
   created_at: string;

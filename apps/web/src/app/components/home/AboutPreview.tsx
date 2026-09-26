@@ -35,7 +35,7 @@ export function AboutPreview() {
             {/* Stats — 4 Columns */}
             <div className="flex flex-wrap gap-4 mb-8">
               <div className="flex-1 min-w-[80px] text-center bg-gray-50 rounded-xl p-4 border border-gray-100">
-                <p className="text-2xl font-bold text-primary-600">8+</p>
+                <p className="text-2xl font-bold text-primary-600">10+</p>
                 <p className="text-xs text-gray-500">Years of Service</p>
               </div>
               <div className="flex-1 min-w-[80px] text-center bg-gray-50 rounded-xl p-4 border border-gray-100">

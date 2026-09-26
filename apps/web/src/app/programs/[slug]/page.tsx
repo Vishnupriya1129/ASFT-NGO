@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
-import { getProgramBySlug, getSubPrograms, getPrograms } from '@/lib/programs';
+import { getProgramBySlug, getSubPrograms, getPrograms, YearBreakdown } from '@/lib/programs';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from '@/components/ui/SafeImage';
-import { ArrowRight, ChevronLeft, Home } from 'lucide-react';
+import { ArrowRight, ChevronLeft, Home, MapPin, Heart } from 'lucide-react';
 
 interface ProgramPageProps {
   params: {
@@ -24,6 +24,40 @@ export async function generateMetadata({ params }: ProgramPageProps): Promise<Me
     title: program.title,
     description: program.description,
   };
+}
+
+// ✅ Helper: normalize year_breakdown data into a consistent shape
+function normalizeYearData(data: unknown): {
+  title: string;
+  summary: string;
+  details: string[];
+  location: string;
+  impact: string;
+} {
+  let title = '';
+  let summary = '';
+  let details: string[] = [];
+  let location = '';
+  let impact = '';
+
+  if (typeof data === 'string') {
+    // Old format: single string
+    summary = data;
+  } else if (Array.isArray(data)) {
+    // Old format: array of strings
+    summary = data[0] || '';
+    details = data.slice(1);
+  } else if (typeof data === 'object' && data !== null) {
+    // New format: rich object
+    const obj = data as YearBreakdown;
+    title = obj.title || '';
+    summary = obj.summary || '';
+    details = obj.details || [];
+    location = obj.location || '';
+    impact = obj.impact || '';
+  }
+
+  return { title, summary, details, location, impact };
 }
 
 export default async function ProgramDetailPage({ params }: ProgramPageProps) {
@@ -187,28 +221,90 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
             </div>
           )}
 
-          {/* Year Breakdown */}
+          {/* ===== YEAR BREAKDOWN — Beautiful Chunked Cards ===== */}
           {hasYearBreakdown && (
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-serif font-bold text-primary-800 mb-6">
-                Our Journey
-              </h2>
+            <div className="mt-8">
+              <div className="text-center mb-12">
+                <span className="inline-block bg-[#C9A227]/10 text-[#C9A227] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-[0.2em] border border-[#C9A227]/20 mb-3">
+                  Our Journey
+                </span>
+                <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#0F223D]">
+                  Milestones Through the Years
+                </h2>
+                <div className="w-16 h-1 bg-[#C9A227] mx-auto mt-4 rounded-full" />
+              </div>
+
               <div className="space-y-6">
                 {Object.entries(program.year_breakdown!)
                   .sort((a, b) => a[0].localeCompare(b[0]))
-                  .map(([year, activities]) => (
-                    <div key={year} className="border-l-4 border-primary-300 pl-6">
-                      <h3 className="text-xl font-bold text-primary-600">{year}</h3>
-                      <ul className="mt-2 space-y-2">
-                        {(activities as string[]).map((activity: string, index: number) => (
-                          <li key={index} className="text-gray-600 flex items-start gap-2 text-sm">
-                            <span className="text-primary-400 mt-0.5">✦</span>
-                            <span>{activity}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+                  .map(([year, data]) => {
+                    const { title, summary, details, location, impact } = normalizeYearData(data);
+
+                    return (
+                      <div
+                        key={year}
+                        className="relative bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+                      >
+                        {/* Left accent bar */}
+                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#C9A227] to-[#0F223D]" />
+
+                        <div className="p-6 md:p-8 pl-8">
+                          <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-8">
+                            {/* Year Badge */}
+                            <div className="flex-shrink-0">
+                              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#0F223D] to-[#1a2a4a] flex items-center justify-center shadow-lg">
+                                <span className="text-white font-bold text-lg">{year}</span>
+                              </div>
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1 min-w-0">
+                              {title && (
+                                <h3 className="text-xl md:text-2xl font-serif font-bold text-[#0F223D] mb-2">
+                                  {title}
+                                </h3>
+                              )}
+
+                              {summary && (
+                                <p className="text-gray-600 leading-relaxed mb-4 text-[15px]">
+                                  {summary}
+                                </p>
+                              )}
+
+                              {details.length > 0 && (
+                                <ul className="space-y-2 mt-3">
+                                  {details.map((detail, index) => (
+                                    <li key={index} className="flex items-start gap-3 text-sm text-gray-700">
+                                      <span className="text-[#C9A227] mt-0.5 flex-shrink-0">◆</span>
+                                      <span>{detail}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+
+                              {/* Meta info */}
+                              {(location || impact) && (
+                                <div className="flex flex-wrap gap-3 mt-5 pt-4 border-t border-gray-100">
+                                  {location && (
+                                    <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-medium">
+                                      <MapPin size={12} />
+                                      {location}
+                                    </span>
+                                  )}
+                                  {impact && (
+                                    <span className="inline-flex items-center gap-1.5 bg-[#C9A227]/10 text-[#8B6914] px-3 py-1 rounded-full text-xs font-medium">
+                                      <Heart size={12} />
+                                      {impact}
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           )}

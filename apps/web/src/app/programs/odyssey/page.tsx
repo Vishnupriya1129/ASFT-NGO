@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import { getSubPrograms } from '@/lib/programs';
@@ -8,7 +8,7 @@ import { ArrowRight, TreePine, Users, Bike, Map, Heart, Target, Handshake, Calen
 
 export const metadata: Metadata = {
   title: 'Odyssey Project | Aram Saeivom Family Trust',
-  description: 'Explore our flagship Odyssey Project — civic engagement, training, outdoor education, and more.',
+  description: 'Explore our flagship Odyssey Project â€” civic engagement, training, outdoor education, and more.',
 };
 
 // All sub-programs under Odyssey
@@ -19,7 +19,7 @@ const subProgramsMap = [
     icon: TreePine, 
     color: 'emerald',
     description: 'Environmental action, health, humanitarian, and relief initiatives.',
-    subItems: ['Just Ride', 'Relief Works', 'Health Programs', 'Humanitarian Programs', 'Observation Days']
+    subItems: ['Relief Works', 'Health Programs', 'Humanitarian Programs', 'Observation Days']
   },
   { 
     slug: 'training', 
@@ -33,7 +33,8 @@ const subProgramsMap = [
     title: 'Field Trips', 
     icon: Map, 
     color: 'purple',
-    description: 'Exploring heritage, history, and culture through immersive educational journeys.'
+    description: 'Exploring heritage, history, and culture through immersive educational journeys.',
+      subItems: ['Just Ride']
   },
 ];
 
@@ -91,7 +92,7 @@ export default async function OdysseyPage() {
             </h2>
             <div className="w-16 h-1 bg-emerald-500 mx-auto mt-4 rounded-full" />
             <p className="text-gray-600 max-w-2xl mx-auto mt-4">
-              Discover the pillars of our flagship program — each designed to create lasting impact.
+              Discover the pillars of our flagship program â€” each designed to create lasting impact.
             </p>
           </div>
 
@@ -146,7 +147,7 @@ export default async function OdysseyPage() {
               href="/programs"
               className="inline-flex items-center gap-2 text-gray-500 hover:text-emerald-600 transition-colors"
             >
-              ← Back to All Programs
+              â† Back to All Programs
             </Link>
           </div>
         </section>

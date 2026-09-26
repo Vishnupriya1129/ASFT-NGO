@@ -78,56 +78,83 @@ export function Navbar() {
       role="navigation"
       aria-label="Main navigation"
       suppressHydrationWarning
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        scrolled
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled
           ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100 py-3'
           : 'bg-gradient-to-b from-black/60 to-transparent py-5'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-        {/* Logo – Perfectly Round */}
+        {/* ===== LOGO — Shining Round Version ===== */}
         <Link
           href="/"
           className="flex items-center gap-3 group shrink-0"
           aria-label="Aram Saeivom Family Trust Home"
         >
-          <div className="relative w-16 h-16 sm:w-20 md:w-24 lg:w-28 transition-transform duration-300 hover:scale-105">
-            {/* Solid white background + gold border to make the circle full */}
-            <div className="absolute inset-0 rounded-full bg-white border-2 border-[#C9A227] shadow-lg shadow-[#C9A227]/20" />
-            {/* Inner subtle glow */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#C9A227]/10 to-transparent" />
-            {/* Image – centered and covering the circle */}
-            <div className="absolute inset-0 rounded-full overflow-hidden">
+          <div className="relative aspect-square w-10 sm:w-12 md:w-14 lg:w-16 transition-transform duration-300 hover:scale-105">
+            {/* Outer gold metallic ring */}
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: 'linear-gradient(135deg, #E8C84A 0%, #C9A227 25%, #8B6914 50%, #C9A227 75%, #E8C84A 100%)',
+                boxShadow: '0 4px 20px rgba(201, 162, 39, 0.4), inset 0 2px 4px rgba(255,255,255,0.3)',
+              }}
+            />
+
+            {/* Inner white ring for depth */}
+            <div className="absolute inset-[3px] rounded-full bg-white shadow-inner" />
+
+            {/* Logo circle */}
+            <div className="absolute inset-[4px] rounded-full overflow-hidden bg-white">
               <Image
-                src="https://res.cloudinary.com/kvatjwwc/image/upload/v1789557687/ar.png"
+                src="https://res.cloudinary.com/kvatjwwc/image/upload/v1790420467/asftt_1.png"
                 alt="Aram Saeivom Family Trust"
                 fill
-                className="object-cover"
+                className="object-cover scale-110"
                 priority
               />
             </div>
+
+            {/* Shine highlight overlay */}
+            <div
+              className="absolute inset-[5px] rounded-full pointer-events-none"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.15) 25%, transparent 45%, transparent 70%, rgba(255,255,255,0.1) 100%)',
+              }}
+            />
+
+            {/* Top-left specular highlight (shine dot) */}
+            <div
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                top: '12%',
+                left: '18%',
+                width: '25%',
+                height: '18%',
+                background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 70%)',
+                transform: 'rotate(-25deg)',
+              }}
+            />
           </div>
+
           <div className="hidden md:block">
             <div
-              className={`font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight transition-colors duration-300 ${
-                scrolled ? 'text-primary-600' : 'text-white'
-              }`}
+              className={`font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight transition-colors duration-300 ${scrolled ? 'text-primary-600' : 'text-white'
+                }`}
             >
               Aram Saeivom Family Trust
             </div>
           </div>
           <div className="md:hidden">
             <div
-              className={`font-bold text-base sm:text-lg leading-tight transition-colors duration-300 ${
-                scrolled ? 'text-primary-600' : 'text-white'
-              }`}
+              className={`font-bold text-base sm:text-lg leading-tight transition-colors duration-300 ${scrolled ? 'text-primary-600' : 'text-white'
+                }`}
             >
               Aram Saeivom
             </div>
           </div>
         </Link>
 
-        {/* Desktop Nav – Bigger Links */}
+        {/* Desktop Nav */}
         <ul className="hidden lg:flex items-center gap-1">
           {navItems.map((item) => {
             const hasDropdownItems = hasDropdown(item);
@@ -145,15 +172,14 @@ export function Navbar() {
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <button
-                    className={`px-4 py-2 text-base md:text-lg font-semibold transition-all duration-300 rounded-md flex items-center gap-1 ${
-                      scrolled
+                    className={`px-4 py-2 text-base md:text-lg font-semibold transition-all duration-300 rounded-md flex items-center gap-1 ${scrolled
                         ? active
                           ? 'text-primary-600 bg-primary-50'
                           : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
                         : active
                           ? 'text-white bg-white/20'
                           : 'text-white hover:text-white/80 hover:bg-white/10'
-                    }`}
+                      }`}
                   >
                     {item.label}
                     <ChevronDown
@@ -169,9 +195,8 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className={`absolute top-full left-0 mt-1 w-56 rounded-lg shadow-xl overflow-hidden ${
-                          scrolled ? 'bg-white' : 'bg-white/95 backdrop-blur-md'
-                        } border border-gray-100`}
+                        className={`absolute top-full left-0 mt-1 w-56 rounded-lg shadow-xl overflow-hidden ${scrolled ? 'bg-white' : 'bg-white/95 backdrop-blur-md'
+                          } border border-gray-100`}
                       >
                         {item.dropdown.map((subItem) => {
                           const subActive =
@@ -182,11 +207,10 @@ export function Navbar() {
                             <Link
                               key={subItem.label}
                               href={subItem.href}
-                              className={`block px-4 py-3 text-base transition-colors ${
-                                subActive
+                              className={`block px-4 py-3 text-base transition-colors ${subActive
                                   ? 'bg-primary-50 text-primary-600 font-medium'
                                   : 'text-gray-700 hover:bg-gray-50 hover:text-primary-600'
-                              }`}
+                                }`}
                               onClick={() => setOpenDropdown(null)}
                             >
                               {subItem.label}
@@ -204,23 +228,21 @@ export function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`px-4 py-2 text-base md:text-lg font-semibold transition-all duration-300 rounded-md relative ${
-                    scrolled
+                  className={`px-4 py-2 text-base md:text-lg font-semibold transition-all duration-300 rounded-md relative ${scrolled
                       ? active
                         ? 'text-primary-600 bg-primary-50'
                         : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
                       : active
                         ? 'text-white bg-white/20'
                         : 'text-white hover:text-white/80 hover:bg-white/10'
-                  }`}
+                    }`}
                 >
                   {item.label}
                   {active && (
                     <motion.span
                       layoutId="activeNavIndicator"
-                      className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-0.5 ${
-                        scrolled ? 'bg-primary-500' : 'bg-white'
-                      } rounded-full`}
+                      className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-0.5 ${scrolled ? 'bg-primary-500' : 'bg-white'
+                        } rounded-full`}
                       transition={{ duration: 0.3 }}
                     />
                   )}
@@ -231,11 +253,10 @@ export function Navbar() {
           <li>
             <Link
               href="/donate"
-              className={`text-base md:text-lg font-bold px-6 py-2.5 rounded-full transition shadow-lg ${
-                scrolled
+              className={`text-base md:text-lg font-bold px-6 py-2.5 rounded-full transition shadow-lg ${scrolled
                   ? 'bg-primary-500 text-white hover:bg-primary-600'
                   : 'bg-white text-primary-600 hover:bg-white/90'
-              }`}
+                }`}
             >
               Donate
             </Link>
@@ -244,9 +265,8 @@ export function Navbar() {
 
         {/* Mobile menu button */}
         <button
-          className={`lg:hidden p-2 rounded-lg transition-colors ${
-            scrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'
-          }`}
+          className={`lg:hidden p-2 rounded-lg transition-colors ${scrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'
+            }`}
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
@@ -293,11 +313,10 @@ export function Navbar() {
                     <li key={item.href}>
                       <Link
                         href={item.href}
-                        className={`block px-4 py-3 rounded-lg font-medium text-base transition-all ${
-                          isActive(item.href)
+                        className={`block px-4 py-3 rounded-lg font-medium text-base transition-all ${isActive(item.href)
                             ? 'bg-primary-50 text-primary-600'
                             : 'text-gray-700 hover:bg-primary-50 hover:text-primary-600'
-                        }`}
+                          }`}
                         onClick={() => setMenuOpen(false)}
                       >
                         {item.label}

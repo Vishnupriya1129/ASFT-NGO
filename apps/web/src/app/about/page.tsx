@@ -65,7 +65,7 @@ export default async function AboutPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center border border-[#C9A227]/10">
                   <Heart size={36} className="text-[#0E7A5F] mx-auto mb-3" />
-                  <p className="text-2xl font-bold text-[#0F223D]">8+</p>
+                  <p className="text-2xl font-bold text-[#0F223D]">10+</p>
                   <p className="text-sm text-gray-500">Years of Service</p>
                 </div>
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center border border-[#C9A227]/10">

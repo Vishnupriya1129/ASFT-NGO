@@ -1,4 +1,5 @@
 // src/app/dashboard/layout.tsx
+import LogoutButton from '@/components/LogoutButton';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
@@ -15,7 +16,6 @@ import {
   Bell,
   Star,
   BookOpen,
-  LogOut
 } from 'lucide-react';
 
 const navItems = [
@@ -70,10 +70,7 @@ export default async function DashboardLayout({
         </nav>
         
         <div className="p-4 border-t border-gray-700">
-          <button className="flex items-center gap-3 px-4 py-3 w-full text-gray-300 hover:bg-[#1a3355] hover:text-white rounded-lg transition-colors">
-            <LogOut className="w-5 h-5" />
-            <span>Logout</span>
-          </button>
+          <LogoutButton />
         </div>
       </aside>
 

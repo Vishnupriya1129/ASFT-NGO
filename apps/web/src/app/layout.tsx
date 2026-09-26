@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Providers } from '@/app/components/providers';
 import { Toaster } from 'react-hot-toast';
-import { FloatingActions } from '@/app/components/ui/FloatingActions';
+import FloatingChat from '@/app/components/ui/FloatingChat';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://seed-and-serve-4djp3dt4c-vishnus-projects-76247019.vercel.app'),
@@ -50,8 +50,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               success: { iconTheme: { primary: '#FFCA28', secondary: '#1B5E20' } },
             }}
           />
+          <FloatingChat />
         </Providers>
-       {/*  <FloatingActions /> */}
       </body>
     </html>
   );
