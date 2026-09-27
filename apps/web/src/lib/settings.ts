@@ -1,12 +1,12 @@
 // src/lib/settings.ts
-import { createClient } from '@/lib/supabase/server'  // 👈 import the server client
+import { createClient } from '@/lib/supabase/client';  // ← Client-side
 
 let settingsCache: any = null;
 
 export async function getSettings() {
   if (settingsCache) return settingsCache;
 
-  const supabase = createClient();  // 👈 instantiate it
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('settings')
     .select('*');

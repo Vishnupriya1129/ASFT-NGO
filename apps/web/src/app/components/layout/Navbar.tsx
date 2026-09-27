@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -31,18 +31,16 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
   const [aboutOpen, setAboutOpen] = useState(false);
   const pathname = usePathname();
 
-  const programsTimeout = useRef<NodeJS.Timeout | null>(null);
-  const aboutTimeout = useRef<NodeJS.Timeout | null>(null);
-
+  // Scroll detection
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // ✅ Fetch program tree from API
+  // Fetch program tree from API
   useEffect(() => {
-    if (initialTree.length > 0) return; // Skip if tree passed as prop
+    if (initialTree.length > 0) return;
     fetch('/api/programs/tree')
       .then((res) => res.json())
       .then((data) => setProgramTree(data))
@@ -69,23 +67,18 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
 
-  const handleProgramsEnter = () => {
-    if (programsTimeout.current) clearTimeout(programsTimeout.current);
-    setProgramsOpen(true);
-  };
-
-  const handleProgramsLeave = () => {
-    programsTimeout.current = setTimeout(() => setProgramsOpen(false), 200);
-  };
-
-  const handleAboutEnter = () => {
-    if (aboutTimeout.current) clearTimeout(aboutTimeout.current);
-    setAboutOpen(true);
-  };
-
-  const handleAboutLeave = () => {
-    aboutTimeout.current = setTimeout(() => setAboutOpen(false), 200);
-  };
+  // Click outside closes menus
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('nav')) {
+        setProgramsOpen(false);
+        setAboutOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -111,13 +104,14 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-        {/* ✅ Logo — Small Perfect Circle */}
+        {/* Logo — Small Perfect Circle */}
         <Link href="/" className="flex items-center gap-3 group shrink-0">
           <div className="relative w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 transition-transform duration-300 hover:scale-105 flex-shrink-0">
             <div
               className="absolute inset-0 rounded-full"
               style={{
-                background: 'linear-gradient(135deg, #E8C84A 0%, #C9A227 50%, #8B6914 100%)',
+                background:
+                  'linear-gradient(135deg, #E8C84A 0%, #C9A227 50%, #8B6914 100%)',
                 boxShadow: '0 3px 12px rgba(201, 162, 39, 0.4)',
               }}
             />
@@ -134,7 +128,8 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
             <div
               className="absolute inset-[3px] rounded-full pointer-events-none"
               style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.35) 0%, transparent 45%)',
+                background:
+                  'linear-gradient(135deg, rgba(255,255,255,0.35) 0%, transparent 45%)',
               }}
             />
           </div>
@@ -161,13 +156,13 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
 
         {/* Desktop Nav */}
         <ul className="hidden lg:flex items-center gap-1">
-          {/* About dropdown */}
-          <li
-            className="relative"
-            onMouseEnter={handleAboutEnter}
-            onMouseLeave={handleAboutLeave}
-          >
+          {/* About dropdown — click-based */}
+          <li className="relative">
             <button
+              onClick={() => {
+                setAboutOpen(!aboutOpen);
+                setProgramsOpen(false);
+              }}
               className={`px-4 py-2 text-base md:text-lg font-semibold transition-all duration-300 rounded-md flex items-center gap-1 ${
                 scrolled
                   ? 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
@@ -208,13 +203,13 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
             </AnimatePresence>
           </li>
 
-          {/* Programs Mega Menu */}
-          <li
-            className="relative"
-            onMouseEnter={handleProgramsEnter}
-            onMouseLeave={handleProgramsLeave}
-          >
+          {/* Programs Mega Menu — click-based */}
+          <li className="relative">
             <button
+              onClick={() => {
+                setProgramsOpen(!programsOpen);
+                setAboutOpen(false);
+              }}
               className={`px-4 py-2 text-base md:text-lg font-semibold transition-all duration-300 rounded-md flex items-center gap-1 ${
                 scrolled
                   ? 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
@@ -275,13 +270,19 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
         {/* Mobile menu button */}
         <button
           className={`lg:hidden p-2 rounded-lg transition-colors ${
-            scrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'
+            scrolled
+              ? 'text-gray-700 hover:bg-gray-100'
+              : 'text-white hover:bg-white/10'
           }`}
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
         >
-          {menuOpen ? <span className="text-2xl">✕</span> : <span className="text-2xl">☰</span>}
+          {menuOpen ? (
+            <span className="text-2xl">✕</span>
+          ) : (
+            <span className="text-2xl">☰</span>
+          )}
         </button>
       </div>
 
@@ -296,10 +297,14 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
             className="lg:hidden bg-white/98 backdrop-blur-md border-t border-gray-100 shadow-lg overflow-hidden max-h-[80vh] overflow-y-auto"
           >
             <div className="px-4 py-4 space-y-1">
+              {/* About */}
               <details className="group">
                 <summary className="flex items-center justify-between px-4 py-3 rounded-lg font-medium text-gray-700 cursor-pointer hover:bg-primary-50">
                   About
-                  <ChevronDown size={16} className="group-open:rotate-180 transition-transform" />
+                  <ChevronDown
+                    size={16}
+                    className="group-open:rotate-180 transition-transform"
+                  />
                 </summary>
                 <div className="pl-4 mt-1 space-y-1">
                   {aboutItems.map((item) => (
@@ -315,10 +320,14 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
                 </div>
               </details>
 
+              {/* Programs */}
               <details className="group">
                 <summary className="flex items-center justify-between px-4 py-3 rounded-lg font-medium text-gray-700 cursor-pointer hover:bg-primary-50">
                   Programs
-                  <ChevronDown size={16} className="group-open:rotate-180 transition-transform" />
+                  <ChevronDown
+                    size={16}
+                    className="group-open:rotate-180 transition-transform"
+                  />
                 </summary>
                 <div className="pl-4 mt-1 space-y-1">
                   {programTree.map((program) => (
@@ -327,7 +336,10 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
                         <details className="group/sub">
                           <summary className="flex items-center justify-between px-4 py-2.5 rounded-lg text-sm text-gray-700 cursor-pointer hover:bg-primary-50">
                             {program.title}
-                            <ChevronDown size={14} className="group-open/sub:rotate-180 transition-transform" />
+                            <ChevronDown
+                              size={14}
+                              className="group-open/sub:rotate-180 transition-transform"
+                            />
                           </summary>
                           <div className="pl-4 mt-1 space-y-1">
                             <Link
