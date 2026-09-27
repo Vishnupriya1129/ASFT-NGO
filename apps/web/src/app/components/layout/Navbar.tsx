@@ -23,7 +23,8 @@ interface NavbarProps {
   programTree?: ProgramNode[];
 }
 
-export function Navbar({ programTree = [] }: NavbarProps) {
+export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
+  const [programTree, setProgramTree] = useState<ProgramNode[]>(initialTree);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [programsOpen, setProgramsOpen] = useState(false);
@@ -39,12 +40,23 @@ export function Navbar({ programTree = [] }: NavbarProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // ✅ Fetch program tree from API
+  useEffect(() => {
+    if (initialTree.length > 0) return; // Skip if tree passed as prop
+    fetch('/api/programs/tree')
+      .then((res) => res.json())
+      .then((data) => setProgramTree(data))
+      .catch((err) => console.error('Failed to load program tree:', err));
+  }, [initialTree]);
+
+  // Close menus on route change
   useEffect(() => {
     setProgramsOpen(false);
     setAboutOpen(false);
     setMenuOpen(false);
   }, [pathname]);
 
+  // ESC key closes menus
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -102,7 +114,6 @@ export function Navbar({ programTree = [] }: NavbarProps) {
         {/* ✅ Logo — Small Perfect Circle */}
         <Link href="/" className="flex items-center gap-3 group shrink-0">
           <div className="relative w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 transition-transform duration-300 hover:scale-105 flex-shrink-0">
-            {/* Gold ring */}
             <div
               className="absolute inset-0 rounded-full"
               style={{
@@ -110,9 +121,7 @@ export function Navbar({ programTree = [] }: NavbarProps) {
                 boxShadow: '0 3px 12px rgba(201, 162, 39, 0.4)',
               }}
             />
-            {/* Inner white ring */}
             <div className="absolute inset-[2px] rounded-full bg-white" />
-            {/* Logo image clipped to circle */}
             <div className="absolute inset-[3px] rounded-full overflow-hidden bg-white">
               <Image
                 src="https://res.cloudinary.com/kvatjwwc/image/upload/v1790420467/asftt_1.png"
@@ -122,7 +131,6 @@ export function Navbar({ programTree = [] }: NavbarProps) {
                 priority
               />
             </div>
-            {/* Subtle shine */}
             <div
               className="absolute inset-[3px] rounded-full pointer-events-none"
               style={{
@@ -288,7 +296,6 @@ export function Navbar({ programTree = [] }: NavbarProps) {
             className="lg:hidden bg-white/98 backdrop-blur-md border-t border-gray-100 shadow-lg overflow-hidden max-h-[80vh] overflow-y-auto"
           >
             <div className="px-4 py-4 space-y-1">
-              {/* About */}
               <details className="group">
                 <summary className="flex items-center justify-between px-4 py-3 rounded-lg font-medium text-gray-700 cursor-pointer hover:bg-primary-50">
                   About
@@ -308,7 +315,6 @@ export function Navbar({ programTree = [] }: NavbarProps) {
                 </div>
               </details>
 
-              {/* Programs */}
               <details className="group">
                 <summary className="flex items-center justify-between px-4 py-3 rounded-lg font-medium text-gray-700 cursor-pointer hover:bg-primary-50">
                   Programs

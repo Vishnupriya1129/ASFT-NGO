@@ -1,4 +1,4 @@
-﻿import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
+﻿import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import { HeroSection } from '@/app/components/home/HeroSection';
 import { VideoSection } from '@/app/components/home/VideoSection';

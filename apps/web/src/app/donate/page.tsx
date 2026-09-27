@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import { useState } from 'react';
-import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
+import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import Image from 'next/image';
 import Link from 'next/link';

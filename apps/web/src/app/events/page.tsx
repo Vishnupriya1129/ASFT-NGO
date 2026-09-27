@@ -1,4 +1,4 @@
-﻿import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';   // âœ… Correct path
+﻿import { Navbar } from '@/app/components/layout/Navbar';   // âœ… Correct path
 import { Footer } from '@/app/components/layout/Footer';   // âœ… Correct path
 import { createClient } from '@/lib/supabase/server';
 import Image from '@/components/ui/SafeImage';
