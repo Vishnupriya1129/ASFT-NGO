@@ -1,12 +1,12 @@
-import { Metadata } from 'next';
-import { Navbar } from '@/app/components/layout/Navbar';
+﻿import { Metadata } from 'next';
+import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import { getTimeline } from '@/lib/timeline';
 import { Timeline } from '@/app/components/about/Timeline';
 
 export const metadata: Metadata = {
   title: 'Our Timeline | Aram Saeivom Family Trust',
-  description: 'Explore the journey of Aram Saeivom Family Trust — from 2017 to the present.',
+  description: 'Explore the journey of Aram Saeivom Family Trust â€” from 2017 to the present.',
 };
 
 export default async function TimelinePage() {
@@ -25,7 +25,7 @@ export default async function TimelinePage() {
               Journey Through the Years
             </h1>
             <p className="text-white/70 text-sm max-w-2xl mx-auto mt-2 leading-relaxed">
-              Explore our story, chapter by chapter — from a simple act of kindness to a movement of change.
+              Explore our story, chapter by chapter â€” from a simple act of kindness to a movement of change.
             </p>
           </div>
         </section>

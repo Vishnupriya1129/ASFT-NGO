@@ -1,5 +1,5 @@
-import { Navbar } from '@/app/components/layout/Navbar';   // ✅ Correct path
-import { Footer } from '@/app/components/layout/Footer';   // ✅ Correct path
+﻿import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';   // âœ… Correct path
+import { Footer } from '@/app/components/layout/Footer';   // âœ… Correct path
 import { createClient } from '@/lib/supabase/server';
 import Image from '@/components/ui/SafeImage';
 import Link from 'next/link';
@@ -20,7 +20,7 @@ interface Announcement {
 }
 
 async function getAnnouncements() {
-  console.log('🔍 Fetching announcements...');
+  console.log('ðŸ” Fetching announcements...');
   const supabase = createClient();
   
   const { data, error } = await supabase
@@ -29,11 +29,11 @@ async function getAnnouncements() {
     .order('id', { ascending: false });
 
   if (error) {
-    console.error('❌ Error:', error);
+    console.error('âŒ Error:', error);
     return { data: [], error: error.message };
   }
 
-  console.log(`✅ Fetched ${data?.length || 0} announcements`);
+  console.log(`âœ… Fetched ${data?.length || 0} announcements`);
   return { data: data || [], error: null };
 }
 

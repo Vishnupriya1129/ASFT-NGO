@@ -1,4 +1,4 @@
-import { Navbar } from '@/app/components/layout/Navbar';
+﻿import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -34,7 +34,7 @@ export default async function AboutPage() {
               <span className="text-[#C9A227]">Transforming Communities</span>
             </h1>
             <p className="text-white/80 text-lg max-w-2xl mx-auto mt-4 leading-relaxed">
-              Since 2017, we have been working tirelessly to create lasting change — one life, one family, one community at a time.
+              Since 2017, we have been working tirelessly to create lasting change â€” one life, one family, one community at a time.
             </p>
           </div>
         </section>
@@ -105,7 +105,7 @@ export default async function AboutPage() {
               <div className="bg-[#F8F5EE] rounded-2xl p-8 border-t-4 border-[#C9A227]">
                 <h3 className="text-2xl font-bold text-[#0F223D] mb-4">Our Vision</h3>
                 <p className="text-gray-600 text-lg leading-relaxed">
-                  To create a world that is inclusive, just, and humane — one that 
+                  To create a world that is inclusive, just, and humane â€” one that 
                   values the capabilities and active participation of every individual, 
                   especially the youth, in building a sustainable and equitable future.
                 </p>
@@ -136,7 +136,7 @@ export default async function AboutPage() {
               </h2>
               <div className="w-16 h-1 bg-[#C9A227] mx-auto mt-4 rounded-full" />
               <p className="text-gray-600 max-w-2xl mx-auto mt-4">
-                Explore the key areas where we create impact — click to learn more.
+                Explore the key areas where we create impact â€” click to learn more.
               </p>
             </div>
 

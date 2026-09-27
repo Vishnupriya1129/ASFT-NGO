@@ -1,5 +1,5 @@
-import { Metadata } from 'next';
-import { Navbar } from '@/app/components/layout/Navbar';
+﻿import { Metadata } from 'next';
+import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -17,9 +17,9 @@ export default function VolunteerPage() {
       <Navbar />
       <main className="min-h-screen bg-white pt-24">
 
-{/* ===== HERO — Clean Image, No Heavy Overlay ===== */}
+{/* ===== HERO â€” Clean Image, No Heavy Overlay ===== */}
 <section className="relative h-[400px] flex items-center justify-center overflow-hidden">
-  {/* Background Image — Full width, no cut */}
+  {/* Background Image â€” Full width, no cut */}
   <div className="absolute inset-0">
     <Image
       src="https://res.cloudinary.com/kvatjwwc/image/upload/v1789558498/IMG_2516.jpg"
@@ -28,11 +28,11 @@ export default function VolunteerPage() {
       className="object-cover"
       priority
     />
-    {/* ✅ Very subtle gradient overlay — just for text readability */}
+    {/* âœ… Very subtle gradient overlay â€” just for text readability */}
     <div className="absolute inset-0 bg-gradient-to-t from-[#0F223D]/70 via-[#0F223D]/30 to-[#0F223D]/20" />
   </div>
   
-  {/* Content — positioned on top of image */}
+  {/* Content â€” positioned on top of image */}
   <div className="relative z-10 max-w-4xl mx-auto px-6 text-center text-white">
     <span className="inline-block bg-white/20 backdrop-blur-sm px-5 py-2 rounded-full text-sm font-semibold uppercase tracking-widest border border-white/30 mb-4">
       Join the Movement
@@ -131,13 +131,13 @@ export default function VolunteerPage() {
                 {
                   icon: Users,
                   title: 'Program Support',
-                  description: 'Assist in running programs — from education to environmental initiatives.',
+                  description: 'Assist in running programs â€” from education to environmental initiatives.',
                   color: 'border-blue-200 hover:border-blue-400'
                 },
                 {
                   icon: Target,
                   title: 'Skill-Based Volunteering',
-                  description: 'Share your expertise — teaching, photography, social media, or administration.',
+                  description: 'Share your expertise â€” teaching, photography, social media, or administration.',
                   color: 'border-amber-200 hover:border-amber-400'
                 },
               ].map((item, index) => {
@@ -188,12 +188,12 @@ export default function VolunteerPage() {
         </section>
 
 
-        {/* ===== WHO CAN APPLY & WHAT WE LOOK FOR — Premium SaaS Layout ===== */}
+        {/* ===== WHO CAN APPLY & WHAT WE LOOK FOR â€” Premium SaaS Layout ===== */}
         <section className="py-24 bg-white">
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               
-              {/* Who Can Apply — Glass Card */}
+              {/* Who Can Apply â€” Glass Card */}
               <div className="relative overflow-hidden rounded-[32px] bg-white/80 backdrop-blur-xl border border-white/50 shadow-[0_25px_60px_rgba(15,34,61,0.06)] p-10">
                 <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-[#9f813b] pointer-events-none" />
                 
@@ -211,10 +211,10 @@ export default function VolunteerPage() {
                   
                   <div className="grid grid-cols-2 gap-4">
                     {[
-                      { icon: "🎓", title: "Students" },
-                      { icon: "💼", title: "Professionals" },
-                      { icon: "🌿", title: "Retirees" },
-                      { icon: "❤️", title: "Anyone with Passion" },
+                      { icon: "ðŸŽ“", title: "Students" },
+                      { icon: "ðŸ’¼", title: "Professionals" },
+                      { icon: "ðŸŒ¿", title: "Retirees" },
+                      { icon: "â¤ï¸", title: "Anyone with Passion" },
                     ].map((item) => (
                       <div
                         key={item.title}
@@ -232,7 +232,7 @@ export default function VolunteerPage() {
                 </div>
               </div>
 
-              {/* What We Look For — Navy Card */}
+              {/* What We Look For â€” Navy Card */}
               <div className="relative overflow-hidden rounded-[32px] bg-[#0F223D] p-10 text-white shadow-[0_25px_60px_rgba(15,34,61,0.15)]">
                 <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#C9A227]/10 blur-3xl" />
                 <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-emerald-500/10 blur-3xl" />
@@ -273,7 +273,7 @@ export default function VolunteerPage() {
           </div>
         </section>
 
-        {/* ===== VOLUNTEER FOR A SPECIFIC PROGRAM — Professional Grid ===== */}
+        {/* ===== VOLUNTEER FOR A SPECIFIC PROGRAM â€” Professional Grid ===== */}
         <section className="py-24 bg-[#F8F5EE]">
           <div className="max-w-4xl mx-auto px-6">
             <div className="text-center mb-16">

@@ -1,5 +1,5 @@
-import { Metadata } from 'next';
-import { Navbar } from '@/app/components/layout/Navbar';
+﻿import { Metadata } from 'next';
+import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import { getPrograms } from '@/lib/programs';
 import Link from 'next/link';
@@ -72,7 +72,7 @@ export default async function ProgramsPage() {
           </div>
         </section>
 
-        {/* Odyssey Program Card — Only One */}
+        {/* Odyssey Program Card â€” Only One */}
         <section className="py-16 max-w-4xl mx-auto px-6">
           <Link
             href="/programs/odyssey"
@@ -113,7 +113,7 @@ export default async function ProgramsPage() {
 
           {/* Note about other programs */}
           <div className="text-center mt-8 text-sm text-gray-400">
-            <span className="text-[#C9A227]">✦</span> Odyssey is our flagship program. Explore its eight pillars to learn more.
+            <span className="text-[#C9A227]">âœ¦</span> Odyssey is our flagship program. Explore its eight pillars to learn more.
           </div>
         </section>
       </main>

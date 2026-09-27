@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
 
-// ✅ Rich breakdown format (new)
 export interface YearBreakdown {
   title?: string;
   summary?: string;
@@ -9,7 +8,6 @@ export interface YearBreakdown {
   impact?: string;
 }
 
-// ✅ Backward compatible — accepts old string/array formats and new object format
 export type YearBreakdownData = YearBreakdown | string | string[];
 
 export interface Program {
@@ -25,6 +23,10 @@ export interface Program {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface ProgramTreeNode extends Program {
+  children: ProgramTreeNode[];
 }
 
 export async function getPrograms(): Promise<Program[]> {
@@ -77,4 +79,27 @@ export async function getSubPrograms(parentSlug: string): Promise<Program[]> {
   }
 
   return data || [];
+}
+
+/**
+ * ✅ Build the full tree — root programs with nested sub-programs
+ * Used by the Navbar mega menu
+ */
+export async function getProgramTree(): Promise<ProgramTreeNode[]> {
+  const all = await getPrograms();
+  
+  const byId = new Map<string, ProgramTreeNode>();
+  all.forEach((p) => byId.set(p.slug, { ...p, children: [] }));
+
+  const roots: ProgramTreeNode[] = [];
+  byId.forEach((node) => {
+    if (node.parent_slug) {
+      const parent = byId.get(node.parent_slug);
+      if (parent) parent.children.push(node);
+    } else {
+      roots.push(node);
+    }
+  });
+
+  return roots;
 }

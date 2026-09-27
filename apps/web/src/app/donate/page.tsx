@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
-import { Navbar } from '@/app/components/layout/Navbar';
+import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -27,7 +27,7 @@ export default function DonatePage() {
       <Navbar />
       <main className="min-h-screen pt-24">
         
-        {/* ===== HERO — Navy + Emerald ===== */}
+        {/* ===== HERO â€” Navy + Emerald ===== */}
         <section className="relative h-[280px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0a1628] via-[#1a2a4a] to-emerald-800">
           <div className="absolute inset-0">
             <div className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-r from-emerald-500/10 to-transparent" />
@@ -69,7 +69,7 @@ export default function DonatePage() {
           </div>
         </section>
 
-        {/* ===== DONATION OPTIONS — Premium Glass Cards ===== */}
+        {/* ===== DONATION OPTIONS â€” Premium Glass Cards ===== */}
         <section className="py-16" style={{ background: 'linear-gradient(180deg, #faf8f4 0%, #f0ebe0 50%, #faf8f4 100%)' }}>
           <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-12">
@@ -84,7 +84,7 @@ export default function DonatePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               
-              {/* ===== OPTION 1: UPI / QR — Premium Glass ===== */}
+              {/* ===== OPTION 1: UPI / QR â€” Premium Glass ===== */}
               <div className="relative group">
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/30 to-[#C9A227]/30 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500" />
                 <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300">
@@ -121,7 +121,7 @@ export default function DonatePage() {
                 </div>
               </div>
 
-              {/* ===== OPTION 2: BANK TRANSFER — Premium Glass ===== */}
+              {/* ===== OPTION 2: BANK TRANSFER â€” Premium Glass ===== */}
               <div className="relative group">
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-[#C9A227]/30 to-emerald-500/30 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500" />
                 <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300">
@@ -166,7 +166,7 @@ export default function DonatePage() {
           </div>
         </section>
 
-        {/* ===== 18G/12A DETAILS — Navy + Emerald ===== */}
+        {/* ===== 18G/12A DETAILS â€” Navy + Emerald ===== */}
         <section className="py-16 bg-[#0a1628] text-white">
           <div className="max-w-4xl mx-auto px-6 text-center">
             <div className="flex justify-center mb-4">

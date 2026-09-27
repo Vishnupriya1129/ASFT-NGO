@@ -1,5 +1,5 @@
 ﻿import { Metadata } from 'next';
-import { Navbar } from '@/app/components/layout/Navbar';
+import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import { getSubPrograms } from '@/lib/programs';
 import Link from 'next/link';

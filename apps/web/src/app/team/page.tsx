@@ -1,13 +1,13 @@
-'use client';
+﻿'use client';
 
-import { Navbar } from '@/app/components/layout/Navbar';
+import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import Link from 'next/link';
 import { Calendar, Quote, ArrowUpRight, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
 
-// ✅ LinkedIn Icon — Custom SVG (no import issues)
+// âœ… LinkedIn Icon â€” Custom SVG (no import issues)
 function LinkedInIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -18,7 +18,7 @@ function LinkedInIcon() {
   );
 }
 
-// ✅ Team member data
+// âœ… Team member data
 const teamMembers = [
   {
     id: 1,
@@ -88,7 +88,7 @@ const teamMembers = [
   },
 ];
 
-// ✅ Safe Image Component — Full Face Visible, No Cut-Off
+// âœ… Safe Image Component â€” Full Face Visible, No Cut-Off
 function TeamMemberImage({ src, name }: { src: string | null | undefined; name: string }) {
   const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2);
   
@@ -161,7 +161,7 @@ export default function TeamPage() {
                 Meet Our Team
               </h1>
               <p className="text-white/60 text-lg max-w-2xl mx-auto mt-4 font-light">
-                The dedicated individuals behind Aram Saeivom Family Trust — working tirelessly to create lasting change.
+                The dedicated individuals behind Aram Saeivom Family Trust â€” working tirelessly to create lasting change.
               </p>
             </motion.div>
           </div>

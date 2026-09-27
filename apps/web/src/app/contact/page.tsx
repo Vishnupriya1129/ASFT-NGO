@@ -1,12 +1,12 @@
-import { Metadata } from 'next';
-import { Navbar } from '@/app/components/layout/Navbar';
+﻿import { Metadata } from 'next';
+import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Contact Us | Aram Saeivom Family Trust',
-  description: 'Get in touch with us — we\'d love to hear from you.',
+  description: 'Get in touch with us â€” we\'d love to hear from you.',
 };
 
 export default function ContactPage() {
@@ -61,7 +61,7 @@ export default function ContactPage() {
               <h3 className="font-bold text-gray-800 mb-2">Address</h3>
               <p className="text-gray-600">
                 No.381, Transport Nagar,<br />
-                PTC Post, Madurai – 625022
+                PTC Post, Madurai â€“ 625022
               </p>
             </div>
           </div>

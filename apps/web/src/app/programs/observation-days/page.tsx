@@ -1,7 +1,7 @@
-import { Metadata } from 'next';
-import { Navbar } from '@/app/components/layout/Navbar';
+﻿import { Metadata } from 'next';
+import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
-import Link from 'next/link'; // ✅ Add this
+import Link from 'next/link'; // âœ… Add this
 import Image from '@/components/ui/SafeImage';
 import { Calendar, Heart, Leaf, Smile } from 'lucide-react';
 
@@ -27,7 +27,7 @@ export default function ObservationDaysPage() {
               Observation of Specific Days
             </h1>
             <p className="text-white/90 text-lg max-w-2xl mx-auto mt-4 leading-relaxed">
-              Aligning our community efforts with global movements — celebrating days that inspire awareness, action, and hope.
+              Aligning our community efforts with global movements â€” celebrating days that inspire awareness, action, and hope.
             </p>
           </div>
         </section>
@@ -36,7 +36,7 @@ export default function ObservationDaysPage() {
         <section className="py-16 max-w-4xl mx-auto px-6">
           <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed mb-12">
             <p>
-              At Aram Saeivom Family Trust, we believe that certain days carry a universal message — 
+              At Aram Saeivom Family Trust, we believe that certain days carry a universal message â€” 
               one that can spark awareness, inspire action, and foster a deeper sense of responsibility 
               towards ourselves, others, and the planet.
             </p>

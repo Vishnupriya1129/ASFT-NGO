@@ -1,5 +1,5 @@
-import { Metadata } from 'next';
-import { Navbar } from '@/app/components/layout/Navbar';
+﻿import { Metadata } from 'next';
+import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,7 +7,7 @@ import { ArrowLeft, Quote } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Founder\'s Note | Aram Saeivom Family Trust',
-  description: 'A message from our founder — the vision, values, and journey of Aram Saeivom Family Trust.',
+  description: 'A message from our founder â€” the vision, values, and journey of Aram Saeivom Family Trust.',
 };
 
 export default function FoundersNotePage() {
@@ -116,7 +116,7 @@ export default function FoundersNotePage() {
                 <div className="h-px flex-1 bg-gradient-to-l from-transparent to-[#C9A227]/30" />
               </div>
 
-              {/* Full Note Content — Times New Roman */}
+              {/* Full Note Content â€” Times New Roman */}
               <div className="prose prose-lg max-w-none" style={{ fontFamily: 'Times New Roman, serif' }}>
                 <p className="text-gray-700 leading-relaxed text-lg italic">
                   "At Aram Saeivom Family Trust, we believe that true change begins with 
@@ -127,7 +127,7 @@ export default function FoundersNotePage() {
                 <p className="text-gray-700 leading-relaxed mt-6">
                   Our journey began in 2017 with a simple belief: that small acts of kindness, 
                   when multiplied by many, can transform the world. What started as a dream 
-                  has grown into a movement — one that touches thousands of lives across Tamil Nadu.
+                  has grown into a movement â€” one that touches thousands of lives across Tamil Nadu.
                 </p>
                 
                 <p className="text-gray-700 leading-relaxed mt-6">
@@ -139,7 +139,7 @@ export default function FoundersNotePage() {
                 </p>
                 
                 <p className="text-gray-700 leading-relaxed mt-6">
-                  Our work is built on compassion — not as a concept, but as a practice. Every 
+                  Our work is built on compassion â€” not as a concept, but as a practice. Every 
                   meal we serve, every child we educate, and every community we empower is a 
                   step toward a brighter, more equitable future. Our journey is built on the 
                   unwavering belief that small acts of kindness, multiplied by many, can 
@@ -148,7 +148,7 @@ export default function FoundersNotePage() {
                 
                 <p className="text-gray-700 leading-relaxed mt-6">
                   Today, as we look toward the future, we are more committed than ever. We 
-                  invite you to join us — whether through volunteering, donations, or simply 
+                  invite you to join us â€” whether through volunteering, donations, or simply 
                   spreading the word. Together, we can build a world where dignity, opportunity, 
                   and hope are not privileges, but rights.
                 </p>
@@ -187,7 +187,7 @@ export default function FoundersNotePage() {
         {/* Footer */}
         <section className="py-12 max-w-4xl mx-auto px-6 text-center">
           <p className="text-sm text-gray-400" style={{ fontFamily: 'Times New Roman, serif' }}>
-            <span className="text-[#C9A227] font-bold">✦</span> Every life touched is a story of hope.
+            <span className="text-[#C9A227] font-bold">âœ¦</span> Every life touched is a story of hope.
           </p>
         </section>
 

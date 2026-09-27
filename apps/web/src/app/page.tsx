@@ -1,4 +1,4 @@
-import { Navbar } from '@/app/components/layout/Navbar';
+﻿import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import { HeroSection } from '@/app/components/home/HeroSection';
 import { VideoSection } from '@/app/components/home/VideoSection';
@@ -11,7 +11,7 @@ import { DonateVolunteerCTA } from '@/app/components/home/DonateVolunteerCTA';
 import { AboutPreview } from '@/app/components/home/AboutPreview';
 import dynamic from 'next/dynamic';
 
-// ✅ Lazy load heavy components (Gallery is heavy)
+// âœ… Lazy load heavy components (Gallery is heavy)
 const GallerySection = dynamic(
   () => import('@/app/components/home/GallerySection').then(mod => mod.GallerySection),
   {

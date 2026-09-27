@@ -1,5 +1,5 @@
-import { Metadata } from 'next';
-import { Navbar } from '@/app/components/layout/Navbar';
+﻿import { Metadata } from 'next';
+import { NavbarWrapper as Navbar } from '@/app/components/layout/NavbarWrapper';
 import { Footer } from '@/app/components/layout/Footer';
 import Image from '@/components/ui/SafeImage';
 import Link from 'next/link';
@@ -38,7 +38,7 @@ export default function ThooayamPage() {
               THOOYAM '26
             </h1>
             <p className="text-white/90 text-lg max-w-2xl mx-auto mt-4 leading-relaxed">
-              Environmental action and community clean-up initiative — creating lasting change through collective effort.
+              Environmental action and community clean-up initiative â€” creating lasting change through collective effort.
             </p>
           </div>
         </section>
@@ -55,7 +55,7 @@ export default function ThooayamPage() {
               educational campaigns, we aim to create lasting behavioral change in communities.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Join us in making a difference — every small action contributes to a cleaner, greener future.
+              Join us in making a difference â€” every small action contributes to a cleaner, greener future.
             </p>
           </div>
         </section>
