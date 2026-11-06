@@ -1,8 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    unoptimized: true,
+    // ✅ Changed to false so Next.js optimizes images for speed
+    unoptimized: false,
     remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
       {
         protocol: 'https',
         hostname: 'vixzstrzqhwswhibzfdq.supabase.co',
@@ -83,6 +89,8 @@ const nextConfig = {
       ? { exclude: ['error', 'warn'] }
       : false,
   },
+  // ✅ Enables faster minification
+  swcMinify: true,
 };
 
 module.exports = nextConfig;

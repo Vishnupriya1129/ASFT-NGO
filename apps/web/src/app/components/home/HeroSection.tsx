@@ -66,7 +66,7 @@ export function HeroSection() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/35" />
+         <div className="absolute inset-0 bg-gradient-to-t from-[#0F223D]/80 via-[#0F223D]/40 to-black/30" />
         </motion.div>
       </AnimatePresence>
 

@@ -3,168 +3,163 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import Image from 'next/image';
 
-interface Testimonial {
-  id: number;
-  name: string;
-  role: string;
-  content: string;
-  rating: number;
-  image_url?: string;
-  is_active: boolean;
-  sort_order: number;
-}
+// Example data structure (replace with your actual Supabase data if needed)
+const defaultTestimonials = [
+  {
+    id: 1,
+    name: 'Aashiq Ahamed N',
+    role: 'Core Team Member',
+    content: 'I have been a part of the NGO Aram Seivom Foundation (ASF) since 2017. I joined when I was a student, and during that time I was able to attend and conduct many programs and activities. Through ASF, I learned leadership, teamwork, commitment, discipline, and my duty towards society.',
+    image_url: 'https://res.cloudinary.com/kvatjwwc/image/upload/f_auto,q_auto,w_1200/v1789557384/aashish.jpg',
+    rating: 5,
+  },
+  {
+    id: 2,
+    name: 'Santhanasibi M',
+    role: 'Graphic Designer',
+    content: 'After joining the Aram Seivom Family Trust, I gained valuable skills through the various programs conducted there. I learned leadership qualities, teamwork, and how to effectively manage and coordinate a team.',
+    image_url: 'https://res.cloudinary.com/kvatjwwc/image/upload/f_auto,q_auto,w_1200/v1789557651/sibi.jpg',
+    rating: 5,
+  },
+  {
+    id: 3,
+    name: 'Vigneshwar M',
+    role: 'Aspirant',
+    content: 'Joining ASF helped me see the world through the eyes of a social worker, helped me understand social values & how impactful the work we do for the society. Personally it made me a better person, team player and a leader.',
+    image_url: 'https://res.cloudinary.com/kvatjwwc/image/upload/f_auto,q_auto,w_1200/v1789557664/v.jpg',
+    rating: 5,
+  }
+];
 
 interface TestimonialsProps {
   title?: string;
   subtitle?: string;
+  testimonials?: any[]; // Replace 'any' with your actual Prisma/Supabase type
 }
 
-export function Testimonials({
-  title = 'What People Say',
-  subtitle = 'Real stories from volunteers and community members',
+export function Testimonials({ 
+  title = "What People Say", 
+  subtitle = "Real stories from our community",
+  testimonials = defaultTestimonials 
 }: TestimonialsProps) {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      const { data, error } = await supabase
-        .from('testimonials')
-        .select('*')
-        .eq('is_active', true)
-        .order('sort_order', { ascending: true });
-
-      if (data) {
-        setTestimonials(data);
-        setLoading(false);
-      } else if (error) {
-        console.error('Error fetching testimonials:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchTestimonials();
-  }, [supabase]);
-
-  const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const prevTestimonial = () => {
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
-
-  // Auto-slide every 6 seconds
+  // Auto-advance
   useEffect(() => {
     if (testimonials.length <= 1) return;
-    const interval = setInterval(nextTestimonial, 6000);
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 6000);
     return () => clearInterval(interval);
   }, [testimonials.length]);
 
-  if (loading) {
-    return (
-      <section className="py-16 bg-[#F8F5EE]">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <div className="animate-pulse flex flex-col items-center">
-            <div className="w-16 h-16 bg-gray-200 rounded-full mb-4" />
-            <div className="h-4 bg-gray-200 rounded w-48 mb-2" />
-            <div className="h-4 bg-gray-200 rounded w-32" />
-          </div>
-        </div>
-      </section>
-    );
-  }
+  const next = () => setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+  const prev = () => setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
-  if (testimonials.length === 0) {
-    return (
-      <section className="py-16 bg-[#F8F5EE]">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-gray-500">No testimonials found. Add some in the admin panel.</p>
-        </div>
-      </section>
-    );
-  }
-
-  const current = testimonials[currentIndex];
+  if (!testimonials || testimonials.length === 0) return null;
 
   return (
-    <section className="py-16 bg-[#F8F5EE]">
-      <div className="max-w-4xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-10">
-          <span className="inline-block bg-[#C9A227]/10 text-[#C9A227] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest border border-[#C9A227]/20 mb-3">
-            Testimonials
-          </span>
-          <h2 className="text-3xl font-serif font-bold text-[#0F223D]">{title}</h2>
-          <p className="text-gray-500 mt-2">{subtitle}</p>
-        </div>
-
-        {/* Testimonial Carousel */}
-        <div className="relative bg-white rounded-2xl shadow-lg p-8 md:p-12">
-          <div className="absolute top-6 left-6 text-[#C9A227]/20">
-            <Quote size={48} />
-          </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className="relative z-10 pt-8"
-            >
-              {/* Rating */}
-              {current.rating && current.rating > 0 && (
-                <div className="flex gap-1 text-yellow-400 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      size={18} 
-                      fill={i < current.rating ? 'currentColor' : 'none'} 
-                    />
-                  ))}
-                </div>
-              )}
-
-              {/* Content */}
-              <p className="text-gray-700 text-lg leading-relaxed italic">
-                "{current.content}"
-              </p>
-
-              {/* Author */}
-              <div className="mt-6">
-                <p className="font-bold text-[#0F223D]">{current.name}</p>
-                <p className="text-sm text-gray-500">{current.role}</p>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Navigation */}
-          {testimonials.length > 1 && (
-            <div className="flex justify-center gap-2 mt-6">
-              <button
-                onClick={prevTestimonial}
-                className="p-2 rounded-full bg-gray-100 hover:bg-[#C9A227]/10 transition-colors"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft size={20} className="text-gray-600" />
-              </button>
-              <button
-                onClick={nextTestimonial}
-                className="p-2 rounded-full bg-gray-100 hover:bg-[#C9A227]/10 transition-colors"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight size={20} className="text-gray-600" />
-              </button>
-            </div>
-          )}
-        </div>
+    <div className="max-w-4xl mx-auto px-6">
+      
+      {/* Header */}
+      <div className="text-center mb-16">
+        <span className="inline-block bg-[#C9A227]/10 text-[#C9A227] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-[0.2em] border border-[#C9A227]/20 mb-4 backdrop-blur-md">
+          Testimonials
+        </span>
+        <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">{title}</h2>
+        <div className="w-16 h-1 bg-[#C9A227] mx-auto rounded-full" />
+        <p className="text-white/70 max-w-2xl mx-auto mt-4 text-lg font-light">{subtitle}</p>
       </div>
-    </section>
+
+      {/* Glass Carousel Card */}
+      <div className="relative bg-white/5 backdrop-blur-xl rounded-[3rem] p-10 md:p-16 shadow-[0_8px_40px_rgb(0,0,0,0.2)] border border-white/10 min-h-[450px] flex items-center justify-center">
+        <Quote size={100} className="text-[#C9A227]/10 absolute top-10 left-10" />
+        
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="w-full flex flex-col items-center text-center relative z-10"
+          >
+            {/* 🖼️ The Image */}
+            <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-4 border-[#C9A227] shadow-[0_0_20px_rgba(201,162,39,0.3)] mb-8 relative">
+              <Image 
+                src={testimonials[currentIndex].image_url || '/images/fallback.jpg'} 
+                alt={testimonials[currentIndex].name}
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            {/* ⭐ Rating */}
+            <div className="flex gap-1 mb-6">
+              {[...Array(5)].map((_, i) => (
+                <Star 
+                  key={i} 
+                  size={18} 
+                  className={i < (testimonials[currentIndex].rating || 5) ? 'text-[#C9A227] fill-[#C9A227]' : 'text-gray-600'} 
+                />
+              ))}
+            </div>
+
+            {/* 💬 Quote */}
+            <p className="text-xl md:text-2xl text-white/90 leading-relaxed italic font-serif mb-10 max-w-3xl">
+              "{testimonials[currentIndex].content}"
+            </p>
+            
+            {/* 👤 Name & Role */}
+            <div>
+              <p className="font-bold text-white text-2xl">
+                {testimonials[currentIndex].name}
+              </p>
+              <p className="text-base text-[#C9A227] font-semibold mt-1">
+                {testimonials[currentIndex].role}
+              </p>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Navigation Arrows */}
+        {testimonials.length > 1 && (
+          <>
+            <button 
+              onClick={prev}
+              className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-[#C9A227] hover:text-[#0F223D] transition-all duration-300 z-20 border border-white/10"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <button 
+              onClick={next}
+              className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-[#C9A227] hover:text-[#0F223D] transition-all duration-300 z-20 border border-white/10"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Pagination Dots */}
+      {testimonials.length > 1 && (
+        <div className="flex justify-center gap-3 mt-10">
+          {testimonials.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`h-3 rounded-full transition-all duration-300 ${
+                currentIndex === index 
+                  ? 'bg-[#C9A227] w-10' 
+                  : 'bg-white/20 hover:bg-white/40 w-3'
+              }`}
+              aria-label={`Go to testimonial ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

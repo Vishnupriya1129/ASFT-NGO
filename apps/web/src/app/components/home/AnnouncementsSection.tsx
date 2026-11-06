@@ -68,7 +68,7 @@ export function AnnouncementsSection() {
     <section
       className="relative py-20 bg-cover bg-center bg-no-repeat"
       style={{
-        backgroundImage: 'url(https://res.cloudinary.com/kvatjwwc/image/upload/v1789559019/20260103_084733.jpg)',
+        backgroundImage: 'url(https://res.cloudinary.com/kvatjwwc/image/upload/f_auto,q_auto,w_1200/v1789559019/20260103_084733.jpg)',
       }}
       aria-label="Announcements"
     >

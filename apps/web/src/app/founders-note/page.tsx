@@ -69,7 +69,7 @@ export default function FoundersNotePage() {
                     >
                       <div className="relative w-full h-full">
                         <Image
-                          src="https://res.cloudinary.com/kvatjwwc/image/upload/v1789557742/_MG_2559.jpg"
+                          src="https://res.cloudinary.com/kvatjwwc/image/upload/f_auto,q_auto,w_1200/v1789557742/_MG_2559.jpg"
                           alt="Founder - Aram Saeivom Family Trust"
                           fill
                           className="object-cover object-[center_30%]"

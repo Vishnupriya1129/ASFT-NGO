@@ -9,6 +9,7 @@ interface SafeImageProps {
   height?: number;
   priority?: boolean;
   fallbackSrc?: string;
+  style?: React.CSSProperties; // 👈 Added this
 }
 
 export default function SafeImage({
@@ -18,8 +19,8 @@ export default function SafeImage({
   fill = false,
   width = 400,
   height = 300,
+  style,
 }: SafeImageProps) {
-  // If no src, render nothing (no fallback)
   if (!src) return null;
 
   if (fill) {
@@ -28,6 +29,7 @@ export default function SafeImage({
         src={src}
         alt={alt}
         className={`absolute inset-0 w-full h-full object-cover ${className}`}
+        style={style} // 👈 Pass the shape here
       />
     );
   }
@@ -39,6 +41,7 @@ export default function SafeImage({
       className={className}
       width={width}
       height={height}
+      style={style}
     />
   );
 }

@@ -97,11 +97,11 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
       role="navigation"
       aria-label="Main navigation"
       suppressHydrationWarning
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100 py-3'
-          : 'bg-gradient-to-b from-black/60 to-transparent py-5'
-      }`}
+     className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+  scrolled
+    ? 'bg-white/70 backdrop-blur-lg shadow-sm border-b border-white/20 py-3'
+    : 'bg-gradient-to-b from-black/60 to-transparent py-5'
+}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         {/* Logo — Small Perfect Circle */}
@@ -118,7 +118,7 @@ export function Navbar({ programTree: initialTree = [] }: NavbarProps) {
             <div className="absolute inset-[2px] rounded-full bg-white" />
             <div className="absolute inset-[3px] rounded-full overflow-hidden bg-white">
               <Image
-                src="https://res.cloudinary.com/kvatjwwc/image/upload/v1790420467/asftt_1.png"
+                src="https://res.cloudinary.com/kvatjwwc/image/upload/f_auto,q_auto,w_1200/v1790420467/asftt_1.png"
                 alt="Aram Saeivom Family Trust"
                 fill
                 className="object-cover"

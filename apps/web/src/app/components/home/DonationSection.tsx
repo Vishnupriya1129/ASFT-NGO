@@ -95,7 +95,7 @@ export function DonationSection() {
               <div className="flex flex-col lg:flex-row items-center gap-10">
                 <div className="bg-white p-4 rounded-2xl shadow-2xl flex-shrink-0">
                   <Image
-                    src="https://res.cloudinary.com/kvatjwwc/image/upload/v1789557702/qr_1.png"
+                    src="https://res.cloudinary.com/kvatjwwc/image/upload/f_auto,q_auto,w_1200/v1789557702/qr_1.png"
                     alt="UPI QR Code"
                     width={220}
                     height={220}
