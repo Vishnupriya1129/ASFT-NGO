@@ -8,7 +8,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.supabase.co', // ✅ ALLOW SUPABASE IMAGES
+        hostname: '**.supabase.co',
       },
       {
         protocol: 'https',
@@ -26,6 +26,10 @@ const nextConfig = {
   },
   swcMinify: true,
   poweredByHeader: false,
+  // 👈 Add the experimental block here, INSIDE the nextConfig object
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
 };
 
 export default nextConfig;
