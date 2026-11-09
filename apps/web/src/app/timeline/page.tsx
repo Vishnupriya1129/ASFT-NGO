@@ -3,6 +3,7 @@ import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import { getTimeline } from '@/lib/timeline';
 import { Timeline } from '@/app/components/about/Timeline';
+import { ShootingStars } from '@/components/ShootingStars';
 
 export const metadata: Metadata = {
   title: 'Our Journey | Aram Saeivom Family Trust',
@@ -17,7 +18,9 @@ export default async function TimelinePage() {
       <Navbar />
       {/* Main Background: Navy to Jade Gradient */}
       <main className="min-h-screen bg-gradient-to-br from-[#0F223D] via-[#0F223D] to-[#064E3B] pt-24 overflow-hidden relative">
-        
+      
+      <ShootingStars />
+
         {/* Subtle background glows for glass effect */}
         <div className="absolute top-[10%] left-[5%] w-[500px] h-[500px] bg-[#0E7A5F]/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-[20%] right-[5%] w-[400px] h-[400px] bg-[#C9A227]/10 rounded-full blur-[100px] pointer-events-none" />

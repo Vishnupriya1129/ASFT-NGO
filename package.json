@@ -17,6 +17,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.4.5",
     "turbo": "latest"
   },
   "packageManager": "npm@10.0.0",

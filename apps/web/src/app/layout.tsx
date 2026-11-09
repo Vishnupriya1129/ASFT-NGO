@@ -2,7 +2,12 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Providers } from '@/app/components/providers';
 import { Toaster } from 'react-hot-toast';
-import FloatingChat from '@/app/components/ui/FloatingChat';
+import dynamic from 'next/dynamic'; // 👈 Import dynamic
+
+// 👈 Dynamically import FloatingChat so it skips server-side rendering
+const FloatingChat = dynamic(() => import('@/app/components/ui/FloatingChat'), { 
+  ssr: false 
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://seed-and-serve-4djp3dt4c-vishnus-projects-76247019.vercel.app'),
@@ -37,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-cloud text-charcoal antialiased overflow-x-hidden">
         <Providers>
           {children}
+          
           <Toaster
             position="bottom-center"
             toastOptions={{
@@ -50,6 +56,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               success: { iconTheme: { primary: '#FFCA28', secondary: '#1B5E20' } },
             }}
           />
+          
+          {/* 👈 Now safely loading the dynamic FloatingChat */}
           <FloatingChat />
         </Providers>
       </body>

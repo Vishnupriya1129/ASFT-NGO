@@ -2,6 +2,7 @@
 import { Navbar } from '@/app/components/layout/Navbar';
 import { Footer } from '@/app/components/layout/Footer';
 import GalleryArchive from '@/app/components/gallery/GalleryArchive';
+import { ShootingStars } from '@/components/ShootingStars';
 
 export const metadata: Metadata = {
   title: 'Gallery | Aram Saeivom Family Trust',
@@ -37,7 +38,7 @@ export default function GalleryPage() {
             </svg>
           </div>
         </section>
-
+        <ShootingStars />
         {/* Gallery â€” Navy Blue + Emerald Green Theme */}
         <section className="py-16" style={{ background: 'linear-gradient(180deg, #faf8f4 0%, #f0ebe0 50%, #faf8f4 100%)' }}>
           <div className="max-w-7xl mx-auto px-6">

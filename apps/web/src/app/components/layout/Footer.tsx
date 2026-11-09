@@ -51,7 +51,7 @@ export function Footer() {
       const { data, error } = await supabase
         .from('settings')
         .select('*')
-        .single();
+        .maybeSingle();
       
       if (data) {
         setSettings(data);

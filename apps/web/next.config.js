@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
 const nextConfig = {
   // ✅ Read from process.env, no hardcoded secrets
   env: {

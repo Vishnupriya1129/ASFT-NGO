@@ -1,28 +1,19 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactNode, useState } from 'react';
+import { SWRConfig } from 'swr';
 
-interface ProvidersProps {
-  children: ReactNode;
-}
-
-export function Providers({ children }: ProvidersProps) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 60 * 1000,
-            retry: 1,
-          },
-        },
-      })
-  );
-
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <QueryClientProvider client={queryClient}>
+    <SWRConfig 
+      value={{
+        fetcher: (url: string) => fetch(url).then((res) => res.json()),
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        revalidateIfStale: false,
+        dedupingInterval: 60000, // Stops duplicate requests for 60 seconds
+      }}
+    >
       {children}
-    </QueryClientProvider>
+    </SWRConfig>
   );
 }
